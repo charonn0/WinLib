@@ -105,15 +105,15 @@ Protected Class Privileges
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mInstance = Nil Then mInstance = New WinLib.Privileges(WinLib.CurrentProcessID)
+			  If mInstance = Nil Then mInstance = New WinLib.Classes.Privileges(WinLib.CurrentProcessID)
 			  Return mInstance
 			End Get
 		#tag EndGetter
-		Shared Instance As WinLib.Privileges
+		Shared Instance As WinLib.Classes.Privileges
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private Shared mInstance As WinLib.Privileges
+		Private Shared mInstance As WinLib.Classes.Privileges
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

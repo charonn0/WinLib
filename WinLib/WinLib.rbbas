@@ -1,30 +1,11 @@
 #tag Module
 Protected Module WinLib
-	#tag Method, Flags = &h1
-		Protected Function CaptureRect(X As Integer, Y As Integer, Width As Integer, Height As Integer) As Picture
-		  'Performs a screen capture on the specified on-screen rectangle. All screen contents in that
-		  'rectangle will be captured as they appear to the user on screen.
-		  If Width = 0 Or Height = 0 Then Return Nil
-		  Dim screenCap As Picture
-		  
-		  #If TargetWin32 Then
-		    screenCap = New Picture(Width, Height, 24)
-		    Dim deskHWND As Integer = WinLib.User32.GetDesktopWindow()
-		    Dim deskHDC As Integer = WinLib.User32.GetDC(deskHWND)
-		    Call WinLib.GDI32.BitBlt(screenCap.Graphics.Handle(Graphics.HandleTypeHDC), 0, 0, Width, Height, DeskHDC, X, Y, SRCCOPY Or CAPTUREBLT)
-		    Call WinLib.User32.ReleaseDC(DeskHWND, deskHDC)
-		  #Endif
-		  
-		  Return screenCap
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h21
-		Private Function ExitWindows(mode As Integer, Reason As Integer = 0) As Integer
+		Private Function ExitWindows(mode As Integer, Reason As Integer) As Integer
 		  //Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
 		  
 		  #If TargetWin32 Then
-		    If CurrentPrivileges.Enable("SeShutdownPrivilege") Then
+		    If CurrentPrivileges.Enable(SE_SHUTDOWN_NAME) Then
 		      Call WinLib.User32.ExitWindowsEx(mode, reason)
 		    End If
 		    Return GetLastError()
@@ -46,8 +27,7 @@ Protected Module WinLib
 
 	#tag Method, Flags = &h1
 		Protected Function FormatError(WinErrorNumber As Integer) As String
-		  //Returns the error message corresponding to a given windows error number. If no message is available, returns the error number as a string.
-		  //To get the REAL last error code, you should call LastErrorCode *immediately* to avoid having another function change the last error.
+		  //Returns the error message corresponding to a given windows error number. 
 		  
 		  #If TargetWin32 Then
 		    Dim buffer As New MemoryBlock(2048)
@@ -79,9 +59,9 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub LogOff()
+		Protected Sub LogOff(Reason As Integer = 0)
 		  //Logs off the current user
-		  Call ExitWindows(EWX_LOGOFF)
+		  Call ExitWindows(EWX_LOGOFF, Reason)
 		End Sub
 	#tag EndMethod
 
@@ -93,7 +73,7 @@ Protected Module WinLib
 		    If WinLib.Kernel32.GetVersionEx(info) Then
 		      Return info
 		    Else
-		      Raise New Win32Exception(GetLastError)
+		      Raise New WinLib.Classes.Win32Exception(GetLastError)
 		    End If
 		  #endif
 		End Function
@@ -112,48 +92,17 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub Reboot()
+		Protected Sub Reboot(Reason As Integer = 0)
 		  //Reboots the computer
-		  Call ExitWindows(EWX_REBOOT)
+		  Call ExitWindows(EWX_REBOOT, Reason)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub SetWindowStyleEx(HWND As Integer, flag As Integer, Assigns b As Boolean)
-		  #If TargetWin32 Then
-		    Dim oldFlags as Integer
-		    Dim newFlags as Integer
-		    
-		    oldFlags = WinLib.User32.GetWindowLong(HWND, GWL_EXSTYLE)
-		    
-		    If Not b Then
-		      newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag)) 'turn off
-		    Else
-		      newFlags = BitOr(oldFlags, flag)  'turn on
-		    End
-		    
-		    Call WinLib.User32.SetWindowLong(HWND, GWL_EXSTYLE, newFlags)
-		    Call WinLib.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Sub ShutDown()
+		Protected Sub ShutDown(Reason As Integer = 0)
 		  //Shuts the computer down.
-		  Call ExitWindows(EWX_SHUTDOWN)
+		  Call ExitWindows(EWX_SHUTDOWN, Reason)
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function TestWindowStyleEx(HWND As Integer, flag As Integer) As Boolean
-		  #if TargetWin32
-		    Dim oldFlags as Integer
-		    oldFlags = WinLib.User32.GetWindowLong(HWND, GWL_EXSTYLE)
-		    
-		    Return BitAnd(oldFlags, flag) = flag
-		  #endif
-		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -191,10 +140,10 @@ Protected Module WinLib
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return WinLib.Privileges.Instance
+			  Return WinLib.Classes.Privileges.Instance
 			End Get
 		#tag EndGetter
-		Protected CurrentPrivileges As WinLib.Privileges
+		Protected CurrentPrivileges As WinLib.Classes.Privileges
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1
@@ -235,10 +184,10 @@ Protected Module WinLib
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return WinLib.Hardware.Instance
+			  Return WinLib.Classes.Hardware.Instance
 			End Get
 		#tag EndGetter
-		Protected Devices As WinLib.Hardware
+		Protected Devices As WinLib.Classes.Hardware
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1
@@ -259,10 +208,10 @@ Protected Module WinLib
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return WinLib.BatteryState.Instance
+			  Return WinLib.Classes.BatteryState.Instance
 			End Get
 		#tag EndGetter
-		Protected Power As WinLib.BatteryState
+		Protected Power As WinLib.Classes.BatteryState
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1

@@ -178,15 +178,15 @@ Protected Class Hardware
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mInstance = Nil Then mInstance = New WinLib.Hardware
+			  If mInstance = Nil Then mInstance = New WinLib.Classes.Hardware
 			  Return mInstance
 			End Get
 		#tag EndGetter
-		Shared Instance As WinLib.Hardware
+		Shared Instance As WinLib.Classes.Hardware
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private Shared mInstance As WinLib.Hardware
+		Private Shared mInstance As WinLib.Classes.Hardware
 	#tag EndProperty
 
 

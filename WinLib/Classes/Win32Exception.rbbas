@@ -1,5 +1,5 @@
 #tag Class
-Class Win32Exception
+Protected Class Win32Exception
 Inherits RuntimeException
 	#tag Method, Flags = &h1000
 		Sub Constructor(Win32ErrorNumber As Integer)

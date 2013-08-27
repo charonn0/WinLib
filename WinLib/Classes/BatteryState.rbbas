@@ -141,15 +141,15 @@ Protected Class BatteryState
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  If mInstance = Nil Then mInstance = New WinLib.BatteryState
+			  If mInstance = Nil Then mInstance = New WinLib.Classes.BatteryState
 			  Return mInstance
 			End Get
 		#tag EndGetter
-		Shared Instance As WinLib.BatteryState
+		Shared Instance As WinLib.Classes.BatteryState
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private Shared mInstance As WinLib.BatteryState
+		Private Shared mInstance As WinLib.Classes.BatteryState
 	#tag EndProperty
 
 
