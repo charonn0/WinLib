@@ -1,8 +1,9 @@
 #tag Class
 Protected Class IOStream
-Implements Readable,Writeable,Win32Object
+Implements Readable,Writeable,Win32Object, WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
+		  // Part of the WinLib.Win32Object interface.
 		  Me.Flush()
 		  #If TargetWin32 Then Call WinLib.Kernel32.CloseHandle(Me.Handle)
 		End Sub
@@ -10,9 +11,7 @@ Implements Readable,Writeable,Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Constructor(FileHandle As Integer)
-		  #If Not TargetWin32 Then
-		    #pragma Warning "This class supports only Win32 applications."
-		  #endif
+		  // Part of the WinLib.Win32Object interface.
 		  Me.mHandle = FileHandle
 		  
 		End Sub
@@ -33,10 +32,7 @@ Implements Readable,Writeable,Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Flush() Implements Writeable.Flush
-		  #If Not TargetWin32 Then
-		    #pragma Warning "This class supports only Win32 applications."
-		    
-		  #Else
+		  #If TargetWin32 Then
 		    If WinLib.Kernel32.FlushFileBuffers(Me.Handle) Then
 		      mLastError = 0
 		    Else
@@ -63,9 +59,7 @@ Implements Readable,Writeable,Win32Object
 	#tag Method, Flags = &h0
 		Function Read(Count As Integer, encoding As TextEncoding = Nil) As String Implements Readable.Read
 		  #pragma BoundsChecking Off
-		  #If Not TargetWin32 Then
-		    #pragma Warning "This class supports only Win32 applications."
-		  #Else
+		  #If TargetWin32 Then
 		    Dim mb As New MemoryBlock(Count)
 		    Dim read As Integer
 		    If WinLib.Kernel32.ReadFile(Me.Handle, mb, mb.Size, read, Nil) Then
@@ -95,9 +89,7 @@ Implements Readable,Writeable,Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Write(text As String) Implements Writeable.Write
-		  #If Not TargetWin32 Then
-		    #pragma Warning "This class supports only Win32 applications."
-		  #Else
+		  #If TargetWin32 Then
 		    Dim mb As MemoryBlock = text
 		    Dim written As Integer
 		    If WinLib.Kernel32.WriteFile(Me.Handle, mb, mb.Size, written, Nil) Then
@@ -119,9 +111,7 @@ Implements Readable,Writeable,Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  #If Not TargetWin32 Then
-			    #pragma Warning "This class supports only Win32 applications."
-			  #Else
+			  #If TargetWin32 Then
 			    Dim value, oldvalue As Integer
 			    oldvalue = Me.Position
 			    value = WinLib.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_END)
@@ -137,12 +127,7 @@ Implements Readable,Writeable,Win32Object
 			  'If the current Position of the file pointer is outside the new length, then then Position is moved to
 			  'the new EOF. Otherwise thefile pointer position relative to the beginning of the file remains the same.
 			  
-			  #If Not TargetWin32 Then
-			    Dim err As New RuntimeException
-			    err.Message = "This class supports only Win32 applications."
-			    Raise err
-			    #pragma Warning "This class supports only Win32 applications."
-			  #Else
+			  #If TargetWin32 Then
 			    Dim oldvalue As Integer = Me.Position
 			    Me.Position = value
 			    If Not WinLib.Kernel32.SetEndOfFile(Me.Handle) Then
@@ -168,9 +153,7 @@ Implements Readable,Writeable,Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  #If Not TargetWin32 Then
-			    #pragma Warning "This class supports only Win32 applications."
-			  #Else
+			  #If TargetWin32 Then
 			    Dim value As Integer = WinLib.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_CURRENT)
 			    mLastError = WinLib.GetLastError()
 			    Return value
@@ -179,12 +162,7 @@ Implements Readable,Writeable,Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  #If Not TargetWin32 Then
-			    Dim err As New RuntimeException
-			    err.Message = "This class supports only Win32 applications."
-			    Raise err
-			    #pragma Warning "This class supports only Win32 applications."
-			  #Else
+			  #If TargetWin32 Then
 			    Call WinLib.Kernel32.SetFilePointer(Me.Handle, value, Nil, FILE_BEGIN)
 			    mLastError = WinLib.GetLastError()
 			  #endif
