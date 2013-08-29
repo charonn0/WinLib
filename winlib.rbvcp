@@ -35,7 +35,6 @@ Module=PSAPI;WinLib/PSAPI.rbbas;&h78223FFF;&h561B87FF;false
 Module=User32;WinLib/User32.rbbas;&h4A026FFF;&h561B87FF;false
 Module=AdvApi32;WinLib/AdvApi32.rbbas;&h27606FFF;&h561B87FF;false
 Module=Kernel32;WinLib/Kernel32.rbbas;&h46716FFF;&h561B87FF;false
-Module=Interfaces;WinLib/Interfaces.rbbas;&h70903FFF;&h561B87FF;false
 DefaultWindow=Window1
 MajorVersion=1
 MinorVersion=0
