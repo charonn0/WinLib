@@ -58,7 +58,7 @@ Protected Class BatteryState
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
-		Private Function GetBatteryState() As SYSTEM_BATTERY_STATE()
+		Private Shared Function GetBatteryState() As SYSTEM_BATTERY_STATE()
 		  #If TargetWin32 Then
 		    
 		    Const Battery = 5

@@ -27,7 +27,7 @@ Protected Module WinLib
 
 	#tag Method, Flags = &h1
 		Protected Function FormatError(WinErrorNumber As Integer) As String
-		  //Returns the error message corresponding to a given windows error number. 
+		  //Returns the error message corresponding to a given windows error number.
 		  
 		  #If TargetWin32 Then
 		    Dim buffer As New MemoryBlock(2048)
@@ -37,7 +37,7 @@ Protected Module WinLib
 		      Return "Unknown error number: " + Str(WinErrorNumber)
 		    End If
 		  #Else
-		    Return "Not a Windows system."
+		    Return "Not a Windows system. Error number: " + Str(WinErrorNumber)
 		  #endif
 		End Function
 	#tag EndMethod
@@ -59,10 +59,10 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub LogOff(Reason As Integer = 0)
-		  //Logs off the current user
-		  Call ExitWindows(EWX_LOGOFF, Reason)
-		End Sub
+		Protected Function LogOff(Reason As Integer = 0) As Boolean
+		  //Logs off the current user; returns False on error.
+		  Return ExitWindows(EWX_LOGOFF, Reason) = 0
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -70,11 +70,8 @@ Protected Module WinLib
 		  Dim info As OSVERSIONINFOEX
 		  info.StructSize = Info.Size
 		  #If TargetWin32 Then
-		    If WinLib.Kernel32.GetVersionEx(info) Then
-		      Return info
-		    Else
-		      Raise New WinLib.Classes.Win32Exception(GetLastError)
-		    End If
+		    If Not WinLib.Kernel32.GetVersionEx(info) Then Raise New Win32Exception(GetLastError)
+		    Return info
 		  #endif
 		End Function
 	#tag EndMethod
@@ -92,17 +89,17 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub Reboot(Reason As Integer = 0)
-		  //Reboots the computer
-		  Call ExitWindows(EWX_REBOOT, Reason)
-		End Sub
+		Protected Function Reboot(Reason As Integer = 0) As Boolean
+		  //Reboots the computer; returns False on error.
+		  Return ExitWindows(EWX_REBOOT, Reason) = 0
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub ShutDown(Reason As Integer = 0)
-		  //Shuts the computer down.
-		  Call ExitWindows(EWX_SHUTDOWN, Reason)
-		End Sub
+		Protected Function ShutDown(Reason As Integer = 0) As Boolean
+		  //Shuts the computer down; returns False on error.
+		  Return ExitWindows(EWX_SHUTDOWN, Reason) = 0
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -130,7 +127,7 @@ Protected Module WinLib
 			Set
 			  #If TargetWin32 Then
 			    Dim path As String = value.AbsolutePath
-			    Call WinLib.Kernel32.SetCurrentDirectory(path)
+			    If Not WinLib.Kernel32.SetCurrentDirectory(path) Then Raise New Win32Exception(GetLastError)
 			  #endif
 			End Set
 		#tag EndSetter
@@ -167,7 +164,7 @@ Protected Module WinLib
 			  #If TargetWin32 Then
 			    Dim mb As New MemoryBlock(0)
 			    Dim nmLen As Integer = mb.Size
-			    Call WinLib.AdvApi32.GetUserName(mb, nmLen)
+			    If Not WinLib.AdvApi32.GetUserName(mb, nmLen) Then Raise New Win32Exception(GetLastError)
 			    mb = New MemoryBlock(nmLen * 2)
 			    nmLen = mb.Size
 			    If WinLib.AdvApi32.GetUserName(mb, nmLen) Then
