@@ -61,10 +61,3 @@ End
 #tag WindowCode
 #tag EndWindowCode
 
-#tag Events PushButton1
-	#tag Event
-		Sub Action()
-		  Call WinLib.CurrentPrivileges.Enable(SE_SHUTDOWN_NAME)
-		End Sub
-	#tag EndEvent
-#tag EndEvents

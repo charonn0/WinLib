@@ -1,11 +1,15 @@
 #tag Module
 Protected Module WinLib
-	#tag Method, Flags = &h21
-		Private Function ExitWindows(mode As Integer, Reason As Integer) As Integer
+	#tag Method, Flags = &h1
+		Protected Function ExitWindows(Mode As Integer, Reason As Integer) As Integer
 		  //Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
+		  //Mode can be one of the following:
+		  // EWX_LOGOFF
+		  // EWX_REBOOT
+		  // EWX_SHUTDOWN
 		  
 		  #If TargetWin32 Then
-		    If CurrentPrivileges.Enable(SE_SHUTDOWN_NAME) Then
+		    If SetPrivilege(SE_SHUTDOWN_NAME, True) Then
 		      Call WinLib.User32.ExitWindowsEx(mode, reason)
 		    End If
 		    Return GetLastError()
@@ -59,19 +63,13 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function LogOff(Reason As Integer = 0) As Boolean
-		  //Logs off the current user; returns False on error.
-		  Return ExitWindows(EWX_LOGOFF, Reason) = 0
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function OSVersion() As OSVERSIONINFOEX
 		  Dim info As OSVERSIONINFOEX
 		  info.StructSize = Info.Size
 		  #If TargetWin32 Then
-		    If Not WinLib.Kernel32.GetVersionEx(info) Then Raise New Win32Exception(GetLastError)
-		    Return info
+		    If WinLib.Kernel32.GetVersionEx(info) Then
+		      Return info
+		    End If
 		  #endif
 		End Function
 	#tag EndMethod
@@ -89,16 +87,32 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Reboot(Reason As Integer = 0) As Boolean
-		  //Reboots the computer; returns False on error.
-		  Return ExitWindows(EWX_REBOOT, Reason) = 0
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function ShutDown(Reason As Integer = 0) As Boolean
-		  //Shuts the computer down; returns False on error.
-		  Return ExitWindows(EWX_SHUTDOWN, Reason) = 0
+		Protected Function SetPrivilege(PrivilegeName As String, Enabled As Boolean) As Boolean
+		  //Modifies the calling process' security token
+		  //See the SE_* Constants in Win32Constants for privilege names.
+		  //Returns 0 on success, or a Win32 error number on failure.
+		  #If TargetWin32 Then
+		    Dim luid As New MemoryBlock(8)
+		    Dim mode As Integer
+		    If Enabled Then
+		      mode = SE_PRIVILEGE_ENABLED
+		    Else
+		      mode = SE_PRIVILEGE_ENABLED
+		    End If
+		    If WinLib.AdvApi32.LookupPrivilegeValue(Nil, PrivilegeName, luid) Then
+		      Dim newState As New MemoryBlock(16)
+		      newState.UInt32Value(0) = 1
+		      newState.UInt32Value(4) = luid.UInt32Value(0)
+		      newState.UInt32Value(8) = luid.UInt32Value(4)
+		      newState.UInt32Value(12) = mode  //mode can be enable, disable, or remove. See: Enable, Disable, and Drop.
+		      Dim retLen As Integer
+		      Dim prevPrivs As Ptr
+		      Dim TokenHandle As Integer
+		      If WinLib.AdvApi32.OpenProcessToken(CurrentProcessID, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, TokenHandle) Then 
+		        Return WinLib.AdvApi32.AdjustTokenPrivileges(TokenHandle, False, newState, newState.Size, prevPrivs, retLen)
+		      End If
+		    End If
+		  #endif
 		End Function
 	#tag EndMethod
 
@@ -127,20 +141,17 @@ Protected Module WinLib
 			Set
 			  #If TargetWin32 Then
 			    Dim path As String = value.AbsolutePath
-			    If Not WinLib.Kernel32.SetCurrentDirectory(path) Then Raise New Win32Exception(GetLastError)
+			    If Not WinLib.Kernel32.SetCurrentDirectory(path) Then 
+			      Dim e As Integer = GetLastError
+			      Dim err As New NilObjectException
+			      err.Message = CurrentMethodName + ": " + FormatError(e)
+			      err.ErrorNumber = e
+			      Raise err
+			    End If
 			  #endif
 			End Set
 		#tag EndSetter
 		Protected CurrentDirectory As FolderItem
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  Return WinLib.Classes.Privileges.Instance
-			End Get
-		#tag EndGetter
-		Protected CurrentPrivileges As WinLib.Classes.Privileges
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1
@@ -164,7 +175,7 @@ Protected Module WinLib
 			  #If TargetWin32 Then
 			    Dim mb As New MemoryBlock(0)
 			    Dim nmLen As Integer = mb.Size
-			    If Not WinLib.AdvApi32.GetUserName(mb, nmLen) Then Raise New Win32Exception(GetLastError)
+			    If Not WinLib.AdvApi32.GetUserName(mb, nmLen) Then Return ""
 			    mb = New MemoryBlock(nmLen * 2)
 			    nmLen = mb.Size
 			    If WinLib.AdvApi32.GetUserName(mb, nmLen) Then
@@ -181,15 +192,6 @@ Protected Module WinLib
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
-			  Return WinLib.Classes.Hardware.Instance
-			End Get
-		#tag EndGetter
-		Protected Devices As WinLib.Classes.Hardware
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
 			  //Returns the Kernel version of Windows as a Double (MajorVersion.MinorVersion)
 			  //For example, Windows 2000 returns 5.0, XP Returns 5.1, Vista Returns 6.0 and Windows 7 returns 6.1
 			  //On error, returns 0.0
@@ -200,15 +202,6 @@ Protected Module WinLib
 			End Get
 		#tag EndGetter
 		Protected KernelVersion As Double
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  Return WinLib.Classes.BatteryState.Instance
-			End Get
-		#tag EndGetter
-		Protected Power As WinLib.Classes.BatteryState
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h1
@@ -396,10 +389,25 @@ Protected Module WinLib
 	#tag Constant, Name = ERROR_NO_MORE_FILES, Type = Double, Dynamic = False, Default = \"18", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = EWX_FORCE, Type = Double, Dynamic = False, Default = \"&h00000004", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_FORCEIFHUNG, Type = Double, Dynamic = False, Default = \"&h00000010", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_HYBRID_SHUTDOWN, Type = Double, Dynamic = False, Default = \"&h00400000", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = EWX_LOGOFF, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = EWX_POWEROFF, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = EWX_REBOOT, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_RESTARTAPPS, Type = Double, Dynamic = False, Default = \"&h00000040", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = EWX_SHUTDOWN, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Public
