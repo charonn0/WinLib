@@ -1,13 +1,19 @@
 #tag Module
 Protected Module WinLib
 	#tag Method, Flags = &h1
-		Protected Function ExitWindows(Mode As Integer, Reason As Integer) As Integer
+		Protected Function ExitWindows(Mode As Integer, Reason As Integer, ForceIfHung As Boolean) As Integer
 		  //Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
-		  //Mode can be one of the following:
-		  // EWX_LOGOFF
-		  // EWX_REBOOT
-		  // EWX_SHUTDOWN
+		  // The reason code may be any code(s) documented here: http://msdn.microsoft.com/en-us/library/aa376885%28v=vs.85%29.aspx
+		  // If ForceIfHung=True then Windows forces processes to terminate if they do not respond to end-of-session messages within a timeout interval.
+		  // Mode can be one of the following:
+		  // EWX_LOGOFF  (all Windows versions)
+		  // EWX_REBOOT  (all Windows versions)
+		  // EWX_SHUTDOWN  (all Windows versions)
+		  // EWX_HYBRID_SHUTDOWN 
+		  // EWX_POWEROFF
+		  // EWX_RESTARTAPPS
 		  
+		  If ForceIfHung Then Mode = Mode Or EWX_FORCEIFHUNG
 		  #If TargetWin32 Then
 		    If SetPrivilege(SE_SHUTDOWN_NAME, True) Then
 		      Call WinLib.User32.ExitWindowsEx(mode, reason)
@@ -108,7 +114,7 @@ Protected Module WinLib
 		      Dim retLen As Integer
 		      Dim prevPrivs As Ptr
 		      Dim TokenHandle As Integer
-		      If WinLib.AdvApi32.OpenProcessToken(CurrentProcessID, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, TokenHandle) Then 
+		      If WinLib.AdvApi32.OpenProcessToken(CurrentProcessID, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, TokenHandle) Then
 		        Return WinLib.AdvApi32.AdjustTokenPrivileges(TokenHandle, False, newState, newState.Size, prevPrivs, retLen)
 		      End If
 		    End If
@@ -141,7 +147,7 @@ Protected Module WinLib
 			Set
 			  #If TargetWin32 Then
 			    Dim path As String = value.AbsolutePath
-			    If Not WinLib.Kernel32.SetCurrentDirectory(path) Then 
+			    If Not WinLib.Kernel32.SetCurrentDirectory(path) Then
 			      Dim e As Integer = GetLastError
 			      Dim err As New NilObjectException
 			      err.Message = CurrentMethodName + ": " + FormatError(e)
