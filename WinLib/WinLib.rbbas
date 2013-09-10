@@ -21,7 +21,9 @@ Protected Module WinLib
 
 	#tag Method, Flags = &h1
 		Protected Function CloseHandle(Handle As Integer) As Boolean
-		  Return Win32.Kernel32.CloseHandle(Handle)
+		  #If TargetWin32 Then 
+		    Return Win32.Kernel32.CloseHandle(Handle)
+		  #endif
 		End Function
 	#tag EndMethod
 
@@ -84,7 +86,7 @@ Protected Module WinLib
 	#tag Method, Flags = &h1
 		Protected Function SetPrivilege(PrivilegeName As String, Enabled As Boolean) As Boolean
 		  //Modifies the calling process' security token
-		  //See the SE_* Constants in Win32Constants for privilege names.
+		  //See the SE_* Constants for privilege names.
 		  //Returns 0 on success, or a Win32 error number on failure.
 		  #If TargetWin32 Then
 		    Dim luid As New MemoryBlock(8)

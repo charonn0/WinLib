@@ -3,8 +3,10 @@ Class WindowRef
 Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
-		  Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
-		  mLastError = WinLib.GetLastError
+		  #If TargetWin32 Then
+		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
+		    mLastError = WinLib.GetLastError
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -51,23 +53,27 @@ Implements Win32Object
 
 	#tag Method, Flags = &h0
 		Sub FlashWindow()
-		  Call Win32.User32.FlashWindow(Me.Handle, True)
-		  mLastError = WinLib.GetLastError
+		  #If TargetWin32 Then
+		    Call Win32.User32.FlashWindow(Me.Handle, True)
+		    mLastError = WinLib.GetLastError
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		 Shared Function FromXY(X As Integer, Y As Integer) As WindowRef
-		  Dim p As POINT
-		  p.X = X
-		  p.Y = Y
-		  Dim hwnd As Integer = Win32.User32.WindowFromPoint(p)
-		  If hwnd > 0 Then
-		    If Win32.User32.ChildWindowFromPoint(hwnd, p) > 0 Then
-		      hwnd = Win32.User32.ChildWindowFromPoint(hwnd, p)
+		  #If TargetWin32 Then
+		    Dim p As POINT
+		    p.X = X
+		    p.Y = Y
+		    Dim hwnd As Integer = Win32.User32.WindowFromPoint(p)
+		    If hwnd > 0 Then
+		      If Win32.User32.ChildWindowFromPoint(hwnd, p) > 0 Then
+		        hwnd = Win32.User32.ChildWindowFromPoint(hwnd, p)
+		      End If
 		    End If
-		  End If
-		  Return New WindowRef(hwnd)
+		    Return New WindowRef(hwnd)
+		  #endif
 		End Function
 	#tag EndMethod
 
@@ -85,30 +91,34 @@ Implements Win32Object
 
 	#tag Method, Flags = &h0
 		 Shared Function ListWindows(PartialTitle As String = "") As WindowRef()
-		  Dim wins() As WindowRef
-		  Dim ret as integer
-		  ret = Win32.User32.FindWindow(Nil, Nil)
-		  Dim hidden() As String = Split("MSCTFIME UI,Default IME,Jump List,Start Menu,Start,Program Manager", ",")
-		  while ret > 0
-		    Dim pw As New WindowRef(ret)
-		    If pw.Caption.Trim <> "" And hidden.IndexOf(pw.Caption.Trim) <= -1 And pw.Visible Then
-		      If PartialTitle.Trim = "" Or InStr(pw.Caption, PartialTitle) > 0 Then
-		        wins.Append(pw)
+		  #If TargetWin32 Then
+		    Dim wins() As WindowRef
+		    Dim ret as integer
+		    ret = Win32.User32.FindWindow(Nil, Nil)
+		    Dim hidden() As String = Split("MSCTFIME UI,Default IME,Jump List,Start Menu,Start,Program Manager", ",")
+		    while ret > 0
+		      Dim pw As New WindowRef(ret)
+		      If pw.Caption.Trim <> "" And hidden.IndexOf(pw.Caption.Trim) <= -1 And pw.Visible Then
+		        If PartialTitle.Trim = "" Or InStr(pw.Caption, PartialTitle) > 0 Then
+		          wins.Append(pw)
+		        End If
 		      End If
-		    End If
-		    ret = Win32.User32.GetWindow(ret, GW_HWNDNEXT)
-		  wend
-		  Return wins
+		      ret = Win32.User32.GetWindow(ret, GW_HWNDNEXT)
+		    wend
+		    Return wins
+		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Maximized() As Boolean
-		  Dim wp As WINDOWPLACEMENT
-		  wp.Length = wp.Size
-		  If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
-		    Return wp.ShowCmd = SW_SHOWMAXIMIZED
-		  End If
+		  #If TargetWin32 Then
+		    Dim wp As WINDOWPLACEMENT
+		    wp.Length = wp.Size
+		    If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
+		      Return wp.ShowCmd = SW_SHOWMAXIMIZED
+		    End If
+		  #endif
 		  
 		Finally
 		  mLastError = WinLib.GetLastError
@@ -117,22 +127,26 @@ Implements Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Maximized(Assigns b As Boolean)
-		  If b Then
-		    Call Win32.User32.ShowWindow(Me.Handle, SW_MAXIMIZE)
-		  Else
-		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
-		  End If
-		  mLastError = WinLib.GetLastError
+		  #If TargetWin32 Then
+		    If b Then
+		      Call Win32.User32.ShowWindow(Me.Handle, SW_MAXIMIZE)
+		    Else
+		      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
+		    End If
+		    mLastError = WinLib.GetLastError
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Minimized() As Boolean
-		  Dim wp As WINDOWPLACEMENT
-		  wp.Length = wp.Size
-		  If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
-		    Return wp.ShowCmd = SW_SHOWMINIMIZED
-		  End If
+		  #If TargetWin32 Then
+		    Dim wp As WINDOWPLACEMENT
+		    wp.Length = wp.Size
+		    If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
+		      Return wp.ShowCmd = SW_SHOWMINIMIZED
+		    End If
+		  #endif
 		  
 		Finally
 		  mLastError = WinLib.GetLastError
@@ -141,19 +155,23 @@ Implements Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Minimized(Assigns b As Boolean)
-		  If b Then
-		    Call Win32.User32.ShowWindow(Me.Handle, SW_MINIMIZE)
-		  Else
-		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
-		  End If
-		  mLastError = WinLib.GetLastError
+		  #If TargetWin32 Then
+		    If b Then
+		      Call Win32.User32.ShowWindow(Me.Handle, SW_MINIMIZE)
+		    Else
+		      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
+		    End If
+		    mLastError = WinLib.GetLastError
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function PostMessage(Msg As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  'Posts the Window Message to the target window's message queue and returns immediately
-		  Return Win32.User32.PostMessage(Me.Handle, Msg, WParam, LParam)
+		  #If TargetWin32 Then
+		    Return Win32.User32.PostMessage(Me.Handle, Msg, WParam, LParam)
+		  #endif
 		  
 		Finally
 		  mLastError = WinLib.GetLastError
@@ -163,7 +181,9 @@ Implements Win32Object
 	#tag Method, Flags = &h1
 		Protected Function SendMessage(Msg As Integer, WParam As Ptr, LParam As Ptr) As Integer
 		  'Sends the Window Message to the target window and waits for a response
-		  Return Win32.User32.SendMessage(Me.Handle, Msg, WParam, LParam)
+		  #If TargetWin32 Then
+		    Return Win32.User32.SendMessage(Me.Handle, Msg, WParam, LParam)
+		  #endif
 		  
 		Finally
 		  mLastError = WinLib.GetLastError
@@ -172,37 +192,41 @@ Implements Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Shared Sub SetWindowStyle(HWND As Integer, flag As Integer, Assigns b As Boolean)
-		  Dim oldFlags as Integer
-		  Dim newFlags as Integer
-		  
-		  oldFlags = Win32.User32.GetWindowLong(HWND, GWL_STYLE)
-		  
-		  If Not b Then
-		    newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag))
-		  Else
-		    newFlags = BitOr(oldFlags, flag)
-		  End
-		  
-		  Call Win32.User32.SetWindowLong(HWND, GWL_STYLE, newFlags)
-		  Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
+		  #If TargetWin32 Then
+		    Dim oldFlags as Integer
+		    Dim newFlags as Integer
+		    
+		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_STYLE)
+		    
+		    If Not b Then
+		      newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag))
+		    Else
+		      newFlags = BitOr(oldFlags, flag)
+		    End
+		    
+		    Call Win32.User32.SetWindowLong(HWND, GWL_STYLE, newFlags)
+		    Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Shared Sub SetWindowStyleEx(HWND As Integer, flag As Integer, Assigns b As Boolean)
-		  Dim oldFlags as Integer
-		  Dim newFlags as Integer
-		  
-		  oldFlags = Win32.User32.GetWindowLong(HWND, GWL_EXSTYLE)
-		  
-		  If Not b Then
-		    newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag)) 'turn off
-		  Else
-		    newFlags = BitOr(oldFlags, flag)  'turn on
-		  End
-		  
-		  Call Win32.User32.SetWindowLong(HWND, GWL_EXSTYLE, newFlags)
-		  Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
+		  #If TargetWin32 Then
+		    Dim oldFlags as Integer
+		    Dim newFlags as Integer
+		    
+		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_EXSTYLE)
+		    
+		    If Not b Then
+		      newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag)) 'turn off
+		    Else
+		      newFlags = BitOr(oldFlags, flag)  'turn on
+		    End
+		    
+		    Call Win32.User32.SetWindowLong(HWND, GWL_EXSTYLE, newFlags)
+		    Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -259,12 +283,14 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim a As Integer
-			  If Win32.User32.GetLayeredWindowAttributes(Me.Handle, 0 , a, LWA_ALPHA) Then
-			    Return a / 255.0
-			  Else
-			    Return 255.0
-			  End If
+			  #If TargetWin32 Then
+			    Dim a As Integer
+			    If Win32.User32.GetLayeredWindowAttributes(Me.Handle, 0 , a, LWA_ALPHA) Then
+			      Return a / 255.0
+			    Else
+			      Return 255.0
+			    End If
+			  #endif
 			  
 			  
 			  Finally
@@ -273,10 +299,12 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  If Not TestWindowStyleEx(Me.Handle, WS_EX_LAYERED) Then
-			    SetWindowStyleEx(Me.Handle, WS_EX_LAYERED) = True
-			  End If
-			  Call Win32.User32.SetLayeredWindowAttributes(Handle, 0 , value * 255, LWA_ALPHA)
+			  #If TargetWin32 Then
+			    If Not TestWindowStyleEx(Me.Handle, WS_EX_LAYERED) Then
+			      SetWindowStyleEx(Me.Handle, WS_EX_LAYERED) = True
+			    End If
+			    Call Win32.User32.SetLayeredWindowAttributes(Handle, 0 , value * 255, LWA_ALPHA)
+			  #endif
 			  
 			  Finally
 			    mLastError = WinLib.GetLastError
@@ -307,21 +335,24 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim buffer As New MemoryBlock(2048)
-			  Dim sz As New MemoryBlock(4)
-			  sz.Int32Value(0) = buffer.Size
-			  If SendMessage(WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
-			    Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
-			  End If
-			  mLastError = WinLib.GetLastError
-			  Return buffer.WString(0).Trim
-			  
+			  #If TargetWin32 Then
+			    Dim buffer As New MemoryBlock(2048)
+			    Dim sz As New MemoryBlock(4)
+			    sz.Int32Value(0) = buffer.Size
+			    If SendMessage(WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
+			      Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
+			    End If
+			    mLastError = WinLib.GetLastError
+			    Return buffer.WString(0).Trim
+			  #endif
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Dim mb As MemoryBlock = value
-			  Call Win32.User32.SetWindowText(Me.Handle, mb)
+			  #If TargetWin32 Then
+			    Dim mb As MemoryBlock = value
+			    Call Win32.User32.SetWindowText(Me.Handle, mb)
+			  #endif
 			End Set
 		#tag EndSetter
 		Caption As String
@@ -358,9 +389,11 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = Win32.User32.GetWindow(Me.Handle, GW_OWNER)
-			  mLastError = WinLib.GetLastError
-			  Return New WindowRef(h)
+			  #If TargetWin32 Then
+			    Dim h As Integer = Win32.User32.GetWindow(Me.Handle, GW_OWNER)
+			    mLastError = WinLib.GetLastError
+			    Return New WindowRef(h)
+			  #endif
 			End Get
 		#tag EndGetter
 		Owner As WindowRef
@@ -369,9 +402,11 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = Win32.User32.GetParent(Me.Handle)
-			  mLastError = WinLib.GetLastError
-			  Return New WindowRef(h)
+			  #If TargetWin32 Then
+			    Dim h As Integer = Win32.User32.GetParent(Me.Handle)
+			    mLastError = WinLib.GetLastError
+			    Return New WindowRef(h)
+			  #endif
 			End Get
 		#tag EndGetter
 		Parent As WindowRef
@@ -411,9 +446,11 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOTOWNER)
-			  mLastError = WinLib.GetLastError
-			  Return New WindowRef(h)
+			  #If TargetWin32 Then
+			    Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOTOWNER)
+			    mLastError = WinLib.GetLastError
+			    Return New WindowRef(h)
+			  #endif
 			End Get
 		#tag EndGetter
 		TrueOwner As WindowRef
@@ -422,9 +459,11 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOT)
-			  mLastError = WinLib.GetLastError
-			  Return New WindowRef(h)
+			  #If TargetWin32 Then
+			    Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOT)
+			    mLastError = WinLib.GetLastError
+			    Return New WindowRef(h)
+			  #endif
 			End Get
 		#tag EndGetter
 		TrueParent As WindowRef
@@ -500,12 +539,14 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim info As WINDOWINFO
-			  If Win32.User32.GetWindowInfo(Me.Handle, info) Then
-			    mLastError = 0
-			    Return info
-			  End If
-			  mLastError = WinLib.GetLastError
+			  #If TargetWin32 Then
+			    Dim info As WINDOWINFO
+			    If Win32.User32.GetWindowInfo(Me.Handle, info) Then
+			      mLastError = 0
+			      Return info
+			    End If
+			    mLastError = WinLib.GetLastError
+			  #endif
 			End Get
 		#tag EndGetter
 		WindowInfo As WINDOWINFO

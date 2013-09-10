@@ -31,7 +31,9 @@ Inherits Win32MessageMonitor
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(ParentHandle)
 		  Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD)
-		  #If TargetWin32 Then NextViewerWindow = Win32.User32.SetClipboardViewer(Me.ParentWindow)
+		  #If TargetWin32 Then 
+		    NextViewerWindow = Win32.User32.SetClipboardViewer(Me.ParentWindow)
+		  #endif
 		End Sub
 	#tag EndMethod
 
