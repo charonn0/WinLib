@@ -1,6 +1,6 @@
 #tag Class
-Class HotKeyListener
-Inherits WMListener
+Class HotKeyMonitor
+Inherits Win32MessageMonitor
 	#tag Event
 		Function WindowMessage(HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #If DebugBuild Then
@@ -39,11 +39,11 @@ Inherits WMListener
 		    End
 		    ret = ReplaceAll(ret, " ", "+")
 		    
-		    Dim scanCode As Integer = WinLib.User32.MapVirtualKey(high, 0)
+		    Dim scanCode As Integer = Win32.User32.MapVirtualKey(high, 0)
 		    scanCode = Bitwise.ShiftLeft(scanCode, 16)
 		    Dim keyText As New MemoryBlock(32)
 		    Dim keyTextLen As Integer
-		    keyTextLen = WinLib.User32.GetKeyNameText(scanCode, keyText, keyText.Size)
+		    keyTextLen = Win32.User32.GetKeyNameText(scanCode, keyText, keyText.Size)
 		    Return ret + keyText.WString(0)
 		  #endif
 		End Function
@@ -52,7 +52,7 @@ Inherits WMListener
 	#tag Method, Flags = &h1000
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
-		  // Constructor() -- From WMListener
+		  // Constructor() -- From Win32MessageMonitor
 		  Super.Constructor()
 		  Me.AddMessageFilter(WM_HOTKEY)
 		  
@@ -72,10 +72,10 @@ Inherits WMListener
 		Function RegisterKey(modifiers as Integer, virtualKey as Integer) As Integer
 		  #If TargetWin32 Then
 		    Dim id As Integer
-		    id = WinLib.Kernel32.GlobalAddAtom("WinLibAtom" + Str(NextNum))
+		    id = Win32.Kernel32.GlobalAddAtom("Win32Atom" + Str(NextNum))
 		    KeyIDs.Append(id)
 		    
-		    If WinLib.User32.RegisterHotKey(Me.ParentWindow, id, modifiers, virtualKey) Then
+		    If Win32.User32.RegisterHotKey(Me.ParentWindow, id, modifiers, virtualKey) Then
 		      Return id
 		    Else
 		      Return -1
@@ -87,8 +87,8 @@ Inherits WMListener
 	#tag Method, Flags = &h0
 		Sub UnregisterKey(id as Integer)
 		  #If TargetWin32 Then
-		    Call WinLib.User32.UnregisterHotkey(Me.ParentWindow, id)
-		    Call WinLib.User32.GlobalDeleteAtom(id)
+		    Call Win32.User32.UnregisterHotkey(Me.ParentWindow, id)
+		    Call Win32.User32.GlobalDeleteAtom(id)
 		    For i As Integer = UBound(KeyIDs) DownTo 0
 		      If KeyIDs(i) = id Then
 		        KeyIDs.Remove(i)
@@ -100,7 +100,7 @@ Inherits WMListener
 
 	#tag Method, Flags = &h0
 		 Shared Function VirtualKey(Key As String) As Integer
-		  #If TargetWin32 Then Return WinLib.User32.VkKeyScan(Asc(Key))
+		  #If TargetWin32 Then Return Win32.User32.VkKeyScan(Asc(Key))
 		End Function
 	#tag EndMethod
 
@@ -108,6 +108,26 @@ Inherits WMListener
 	#tag Hook, Flags = &h0
 		Event HotKeyPressed(Identifier As Integer, KeyString As String) As Boolean
 	#tag EndHook
+
+
+	#tag Note, Name = About This Class
+		This class allows you to detect specified keyboard shortcuts no matter what application has keyboard input.
+		
+		For example:
+		
+		     Dim hotkey As New HotKeyMonitor()
+		     Dim hotkeyID As Integer = HotKey.RegisterKey(MOD_CONTROL Or MOD_ALT, HotKey.VirtualKey("a"))
+		
+		The above snippet would raise the HotKeyMonitor.HotKeyPressed event whenever the global hotkey combo Ctrl+Alt+a is pressed.
+		Each instance of the HotKeyMonitor class can handle an arbitrary number of hotkey combinations, each being uniquely
+		identifiable by their hotkeyID number. A global hotkey combo can be registered to only one application at a time, and
+		only the most recent application to register the combo will be notified.
+		
+		If you no longer want to receive notifications for a particular HotKey, pass its ID number (the return value from RegisterKey)
+		to the UnregisterKey method. 
+		
+		See: http://msdn.microsoft.com/en-us/library/windows/desktop/ms646309%28v=vs.85%29.aspx
+	#tag EndNote
 
 
 	#tag Property, Flags = &h1

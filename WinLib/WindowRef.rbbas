@@ -1,8 +1,10 @@
 #tag Class
-Protected Class ForeignWindow
+Class WindowRef
+Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
-		  Call WinLib.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
+		  Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
+		  mLastError = WinLib.GetLastError
 		End Sub
 	#tag EndMethod
 
@@ -31,7 +33,14 @@ Protected Class ForeignWindow
 		  End If
 		  
 		  Return CaptureRect(l, t, w, h)
+		  mLastError = WinLib.GetLastError
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Attributes( hidden ) Protected Sub Close()
+		  Return
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -42,48 +51,52 @@ Protected Class ForeignWindow
 
 	#tag Method, Flags = &h0
 		Sub FlashWindow()
-		  Call WinLib.User32.FlashWindow(Me.Handle, True)
+		  Call Win32.User32.FlashWindow(Me.Handle, True)
+		  mLastError = WinLib.GetLastError
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function FromXY(X As Integer, Y As Integer) As ForeignWindow
+		 Shared Function FromXY(X As Integer, Y As Integer) As WindowRef
 		  Dim p As POINT
 		  p.X = X
 		  p.Y = Y
-		  Dim hwnd As Integer = WinLib.User32.WindowFromPoint(p)
+		  Dim hwnd As Integer = Win32.User32.WindowFromPoint(p)
 		  If hwnd > 0 Then
-		    If WinLib.User32.ChildWindowFromPoint(hwnd, p) > 0 Then
-		      hwnd = WinLib.User32.ChildWindowFromPoint(hwnd, p)
+		    If Win32.User32.ChildWindowFromPoint(hwnd, p) > 0 Then
+		      hwnd = Win32.User32.ChildWindowFromPoint(hwnd, p)
 		    End If
 		  End If
-		  Return New ForeignWindow(hwnd)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Attributes( deprecated = "ForeignWindow.WindowInfo" ) Protected Function GetWindowInfo() As WINDOWINFO
-		  Dim info As WINDOWINFO
-		  If WinLib.User32.GetWindowInfo(Me.Handle, info) Then
-		    Return info
-		  End If
+		  Return New WindowRef(hwnd)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function ListWindows(PartialTitle As String = "") As ForeignWindow()
-		  Dim wins() As ForeignWindow
+		Function Handle() As Integer
+		  return mHandle
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LastError() As Integer
+		  Return mLastError
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function ListWindows(PartialTitle As String = "") As WindowRef()
+		  Dim wins() As WindowRef
 		  Dim ret as integer
-		  ret = WinLib.User32.FindWindow(Nil, Nil)
+		  ret = Win32.User32.FindWindow(Nil, Nil)
 		  Dim hidden() As String = Split("MSCTFIME UI,Default IME,Jump List,Start Menu,Start,Program Manager", ",")
 		  while ret > 0
-		    Dim pw As New ForeignWindow(ret)
+		    Dim pw As New WindowRef(ret)
 		    If pw.Caption.Trim <> "" And hidden.IndexOf(pw.Caption.Trim) <= -1 And pw.Visible Then
 		      If PartialTitle.Trim = "" Or InStr(pw.Caption, PartialTitle) > 0 Then
 		        wins.Append(pw)
 		      End If
 		    End If
-		    ret = WinLib.User32.GetWindow(ret, GW_HWNDNEXT)
+		    ret = Win32.User32.GetWindow(ret, GW_HWNDNEXT)
 		  wend
 		  Return wins
 		End Function
@@ -93,19 +106,23 @@ Protected Class ForeignWindow
 		Function Maximized() As Boolean
 		  Dim wp As WINDOWPLACEMENT
 		  wp.Length = wp.Size
-		  If WinLib.User32.GetWindowPlacement(Me.Handle, wp) Then
+		  If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
 		    Return wp.ShowCmd = SW_SHOWMAXIMIZED
 		  End If
+		  
+		Finally
+		  mLastError = WinLib.GetLastError
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Maximized(Assigns b As Boolean)
 		  If b Then
-		    Call WinLib.User32.ShowWindow(Me.Handle, SW_MAXIMIZE)
+		    Call Win32.User32.ShowWindow(Me.Handle, SW_MAXIMIZE)
 		  Else
-		    Call WinLib.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
+		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
 		  End If
+		  mLastError = WinLib.GetLastError
 		End Sub
 	#tag EndMethod
 
@@ -113,31 +130,112 @@ Protected Class ForeignWindow
 		Function Minimized() As Boolean
 		  Dim wp As WINDOWPLACEMENT
 		  wp.Length = wp.Size
-		  If WinLib.User32.GetWindowPlacement(Me.Handle, wp) Then
+		  If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
 		    Return wp.ShowCmd = SW_SHOWMINIMIZED
 		  End If
+		  
+		Finally
+		  mLastError = WinLib.GetLastError
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Minimized(Assigns b As Boolean)
 		  If b Then
-		    Call WinLib.User32.ShowWindow(Me.Handle, SW_MINIMIZE)
+		    Call Win32.User32.ShowWindow(Me.Handle, SW_MINIMIZE)
 		  Else
-		    Call WinLib.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
+		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
 		  End If
+		  mLastError = WinLib.GetLastError
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function PostMessage(Msg As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		  'Posts the Window Message to the target window's message queue and returns immediately
+		  Return Win32.User32.PostMessage(Me.Handle, Msg, WParam, LParam)
+		  
+		Finally
+		  mLastError = WinLib.GetLastError
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function SendMessage(Msg As Integer, WParam As Ptr, LParam As Ptr) As Integer
+		  'Sends the Window Message to the target window and waits for a response
+		  Return Win32.User32.SendMessage(Me.Handle, Msg, WParam, LParam)
+		  
+		Finally
+		  mLastError = WinLib.GetLastError
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Shared Sub SetWindowStyle(HWND As Integer, flag As Integer, Assigns b As Boolean)
+		  Dim oldFlags as Integer
+		  Dim newFlags as Integer
+		  
+		  oldFlags = Win32.User32.GetWindowLong(HWND, GWL_STYLE)
+		  
+		  If Not b Then
+		    newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag))
+		  Else
+		    newFlags = BitOr(oldFlags, flag)
+		  End
+		  
+		  Call Win32.User32.SetWindowLong(HWND, GWL_STYLE, newFlags)
+		  Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Shared Sub SetWindowStyleEx(HWND As Integer, flag As Integer, Assigns b As Boolean)
+		  Dim oldFlags as Integer
+		  Dim newFlags as Integer
+		  
+		  oldFlags = Win32.User32.GetWindowLong(HWND, GWL_EXSTYLE)
+		  
+		  If Not b Then
+		    newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag)) 'turn off
+		  Else
+		    newFlags = BitOr(oldFlags, flag)  'turn on
+		  End
+		  
+		  Call Win32.User32.SetWindowLong(HWND, GWL_EXSTYLE, newFlags)
+		  Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Shared Function TestWindowStyle(HWND As Integer, flag As Integer) As Boolean
+		  #if TargetWin32
+		    Dim oldFlags as Integer
+		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_STYLE)
+		    
+		    Return BitAnd(oldFlags, flag) = flag
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Shared Function TestWindowStyleEx(HWND As Integer, flag As Integer) As Boolean
+		  #if TargetWin32
+		    Dim oldFlags as Integer
+		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_EXSTYLE)
+		    
+		    Return BitAnd(oldFlags, flag) = flag
+		  #endif
+		End Function
 	#tag EndMethod
 
 
 	#tag Note, Name = About this class
-		This class allows you to control and interrogate (to an extent) windows belonging to other applications which
-		are running on the same machine as your app. The Class Constructor expects a valid Win32 window handle (HWND),
-		any valid window handle (including for windows belonging to your app) will suffice.
+		This class can represent any win32 window, even those belonging to other applications. 
+		The Class Constructor expects a valid Win32 window handle (HWND).
 		 
 		Use the shared method FromXY to get a reference to the topmost window over a specific screen coordinate.
 		
-		Use the shared methof ListWindows to get an array of ForeignWindow objects corresponding to all the top-level
+		Use the shared methof ListWindows to get an array of WindowRef objects corresponding to all the top-level
 		windows on the current desktop matching the optional partial title string. Note that the ListWindows method
 		searches all top-level windows which is a computationally expensive and occasionally buggy thing to do.
 		
@@ -145,15 +243,15 @@ Protected Class ForeignWindow
 		Examples:
 		
 		  'Minimize all Firefox windows
-		  Dim wins() As ForeignWindow = ForeignWindow.ListWindows("Firefox")
-		  For Each win As ForeignWindow In wins
+		  Dim wins() As WindowRef = WindowRef.ListWindows("Firefox")
+		  For Each win As WindowRef In wins
 		    win.Minimized = True
 		  Next
 		
 		
 		  'Captures a picture of the topmost window under the mouse cursor
 		  Dim cap As Picture
-		  Dim win As ForeignWindow = ForeignWindow.FromXY(System.MouseX, System.MouseY)
+		  Dim win As WindowRef = WindowRef.FromXY(System.MouseX, System.MouseY)
 		  cap = win.Capture
 	#tag EndNote
 
@@ -162,11 +260,15 @@ Protected Class ForeignWindow
 		#tag Getter
 			Get
 			  Dim a As Integer
-			  If WinLib.User32.GetLayeredWindowAttributes(Me.Handle, 0 , a, LWA_ALPHA) Then
+			  If Win32.User32.GetLayeredWindowAttributes(Me.Handle, 0 , a, LWA_ALPHA) Then
 			    Return a / 255.0
 			  Else
 			    Return 255.0
 			  End If
+			  
+			  
+			  Finally
+			    mLastError = WinLib.GetLastError
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -174,8 +276,11 @@ Protected Class ForeignWindow
 			  If Not TestWindowStyleEx(Me.Handle, WS_EX_LAYERED) Then
 			    SetWindowStyleEx(Me.Handle, WS_EX_LAYERED) = True
 			  End If
-			  Call WinLib.User32.SetLayeredWindowAttributes(Handle, 0 , value * 255, LWA_ALPHA)
+			  Call Win32.User32.SetLayeredWindowAttributes(Handle, 0 , value * 255, LWA_ALPHA)
 			  
+			  Finally
+			    mLastError = WinLib.GetLastError
+			    
 			End Set
 		#tag EndSetter
 		Alpha As Single
@@ -185,7 +290,6 @@ Protected Class ForeignWindow
 		#tag Getter
 			Get
 			  Return Me.WindowInfo.cxWindowBorders
-			  
 			End Get
 		#tag EndGetter
 		BorderSizeX As Integer
@@ -206,10 +310,10 @@ Protected Class ForeignWindow
 			  Dim buffer As New MemoryBlock(2048)
 			  Dim sz As New MemoryBlock(4)
 			  sz.Int32Value(0) = buffer.Size
-			  If WinLib.User32.SendMessage(Me.Handle, WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
-			    Call WinLib.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
+			  If SendMessage(WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
+			    Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
 			  End If
-			  
+			  mLastError = WinLib.GetLastError
 			  Return buffer.WString(0).Trim
 			  
 			End Get
@@ -217,19 +321,10 @@ Protected Class ForeignWindow
 		#tag Setter
 			Set
 			  Dim mb As MemoryBlock = value
-			  Call WinLib.User32.SetWindowText(Me.Handle, mb)
+			  Call Win32.User32.SetWindowText(Me.Handle, mb)
 			End Set
 		#tag EndSetter
 		Caption As String
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mHandle
-			End Get
-		#tag EndGetter
-		Handle As Integer
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
@@ -256,30 +351,35 @@ Protected Class ForeignWindow
 		Private mHandle As Integer
 	#tag EndProperty
 
+	#tag Property, Flags = &h21
+		Private mLastError As Integer
+	#tag EndProperty
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = WinLib.User32.GetWindow(Me.Handle, GW_OWNER)
-			  Return New ForeignWindow(h)
+			  Dim h As Integer = Win32.User32.GetWindow(Me.Handle, GW_OWNER)
+			  mLastError = WinLib.GetLastError
+			  Return New WindowRef(h)
 			End Get
 		#tag EndGetter
-		Owner As ForeignWindow
+		Owner As WindowRef
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = WinLib.User32.GetParent(Me.Handle)
-			  Return New ForeignWindow(h)
+			  Dim h As Integer = Win32.User32.GetParent(Me.Handle)
+			  mLastError = WinLib.GetLastError
+			  Return New WindowRef(h)
 			End Get
 		#tag EndGetter
-		Parent As ForeignWindow
+		Parent As WindowRef
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  
 			  Dim size As RECT = Me.WindowInfo.ClientArea
 			  Return size.top
 			End Get
@@ -311,27 +411,28 @@ Protected Class ForeignWindow
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = WinLib.User32.GetAncestor(Me.Handle, GA_ROOTOWNER)
-			  Return New ForeignWindow(h)
+			  Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOTOWNER)
+			  mLastError = WinLib.GetLastError
+			  Return New WindowRef(h)
 			End Get
 		#tag EndGetter
-		TrueOwner As ForeignWindow
+		TrueOwner As WindowRef
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim h As Integer = WinLib.User32.GetAncestor(Me.Handle, GA_ROOT)
-			  Return New ForeignWindow(h)
+			  Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOT)
+			  mLastError = WinLib.GetLastError
+			  Return New WindowRef(h)
 			End Get
 		#tag EndGetter
-		TrueParent As ForeignWindow
+		TrueParent As WindowRef
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  
 			  Dim size As RECT = Me.WindowInfo.WindowArea
 			  Return size.right
 			End Get
@@ -364,16 +465,21 @@ Protected Class ForeignWindow
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return WinLib.User32.IsWindowVisible(Me.Handle)
+			  Return Win32.User32.IsWindowVisible(Me.Handle)
+			  
+			  Finally
+			    mLastError = WinLib.GetLastError
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
 			  If value Then
-			    Call WinLib.User32.ShowWindow(Me.Handle, SW_SHOW)
+			    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOW)
 			  Else
-			    Call WinLib.User32.ShowWindow(Me.Handle, SW_FORCEMINIMIZE)
+			    Call Win32.User32.ShowWindow(Me.Handle, SW_FORCEMINIMIZE)
 			  End If
+			  
+			  mLastError = WinLib.GetLastError
 			  
 			End Set
 		#tag EndSetter
@@ -395,9 +501,11 @@ Protected Class ForeignWindow
 		#tag Getter
 			Get
 			  Dim info As WINDOWINFO
-			  If WinLib.User32.GetWindowInfo(Me.Handle, info) Then
+			  If Win32.User32.GetWindowInfo(Me.Handle, info) Then
+			    mLastError = 0
 			    Return info
 			  End If
+			  mLastError = WinLib.GetLastError
 			End Get
 		#tag EndGetter
 		WindowInfo As WINDOWINFO

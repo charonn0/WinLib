@@ -3,22 +3,22 @@ Class IOStream
 Implements Readable,Writeable,Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the WinLib.Win32Object interface.
+		  // Part of the Win32.Win32Object interface.
 		  Me.Flush()
-		  #If TargetWin32 Then Call WinLib.Kernel32.CloseHandle(Me.Handle)
+		  #If TargetWin32 Then Call WinLib.CloseHandle(Me.Handle)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Constructor(FileHandle As Integer)
-		  // Part of the WinLib.Win32Object interface.
+		  // Part of the Win32.Win32Object interface.
 		  Me.mHandle = FileHandle
 		  
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub Destructor()
+	#tag Method, Flags = &h1
+		Protected Sub Destructor()
 		  Me.Close()
 		End Sub
 	#tag EndMethod
@@ -33,10 +33,14 @@ Implements Readable,Writeable,Win32Object
 	#tag Method, Flags = &h0
 		Sub Flush() Implements Writeable.Flush
 		  #If TargetWin32 Then
-		    If WinLib.Kernel32.FlushFileBuffers(Me.Handle) Then
+		    If Win32.Kernel32.FlushFileBuffers(Me.Handle) Then
 		      mLastError = 0
 		    Else
-		      mLastError = WinLib.Kernel32.GetLastError()
+		      mLastError = WinLib.GetLastError()
+		      Dim err As New IOException
+		      err.ErrorNumber = Me.LastError
+		      err.Message = WinLib.FormatError(Me.LastError)
+		      Raise err
 		    End If
 		  #endif
 		End Sub
@@ -62,7 +66,7 @@ Implements Readable,Writeable,Win32Object
 		  #If TargetWin32 Then
 		    Dim mb As New MemoryBlock(Count)
 		    Dim read As Integer
-		    If WinLib.Kernel32.ReadFile(Me.Handle, mb, mb.Size, read, Nil) Then
+		    If Win32.Kernel32.ReadFile(Me.Handle, mb, mb.Size, read, Nil) Then
 		      If read = mb.Size Then
 		        mLastError = 0
 		      Else
@@ -70,6 +74,10 @@ Implements Readable,Writeable,Win32Object
 		      End If
 		    Else
 		      mLastError = WinLib.GetLastError
+		      Dim err As New IOException
+		      err.ErrorNumber = Me.LastError
+		      err.Message = WinLib.FormatError(Me.LastError)
+		      Raise err
 		    End If
 		    
 		    If encoding = Nil Then encoding = Encodings.UTF8
@@ -92,10 +100,14 @@ Implements Readable,Writeable,Win32Object
 		  #If TargetWin32 Then
 		    Dim mb As MemoryBlock = text
 		    Dim written As Integer
-		    If WinLib.Kernel32.WriteFile(Me.Handle, mb, mb.Size, written, Nil) Then
+		    If Win32.Kernel32.WriteFile(Me.Handle, mb, mb.Size, written, Nil) Then
 		      mLastError = 0
 		    Else
 		      mLastError = WinLib.GetLastError()
+		      Dim err As New IOException
+		      err.ErrorNumber = Me.LastError
+		      err.Message = WinLib.FormatError(Me.LastError)
+		      Raise err
 		    End If
 		  #endif
 		End Sub
@@ -108,13 +120,22 @@ Implements Readable,Writeable,Win32Object
 	#tag EndMethod
 
 
+	#tag Note, Name = About this class
+		This class emulates RB's built-in BinaryStream class using Winapi calls like ReadFile, WriteFile, etc. and implements the Writeable and Readable interfaces.
+		Pass any Win32 handle (that's supported by ReadFile, etc.) to the class constructor. Some types of handles don't represent an object with properties like 
+		'length' and 'position' but are still readable and writable, so do be careful.
+		
+		Errors work just like the BinaryStream. If a read or write fails, an IOException is raised with the Win32 error code.
+	#tag EndNote
+
+
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
 			  #If TargetWin32 Then
 			    Dim value, oldvalue As Integer
 			    oldvalue = Me.Position
-			    value = WinLib.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_END)
+			    value = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_END)
 			    Me.Position = oldvalue
 			    mLastError = WinLib.GetLastError()
 			    Return value
@@ -130,7 +151,7 @@ Implements Readable,Writeable,Win32Object
 			  #If TargetWin32 Then
 			    Dim oldvalue As Integer = Me.Position
 			    Me.Position = value
-			    If Not WinLib.Kernel32.SetEndOfFile(Me.Handle) Then
+			    If Not Win32.Kernel32.SetEndOfFile(Me.Handle) Then
 			      mLastError = WinLib.GetLastError()
 			    Else
 			      mLastError = 0
@@ -154,7 +175,7 @@ Implements Readable,Writeable,Win32Object
 		#tag Getter
 			Get
 			  #If TargetWin32 Then
-			    Dim value As Integer = WinLib.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_CURRENT)
+			    Dim value As Integer = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_CURRENT)
 			    mLastError = WinLib.GetLastError()
 			    Return value
 			  #endif
@@ -163,7 +184,7 @@ Implements Readable,Writeable,Win32Object
 		#tag Setter
 			Set
 			  #If TargetWin32 Then
-			    Call WinLib.Kernel32.SetFilePointer(Me.Handle, value, Nil, FILE_BEGIN)
+			    Call Win32.Kernel32.SetFilePointer(Me.Handle, value, Nil, FILE_BEGIN)
 			    mLastError = WinLib.GetLastError()
 			  #endif
 			End Set

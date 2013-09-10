@@ -1,27 +1,27 @@
 #tag Class
-Protected Class ClipboardMonitor
-Inherits WindowMessenger
+Class ClipboardMonitor
+Inherits Win32MessageMonitor
 	#tag Event
-		Function WindowMessage(Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
-		  Select Case Message
-		  Case WM_CHANGECBCHAIN
-		    'A window is being removed
-		    If Integer(WParam) = NextViewerWindow Then
-		      NextViewerWindow = Integer(LParam)
+		Function WindowMessage(HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		  #pragma Unused HWND
+		  #If TargetWin32 Then
+		    Select Case Message
+		    Case WM_CHANGECBCHAIN
+		      'A window is being removed
+		      If Integer(WParam) = NextViewerWindow Then
+		        NextViewerWindow = Integer(LParam)
+		        Return True
+		      Else
+		        Call Win32.User32.SendMessage(NextViewerWindow, Message, WParam, LParam)
+		        Return True
+		      End If
+		    Case WM_DRAWCLIPBOARD
+		      'clipboard changed, pass it on
+		      Call Win32.User32.SendMessage(NextViewerWindow, Message, WParam, LParam)
+		      RaiseEvent ClipboardChanged()
 		      Return True
-		    Else
-		      Call SendMessage(NextViewerWindow, Message, WParam, LParam)
-		      Return True
-		    End If
-		  Case WM_DRAWCLIPBOARD
-		    'clipboard changed, pass it on
-		    Call SendMessage(NextViewerWindow, Message, WParam, LParam)
-		    RaiseEvent ClipboardChanged()
-		    Return True
-		  Else
-		    ' this should never happen since we only get the messages we asked for
-		    Return False
-		  End Select
+		    End Select
+		  #endif
 		End Function
 	#tag EndEvent
 
@@ -29,14 +29,18 @@ Inherits WindowMessenger
 	#tag Method, Flags = &h1000
 		Sub Constructor(ParentHandle As Integer = 0)
 		  // Calling the overridden superclass constructor.
-		  Super.Constructor(ParentHandle, WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD)
-		  NextViewerWindow = WinLib.User32.SetClipboardViewer(Me.ParentWindow)
+		  Super.Constructor(ParentHandle)
+		  Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD)
+		  #If TargetWin32 Then NextViewerWindow = Win32.User32.SetClipboardViewer(Me.ParentWindow)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Sub Destructor()
-		  Call WinLib.User32.ChangeClipboardChain(Me.ParentWindow, Me.NextViewerWindow)
+		  #If TargetWin32 Then
+		    ' We must unlink ourselves from the Clipboard chain without breaking it!
+		    Call Win32.User32.ChangeClipboardChain(Me.ParentWindow, Me.NextViewerWindow)
+		  #endif
 		  Super.Destructor()
 		End Sub
 	#tag EndMethod
@@ -51,9 +55,6 @@ Inherits WindowMessenger
 		http://msdn.microsoft.com/en-us/library/windows/desktop/ms649052%28v=vs.85%29.aspx
 		
 		Monitors the system-wide clipboard for changes.
-		
-		Place this class on a window, or call the class constructor with a handle to the desired parent window.
-		The ClipboardChanged event will fire every time the contents of the Clipboard are set.
 	#tag EndNote
 
 
