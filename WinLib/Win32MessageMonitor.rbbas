@@ -17,7 +17,13 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(HWND As Integer = 0)
+		Sub Constructor()
+		  Me.Constructor(0)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(HWND As Integer)
 		  If HWND = 0 Then HWND = Window(0).Handle
 		  Me.ParentWindow = HWND
 		  Subclass(ParentWindow, Me)

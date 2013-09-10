@@ -53,7 +53,7 @@ Inherits Win32MessageMonitor
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
 		  // Constructor() -- From Win32MessageMonitor
-		  Super.Constructor()
+		  Super.Constructor(0)
 		  Me.AddMessageFilter(WM_HOTKEY)
 		  
 		End Sub
