@@ -43,44 +43,6 @@ Protected Module Win32
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  //Returns the Kernel version of Windows as a Double (MajorVersion.MinorVersion)
-			  //For example, Windows 2000 returns 5.0, XP Returns 5.1, Vista Returns 6.0 and Windows 7 returns 6.1
-			  //On error, returns 0.0
-			  
-			  #If TargetWin32 Then
-			    Return OSVersion.MajorVersion + (OSVersion.MinorVersion / 10)
-			  #endif
-			End Get
-		#tag EndGetter
-		Protected KernelVersion As Double
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  //Returns the service pack number of Windows as a Double (ServicePackMajor.ServicePackMinor)
-			  //For example, Windows XP SP0 returns 0.0, XP SP1 Returns 1.0, etc.
-			  //On error, returns -0.0
-			  
-			  #If TargetWin32 Then
-			    Dim info As OSVERSIONINFOEX
-			    info.StructSize = Info.Size
-			    
-			    If Win32.Kernel32.GetVersionEx(info) Then
-			      Return info.ServicePackMajor + (info.ServicePackMinor / 10)
-			    Else
-			      Return -0.0
-			    End If
-			  #endif
-			End Get
-		#tag EndGetter
-		Protected ServicePack As Double
-	#tag EndComputedProperty
-
-
 	#tag Constant, Name = ACCESS_SYSTEM_SECURITY, Type = Double, Dynamic = False, Default = \"&h01000000", Scope = Public
 	#tag EndConstant
 
@@ -1503,12 +1465,12 @@ Protected Module Win32
 		faceName As String*255
 	#tag EndStructure
 
-	#tag Structure, Name = LUID, Flags = &h0
+	#tag Structure, Name = LUID, Flags = &h0, Attributes = \""
 		Lowpart As Integer
 		HighPart As Integer
 	#tag EndStructure
 
-	#tag Structure, Name = LUID_AND_ATTRIBUTES, Flags = &h0
+	#tag Structure, Name = LUID_AND_ATTRIBUTES, Flags = &h0, Attributes = \""
 		LUID As LUID
 		Attribs As Integer
 	#tag EndStructure
@@ -1790,7 +1752,7 @@ Protected Module Win32
 		DaylightBias As Integer
 	#tag EndStructure
 
-	#tag Structure, Name = TOKEN_PRIVILEGES, Flags = &h0
+	#tag Structure, Name = TOKEN_PRIVILEGES, Flags = &h0, Attributes = \""
 		Count As Integer
 		LUID_AND_ATTRIBS As LUID_AND_ATTRIBUTES
 	#tag EndStructure

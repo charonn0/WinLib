@@ -1,6 +1,6 @@
 #tag Class
 Class HotKeyMonitor
-Inherits Win32MessageMonitor
+Inherits MessageMonitor
 	#tag Event
 		Function WindowMessage(HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #If DebugBuild Then
@@ -52,7 +52,7 @@ Inherits Win32MessageMonitor
 	#tag Method, Flags = &h1000
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
-		  // Constructor() -- From Win32MessageMonitor
+		  // Constructor() -- From MessageMonitor
 		  Super.Constructor(0)
 		  Me.AddMessageFilter(WM_HOTKEY)
 		  

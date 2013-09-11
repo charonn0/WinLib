@@ -1,5 +1,5 @@
 #tag Class
-Class Win32MessageMonitor
+Protected Class MessageMonitor
 Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub AddMessageFilter(ParamArray MsgIDs() As Integer)
@@ -35,7 +35,7 @@ Implements Win32Object
 		  #If TargetWin32 Then
 		    For Each wndclass As Dictionary In Subclasses
 		      If wndclass.HasKey(HWND) Then
-		        Dim subclass As Win32MessageMonitor = wndclass.Value(HWND)
+		        Dim subclass As MessageMonitor = wndclass.Value(HWND)
 		        If subclass <> Nil And subclass.WndProc(HWND, msg, wParam, lParam) Then
 		          Return 1
 		        End If
@@ -79,7 +79,7 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Shared Sub Subclass(SuperWin As Integer, SubWin As Win32MessageMonitor)
+		Protected Shared Sub Subclass(SuperWin As Integer, SubWin As MessageMonitor)
 		  #If TargetWin32 Then
 		    If WndProcs.HasKey(SuperWin) Then
 		      Dim d As New Dictionary
@@ -140,7 +140,7 @@ Implements Win32Object
 		AddMessageFilter method to specify which window messages you would like to receive. Return True from the 
 		WindowMessage event to prevent the message from being passed on to the framework.
 		
-		Each Win32MessageMonitor instance must belong to a window or a control. If no window/control is specified to the 
+		Each MessageMonitor instance must belong to a window or a control. If no window/control is specified to the 
 		Constructor (specifically, the handle property of the Window/Control) then your app's frontmost window will 
 		be used (AKA Window(0)  See: http://docs.realsoftware.com/index.php/Window_Method)
 		

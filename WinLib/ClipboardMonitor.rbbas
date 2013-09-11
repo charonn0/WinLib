@@ -1,6 +1,6 @@
 #tag Class
 Class ClipboardMonitor
-Inherits Win32MessageMonitor
+Inherits MessageMonitor
 	#tag Event
 		Function WindowMessage(HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #pragma Unused HWND
@@ -31,7 +31,7 @@ Inherits Win32MessageMonitor
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(ParentHandle)
 		  Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD)
-		  #If TargetWin32 Then 
+		  #If TargetWin32 Then
 		    NextViewerWindow = Win32.User32.SetClipboardViewer(Me.ParentWindow)
 		  #endif
 		End Sub

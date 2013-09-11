@@ -1,5 +1,5 @@
 #tag Class
-Class WindowRef
+Protected Class WindowRef
 Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
@@ -574,11 +574,6 @@ Implements Win32Object
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Handle"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Height"

@@ -21,7 +21,7 @@ Protected Module WinLib
 
 	#tag Method, Flags = &h1
 		Protected Function CloseHandle(Handle As Integer) As Boolean
-		  #If TargetWin32 Then 
+		  #If TargetWin32 Then
 		    Return Win32.Kernel32.CloseHandle(Handle)
 		  #endif
 		End Function
@@ -79,6 +79,18 @@ Protected Module WinLib
 		Protected Function GetSystemMetric(Index As Integer) As Integer
 		  #If TargetWin32 Then
 		    Return Win32.User32.GetSystemMetrics(Index)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function KernelVersion() As Double
+		  //Returns the Kernel version of Windows as a Double (MajorVersion.MinorVersion)
+		  //For example, Windows 2000 returns 5.0, XP Returns 5.1, Vista Returns 6.0 and Windows 7 returns 6.1
+		  //On error, returns 0.0
+		  
+		  #If TargetWin32 Then
+		    Return Win32.OSVersion.MajorVersion + (Win32.OSVersion.MinorVersion / 10)
 		  #endif
 		End Function
 	#tag EndMethod
