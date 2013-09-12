@@ -1389,6 +1389,15 @@ Protected Module Win32
 		UILengthDrawn As UInt32
 	#tag EndStructure
 
+	#tag Structure, Name = DWM_THUMBNAIL_PROPERTIES, Flags = &h0
+		flags As Integer
+		  Destination As RECT
+		  Source As RECT
+		  Opacity As Byte
+		  Visible As Boolean
+		SourceClientAreaOnly As Boolean
+	#tag EndStructure
+
 	#tag Structure, Name = FILETIME, Flags = &h0
 		HighDateTime As Integer
 		LowDateTime As Integer
@@ -1473,6 +1482,13 @@ Protected Module Win32
 	#tag Structure, Name = LUID_AND_ATTRIBUTES, Flags = &h0, Attributes = \""
 		LUID As LUID
 		Attribs As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = MARGINS, Flags = &h0
+		LeftWidth As Integer
+		  RightWidth As Integer
+		  TopHeight As Integer
+		BottomHeight As Integer
 	#tag EndStructure
 
 	#tag Structure, Name = MEMORYSTATUSEX, Flags = &h0

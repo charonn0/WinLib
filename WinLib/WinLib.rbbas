@@ -28,6 +28,38 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function DesktopComposition() As Boolean
+		  ' Vista and newer. Returns true if desktop composition is enabled.
+		  #If TargetWin32 Then
+		    If System.IsFunctionAvailable("DwmIsCompositionEnabled", "Dwmapi") Then
+		      Dim isenabled As Boolean
+		      If Win32.Dwmapi.DwmIsCompositionEnabled(isenabled) = S_OK Then
+		        Return isenabled
+		      Else
+		        Return False
+		      End If
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub DesktopComposition(Assigns Enabled As Boolean)
+		  ' Vista and newer. Temporarily disableds Aero glass and other eye candy. This is system-wide, so use sparingly and
+		  ' make sure you revert when your app exits.
+		  #If TargetWin32 Then
+		    If System.IsFunctionAvailable("DwmEnableComposition", "Dwmapi") Then
+		      If Enabled Then
+		        Call Win32.Dwmapi.DwmEnableComposition(1)
+		      Else
+		        Call Win32.Dwmapi.DwmEnableComposition(0)
+		      End If
+		    End If
+		  #endif
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function ExitWindows(Mode As Integer, Reason As Integer, ForceIfHung As Boolean) As Integer
 		  //Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
 		  // The reason code may be any code(s) documented here: http://msdn.microsoft.com/en-us/library/aa376885%28v=vs.85%29.aspx
