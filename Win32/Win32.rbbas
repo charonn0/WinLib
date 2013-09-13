@@ -1306,6 +1306,9 @@ Protected Module Win32
 	#tag Constant, Name = WM_SETICON, Type = Double, Dynamic = False, Default = \"&h0080", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = WM_SETTEXT, Type = Double, Dynamic = False, Default = \"&h000C", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = WM_USER, Type = Double, Dynamic = False, Default = \"&h0400", Scope = Public
 	#tag EndConstant
 

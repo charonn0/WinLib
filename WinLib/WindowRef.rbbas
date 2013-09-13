@@ -98,8 +98,8 @@ Implements Win32Object
 		    Dim hidden() As String = Split("MSCTFIME UI,Default IME,Jump List,Start Menu,Start,Program Manager", ",")
 		    while ret > 0
 		      Dim pw As New WindowRef(ret)
-		      If pw.Caption.Trim <> "" And hidden.IndexOf(pw.Caption.Trim) <= -1 And pw.Visible Then
-		        If PartialTitle.Trim = "" Or InStr(pw.Caption, PartialTitle) > 0 Then
+		      If pw.Text.Trim <> "" And hidden.IndexOf(pw.Text.Trim) <= -1 And pw.Visible Then
+		        If PartialTitle.Trim = "" Or InStr(pw.Text, PartialTitle) > 0 Then
 		          wins.Append(pw)
 		        End If
 		      End If
@@ -335,32 +335,6 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  #If TargetWin32 Then
-			    Dim buffer As New MemoryBlock(2048)
-			    Dim sz As New MemoryBlock(4)
-			    sz.Int32Value(0) = buffer.Size
-			    If SendMessage(WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
-			      Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
-			    End If
-			    mLastError = WinLib.GetLastError
-			    Return buffer.WString(0).Trim
-			  #endif
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  #If TargetWin32 Then
-			    Dim mb As MemoryBlock = value
-			    Call Win32.User32.SetWindowText(Me.Handle, mb)
-			  #endif
-			End Set
-		#tag EndSetter
-		Caption As String
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
 			  Dim size As RECT = Me.WindowInfo.ClientArea
 			  Return size.bottom - size.top
 			End Get
@@ -410,6 +384,36 @@ Implements Win32Object
 			End Get
 		#tag EndGetter
 		Parent As WindowRef
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #If TargetWin32 Then
+			    Dim buffer As New MemoryBlock(2048)
+			    Dim sz As New MemoryBlock(4)
+			    sz.Int32Value(0) = buffer.Size
+			    If SendMessage(WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
+			      Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
+			    End If
+			    mLastError = WinLib.GetLastError
+			    Return buffer.WString(0).Trim
+			  #endif
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  #If TargetWin32 Then
+			    value = DefineEncoding(value, Encodings.UTF8)
+			    Dim mb As New MemoryBlock(value.Len * 2 + 2)
+			    mb.WString(0) = value
+			    If SendMessage(WM_SETTEXT, Nil, mb) <= 0 Then 'We ask nicely
+			      Call Win32.User32.SetWindowText(Me.Handle, mb)  'otherwise we try to peek (sometimes crashy!)
+			    End If
+			  #endif
+			End Set
+		#tag EndSetter
+		Text As String
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
