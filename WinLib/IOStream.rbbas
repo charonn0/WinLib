@@ -37,10 +37,6 @@ Implements Readable,Writeable,Win32Object
 		      mLastError = 0
 		    Else
 		      mLastError = WinLib.GetLastError()
-		      Dim err As New IOException
-		      err.ErrorNumber = Me.LastError
-		      err.Message = WinLib.FormatError(Me.LastError)
-		      Raise err
 		    End If
 		  #endif
 		End Sub
