@@ -574,12 +574,6 @@ Implements Win32Object
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Caption"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Height"
 			Group="Behavior"
 			Type="Integer"
@@ -607,6 +601,11 @@ Implements Win32Object
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Text"
+			Group="Behavior"
+			Type="String"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
