@@ -61,60 +61,6 @@ Protected Module Win32
 	#tag Constant, Name = BLACKNESS, Type = Double, Dynamic = False, Default = \"&h00000042", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = BusATA, Type = Double, Dynamic = False, Default = \"&h3", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusATAPI, Type = Double, Dynamic = False, Default = \"&h2", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusFibre, Type = Double, Dynamic = False, Default = \"&h6", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusFileBackedVirtual, Type = Double, Dynamic = False, Default = \"&hF", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusFirewire, Type = Double, Dynamic = False, Default = \"&h4", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusiSCSI, Type = Double, Dynamic = False, Default = \"&h9", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusMax, Type = Double, Dynamic = False, Default = \"&h10", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusMaxReserved, Type = Double, Dynamic = False, Default = \"&h7F", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusMMC, Type = Double, Dynamic = False, Default = \"&hD", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusRAID, Type = Double, Dynamic = False, Default = \"&h8", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusSAS, Type = Double, Dynamic = False, Default = \"&hA", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusSATA, Type = Double, Dynamic = False, Default = \"&hB", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusSCSI, Type = Double, Dynamic = False, Default = \"&h1", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusSD, Type = Double, Dynamic = False, Default = \"&hC", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusSSA, Type = Double, Dynamic = False, Default = \"&h5", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusUnknown, Type = Double, Dynamic = False, Default = \"&h0", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusUSB, Type = Double, Dynamic = False, Default = \"&h7", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = BusVirtual, Type = Double, Dynamic = False, Default = \"&hE", Scope = Public
-	#tag EndConstant
-
 	#tag Constant, Name = CALG_3DES, Type = Double, Dynamic = False, Default = \"&h00006603", Scope = Public
 	#tag EndConstant
 
