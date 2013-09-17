@@ -94,9 +94,9 @@ Implements Win32Object
 
 
 	#tag Note, Name = About this class
-		Create a new instance of the FindFileIterator class passing the top of the directory tree to be examined and a
-		search pattern to match file/folder names against. The search patterns allowed are the same as those accepted
-		by the cmd.exe 'dir' command, e.g. "*.*" matches all names; "*.EXE" matches all .exe files; etc.
+		Create a new instance of the FindFileIterator class passing the directory to be examined and a search pattern to match 
+		file/folder names against. The search patterns allowed are the same as those accepted by the cmd.exe 'dir' command, 
+		e.g. "*.*" matches all names; "*.EXE" matches all .exe files; etc.
 		
 		Call NextItem to receive the next file's or folder's FolderItem. Calling this function will advance the search 
 		position by 1.
@@ -112,9 +112,9 @@ Implements Win32Object
 		    End If
 		  Loop Until fe.LastError <> 0
 		
-		Using this class to enumerate a folder will be much faster than FolderItem.Item(Index), especially on large
-		directories. Execution time of FolderItem.Item rises exponentially relative to the number of items in the directory.
-		The execution time of FindFileIterator.NextItem rises only linearly relative to the number of items.
+		Using this class to enumerate a folder can be much faster than FolderItem.Item, especially on large directories. 
+		Execution time of FolderItem.Item rises exponentially relative to the number of items in the directory. The execution 
+		time of FindFileIterator.NextItem rises only linearly relative to the number of items.
 	#tag EndNote
 
 
