@@ -32,6 +32,7 @@ Implements Win32Object
 
 	#tag Method, Flags = &h21
 		Private Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
+		  #pragma X86CallingConvention StdCall
 		  #If TargetWin32 Then
 		    For Each wndclass As Dictionary In Subclasses
 		      If wndclass.HasKey(HWND) Then
