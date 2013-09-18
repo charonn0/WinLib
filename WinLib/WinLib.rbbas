@@ -157,6 +157,13 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function LoadFontFile(FontFile As FolderItem) As Boolean
+		  Dim flags As Integer = FR_PRIVATE
+		  Return Win32.GDI32.AddFontResourceEx(FontFile.AbsolutePath, flags, 0) > 0
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function SetPrivilege(PrivilegeName As String, Enabled As Boolean) As Boolean
 		  //Modifies the calling process' security token
 		  //See the SE_* Constants for privilege names.
@@ -196,6 +203,13 @@ Protected Module WinLib
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function UnloadFontFile(FontFile As FolderItem) As Boolean
+		  Dim flags As Integer = FR_PRIVATE
+		  Return Win32.GDI32.RemoveFontResourceEx(FontFile.AbsolutePath, flags, 0)
+		End Function
+	#tag EndMethod
+
 
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
@@ -226,6 +240,37 @@ Protected Module WinLib
 			End Set
 		#tag EndSetter
 		Protected CurrentDirectory As FolderItem
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  ' Returns a Rectangle within which the mouse cursor is currently allowed move.
+			  Dim r As RECT
+			  If Win32.User32.GetClipCursor(r) Then
+			    Return New REALbasic.Rect(r.left, r.top, r.right - r.left, r.bottom - r.top)
+			  End If
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  ' Pass a Rectangle whose dimensions the mouse cursor should be confined within.
+			  ' Passing NIL will remove any restrictions imposed by previous calls.
+			  ' Only works as long as your app is frontmost
+			  ' See: http://msdn.microsoft.com/en-us/library/ms648383.aspx
+			  ' Call WinLib.GetLastError to determine whether this method succeeded (GetLastError=0).
+			  
+			  Dim r As Win32.RECT
+			  If value <> Nil Then
+			    r.top = value.Top
+			    r.left = value.Left
+			    r.bottom = value.Bottom
+			    r.right = value.Right
+			  End If
+			  Call Win32.User32.ClipCursor(r)
+			End Set
+		#tag EndSetter
+		Protected CursorConfinementArea As REALbasic.Rect
 	#tag EndComputedProperty
 
 

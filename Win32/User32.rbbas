@@ -33,6 +33,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function ClipCursor Lib "User32" (ByRef Area As RECT) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CloseDesktop Lib "User32" (hDesktop As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -78,6 +82,10 @@ Protected Module User32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GetClientRect Lib "User32" (HWND As Integer, ByRef Dimensions As RECT) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GetClipCursor Lib "User32" (ByRef Area As RECT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

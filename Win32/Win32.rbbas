@@ -439,6 +439,9 @@ Protected Module Win32
 	#tag Constant, Name = FORMAT_MESSAGE_FROM_SYSTEM, Type = Double, Dynamic = False, Default = \"&H1000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = FR_PRIVATE, Type = Double, Dynamic = False, Default = \"&h10", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = GA_PARENT, Type = Double, Dynamic = False, Default = \"1", Scope = Public
 	#tag EndConstant
 
