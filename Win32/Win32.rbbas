@@ -1249,6 +1249,9 @@ Protected Module Win32
 	#tag Constant, Name = WM_HOTKEY, Type = Double, Dynamic = False, Default = \"&h0312", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = WM_MOUSEWHEEL, Type = Double, Dynamic = False, Default = \"&h020A", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = WM_PRINT, Type = Double, Dynamic = False, Default = \"&h0317", Scope = Public
 	#tag EndConstant
 
