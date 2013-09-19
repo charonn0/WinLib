@@ -53,26 +53,97 @@ Protected Module GUI
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function DesktopComposition() As Boolean
+		  ' Vista and newer. Returns true if desktop composition is enabled.
+		  #If TargetWin32 Then
+		    If System.IsFunctionAvailable("DwmIsCompositionEnabled", "Dwmapi") Then
+		      Dim isenabled As Boolean
+		      If Win32.Dwmapi.DwmIsCompositionEnabled(isenabled) = S_OK Then
+		        Return isenabled
+		      End If
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub DesktopComposition(Assigns Enabled As Boolean)
+		  ' Vista and newer. Temporarily disableds Aero glass and other eye candy. This is system-wide, so use sparingly and
+		  ' make sure you revert when your app exits.
+		  #If TargetWin32 Then
+		    If System.IsFunctionAvailable("DwmEnableComposition", "Dwmapi") Then
+		      If Enabled Then
+		        Call Win32.Dwmapi.DwmEnableComposition(1)
+		      Else
+		        Call Win32.Dwmapi.DwmEnableComposition(0)
+		      End If
+		    End If
+		  #endif
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetDesktopWindow() As WinLib.WindowRef
-		  Dim HWND As Integer = Win32.User32.GetDesktopWindow
-		  Return New WinLib.WindowRef(HWND)
+		  #If TargetWin32 Then
+		    Dim HWND As Integer = Win32.User32.GetDesktopWindow
+		    Return New WinLib.WindowRef(HWND)
+		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function LoadFontFile(FontFile As FolderItem) As Boolean
 		  Dim flags As Integer = FR_PRIVATE
-		  Return Win32.GDI32.AddFontResourceEx(FontFile.AbsolutePath, flags, 0) > 0
+		  #If TargetWin32 Then
+		    Return Win32.GDI32.AddFontResourceEx(FontFile.AbsolutePath, flags, 0) > 0
+		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
 		Protected Function UnloadFontFile(FontFile As FolderItem) As Boolean
 		  Dim flags As Integer = FR_PRIVATE
-		  Return Win32.GDI32.RemoveFontResourceEx(FontFile.AbsolutePath, flags, 0)
+		  #If TargetWin32 Then
+		    Return Win32.GDI32.RemoveFontResourceEx(FontFile.AbsolutePath, flags, 0)
+		  #endif
 		End Function
 	#tag EndMethod
 
 
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			InitialValue="-2147483648"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Top"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+	#tag EndViewBehavior
 End Module
 #tag EndModule
