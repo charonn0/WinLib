@@ -34,7 +34,7 @@ Implements Win32Object
 		    h = Me.TrueHeight
 		  End If
 		  
-		  Return CaptureRect(l, t, w, h)
+		  Return WinLib.Gui.CaptureRect(l, t, w, h)
 		  mLastError = WinLib.GetLastError
 		End Function
 	#tag EndMethod
@@ -606,6 +606,7 @@ Implements Win32Object
 			Name="Text"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
