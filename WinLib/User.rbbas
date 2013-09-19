@@ -37,18 +37,17 @@ Protected Module User
 		  //Returns 0 on success, or a Win32 error number on failure.
 		  #If TargetWin32 Then
 		    Dim luid As New MemoryBlock(8)
-		    Dim mode As Integer
-		    If Enabled Then
-		      mode = SE_PRIVILEGE_ENABLED
-		    Else
-		      mode = SE_PRIVILEGE_ENABLED
-		    End If
 		    If Win32.AdvApi32.LookupPrivilegeValue(Nil, PrivilegeName, luid) Then
 		      Dim newState As New MemoryBlock(16)
 		      newState.UInt32Value(0) = 1
 		      newState.UInt32Value(4) = luid.UInt32Value(0)
 		      newState.UInt32Value(8) = luid.UInt32Value(4)
-		      newState.UInt32Value(12) = mode  //mode can be enable, disable, or remove. See: Enable, Disable, and Drop.
+		      If Enabled Then
+		        newState.UInt32Value(12) = SE_PRIVILEGE_ENABLED
+		      Else
+		        newState.UInt32Value(12) = SE_PRIVILEGE_REMOVED
+		      End If
+		      
 		      Dim retLen As Integer
 		      Dim prevPrivs As Ptr
 		      Dim TokenHandle As Integer
@@ -61,5 +60,40 @@ Protected Module User
 	#tag EndMethod
 
 
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			InitialValue="-2147483648"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Top"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+	#tag EndViewBehavior
 End Module
 #tag EndModule
