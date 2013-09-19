@@ -25,7 +25,7 @@ Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub Constructor(HWND As Integer)
 		  If HWND = 0 Then HWND = Window(0).Handle
-		  Me.ParentWindow = HWND
+		  Me.ParentWindow = New WinLib.WindowRef(HWND)
 		  Subclass(ParentWindow, Me)
 		End Sub
 	#tag EndMethod
@@ -60,7 +60,7 @@ Implements Win32Object
 	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  // Part of the WinLib.Win32Object interface.
-		  Return Me.ParentWindow
+		  Return Me.ParentWindow.Handle
 		End Function
 	#tag EndMethod
 
@@ -80,35 +80,35 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Shared Sub Subclass(SuperWin As Integer, SubWin As MessageMonitor)
+		Protected Shared Sub Subclass(SuperWin As WinLib.WindowRef, SubWin As MessageMonitor)
 		  #If TargetWin32 Then
-		    If WndProcs.HasKey(SuperWin) Then
+		    If WndProcs.HasKey(SuperWin.Handle) Then
 		      Dim d As New Dictionary
-		      d.Value(SuperWin) = SubWin
+		      d.Value(SuperWin.Handle) = SubWin
 		      Subclasses.Append(d)
 		      Return
 		    End
 		    Dim windproc As Ptr = AddressOf DefWindowProc
-		    Dim oldWndProc As Integer = Win32.User32.SetWindowLong(SuperWin, GWL_WNDPROC, windproc)
-		    WndProcs.Value(SuperWin) = oldWndProc
+		    Dim oldWndProc As Integer = Win32.User32.SetWindowLong(SuperWin.Handle, GWL_WNDPROC, windproc)
+		    WndProcs.Value(SuperWin.Handle) = oldWndProc
 		    Dim d As New Dictionary
-		    d.Value(SuperWin) = SubWin
+		    d.Value(SuperWin.Handle) = SubWin
 		    Subclasses.Append(d)
 		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Shared Sub UnSubclass(SuperWin As Integer)
+		Protected Shared Sub UnSubclass(SuperWin As WinLib.WindowRef)
 		  #If TargetWin32 Then
-		    If Not WndProcs.HasKey(SuperWin) Then Return
-		    Dim oldWndProc As Ptr = WndProcs.Value(SuperWin)
-		    Call Win32.User32.SetWindowLong(SuperWin, GWL_WNDPROC, oldWndProc)
-		    WndProcs.Remove(SuperWin)
+		    If Not WndProcs.HasKey(SuperWin.Handle) Then Return
+		    Dim oldWndProc As Ptr = WndProcs.Value(SuperWin.Handle)
+		    Call Win32.User32.SetWindowLong(SuperWin.Handle, GWL_WNDPROC, oldWndProc)
+		    WndProcs.Remove(SuperWin.Handle)
 		    Dim wndclass As Dictionary
 		    For i As Integer = UBound(Subclasses) DownTo 0
 		      wndclass = Subclasses(i)
-		      If wndclass.HasKey(SuperWin) Then
+		      If wndclass.HasKey(SuperWin.Handle) Then
 		        Subclasses.Remove(i)
 		      End
 		    Next
@@ -118,16 +118,15 @@ Implements Win32Object
 
 	#tag Method, Flags = &h21
 		Private Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
-		  #pragma Unused HWND
 		  If Me.MessageFilter.HasKey(msg) Then
-		    Return WindowMessage(HWND, msg, wParam, lParam)
+		    Return WindowMessage(New WinLib.WindowRef(HWND), msg, wParam, lParam)
 		  End If
 		End Function
 	#tag EndMethod
 
 
 	#tag Hook, Flags = &h0
-		Event WindowMessage(HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Event WindowMessage(HWND As WinLib.WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 	#tag EndHook
 
 
@@ -184,7 +183,7 @@ Implements Win32Object
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected ParentWindow As Integer
+		Protected ParentWindow As WinLib.WindowRef
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

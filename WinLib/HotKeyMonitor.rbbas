@@ -2,7 +2,7 @@
 Class HotKeyMonitor
 Inherits MessageMonitor
 	#tag Event
-		Function WindowMessage(HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Function WindowMessage(HWND As WinLib.WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #If DebugBuild Then
 		    ' We should not be getting messages addressed to other windows.
 		    If HWND <> Me.ParentWindow Then Break
@@ -75,7 +75,7 @@ Inherits MessageMonitor
 		    id = Win32.Kernel32.GlobalAddAtom("Win32Atom" + Str(NextNum))
 		    KeyIDs.Append(id)
 		    
-		    If Win32.User32.RegisterHotKey(Me.ParentWindow, id, modifiers, virtualKey) Then
+		    If Win32.User32.RegisterHotKey(Me.ParentWindow.Handle, id, modifiers, virtualKey) Then
 		      Return id
 		    Else
 		      Return -1
@@ -87,7 +87,7 @@ Inherits MessageMonitor
 	#tag Method, Flags = &h0
 		Sub UnregisterKey(id as Integer)
 		  #If TargetWin32 Then
-		    Call Win32.User32.UnregisterHotkey(Me.ParentWindow, id)
+		    Call Win32.User32.UnregisterHotkey(Me.ParentWindow.Handle, id)
 		    Call Win32.User32.GlobalDeleteAtom(id)
 		    For i As Integer = UBound(KeyIDs) DownTo 0
 		      If KeyIDs(i) = id Then
