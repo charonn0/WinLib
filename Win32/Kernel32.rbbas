@@ -13,7 +13,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function ConnectNamedPipe Lib "Kernel32" (hPipe As Integer, Overlapped As Ptr) As Boolean
+		Protected Declare Function ConnectNamedPipe Lib "Kernel32" (hPipe As Integer, Overlapped As Win32 . OVERLAPPED) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
