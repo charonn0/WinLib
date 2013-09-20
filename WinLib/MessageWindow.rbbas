@@ -4,9 +4,10 @@ Inherits WinLib.MessageMonitor
 Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the WinLib.Win32Object interface.
 		  Super.Close
-		  Call Win32.User32.DestroyWindow(Me.Handle)
+		  #If TargetWin32 Then
+		    Call Win32.User32.DestroyWindow(Me.Handle)
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -17,7 +18,12 @@ Implements WinLib.Win32Object
 		  Dim exflags, flags As Integer
 		  exflags = WS_EX_NOREDIRECTIONBITMAP
 		  flags = WS_VISIBLE
-		  Dim HWND As Integer = Win32.User32.CreateWindowEx(exflags, mClassName, mWindowName, flags, 0, 0, 0, 0, HWND_MESSAGE, 0, 0, Nil)
+		  Dim HWND As Integer
+		  #If TargetWin32 Then
+		    HWND = Win32.User32.CreateWindowEx(exflags, mClassName, mWindowName, flags, 0, 0, 0, 0, HWND_MESSAGE, 0, 0, Nil)
+		    ' FIXME this call returns 0 and LastError=87. 0 is a valid parameter for the superclass constructor, so this class will work
+		    ' in a gui app despite the error.
+		  #endif
 		  mLastError = WinLib.GetLastError
 		  Super.Constructor(HWND)
 		End Sub
@@ -26,14 +32,12 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h1
 		Protected Sub Destructor()
 		  Me.Close
-		  ' don't invoke the super's destructor
 		End Sub
 	#tag EndMethod
 
 
 	#tag Note, Name = About this class
 		This class provides an invisible message-reception window.
-		
 	#tag EndNote
 
 
@@ -69,6 +73,7 @@ Implements WinLib.Win32Object
 			Name="ClassName"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
@@ -108,6 +113,7 @@ Implements WinLib.Win32Object
 			Name="WindowName"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

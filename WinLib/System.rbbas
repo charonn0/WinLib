@@ -53,7 +53,9 @@ Protected Module System
 
 	#tag Method, Flags = &h1
 		Protected Function RegisterWindowMessage(MessageName As String) As Integer
-		  Return Win32.User32.RegisterWindowMessage(MessageName)
+		  #If TargetWin32 Then
+		    Return Win32.User32.RegisterWindowMessage(MessageName)
+		  #endif
 		End Function
 	#tag EndMethod
 
