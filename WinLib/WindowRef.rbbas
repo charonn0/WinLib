@@ -271,7 +271,7 @@ Implements Win32Object
 		 
 		Use the shared method FromXY to get a reference to the topmost window over a specific screen coordinate.
 		
-		Use the shared methof ListWindows to get an array of WindowRef objects corresponding to all the top-level
+		Use the shared method ListWindows to get an array of WindowRef objects corresponding to all the top-level
 		windows on the current desktop matching the optional partial title string. Note that the ListWindows method
 		searches all top-level windows which is a computationally expensive and occasionally buggy thing to do.
 		
@@ -351,6 +351,11 @@ Implements Win32Object
 			  Return size.bottom - size.top
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  Call Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, Me.TrueWidth, value, SWP_NOZORDER)
+			End Set
+		#tag EndSetter
 		Height As Integer
 	#tag EndComputedProperty
 
@@ -361,6 +366,11 @@ Implements Win32Object
 			  Return size.left
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  Call Win32.User32.SetWindowPos(Me.Handle, 0, value, Me.TrueTop, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER)
+			End Set
+		#tag EndSetter
 		Left As Integer
 	#tag EndComputedProperty
 
@@ -435,6 +445,11 @@ Implements Win32Object
 			  Return size.top
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  Call Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, value, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER)
+			End Set
+		#tag EndSetter
 		Top As Integer
 	#tag EndComputedProperty
 
@@ -549,6 +564,11 @@ Implements Win32Object
 			  Return size.right - size.left
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  Call Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, value, Me.TrueHeight, SWP_NOZORDER)
+			End Set
+		#tag EndSetter
 		Width As Integer
 	#tag EndComputedProperty
 
