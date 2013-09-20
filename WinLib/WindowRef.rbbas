@@ -273,11 +273,14 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, Me.TrueWidth, value, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
-			    mLastError = 0
-			  Else
-			    mLastError = WinLib.GetLastError
-			  End If
+			  #If TargetWin32 Then
+			    Dim flags As Integer = SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE
+			    If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, Me.TrueWidth, value, flags) Then
+			      mLastError = 0
+			    Else
+			      mLastError = WinLib.GetLastError
+			    End If
+			  #endif
 			End Set
 		#tag EndSetter
 		Height As Integer
@@ -292,11 +295,14 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  If Win32.User32.SetWindowPos(Me.Handle, 0, value, Me.TrueTop, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
-			    mLastError = 0
-			  Else
-			    mLastError = WinLib.GetLastError
-			  End If
+			  #If TargetWin32 Then
+			    Dim flags As Integer = SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE
+			    If Win32.User32.SetWindowPos(Me.Handle, 0, value, Me.TrueTop, Me.TrueWidth, Me.TrueHeight, flags) Then
+			      mLastError = 0
+			    Else
+			      mLastError = WinLib.GetLastError
+			    End If
+			  #endif
 			End Set
 		#tag EndSetter
 		Left As Integer
@@ -435,11 +441,14 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, value, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
-			    mLastError = 0
-			  Else
-			    mLastError = WinLib.GetLastError
-			  End If
+			  #If TargetWin32 Then
+			    Dim flags As Integer = SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE
+			    If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, value, Me.TrueWidth, Me.TrueHeight, flags) Then
+			      mLastError = 0
+			    Else
+			      mLastError = WinLib.GetLastError
+			    End If
+			  #endif
 			End Set
 		#tag EndSetter
 		Top As Integer
@@ -527,7 +536,9 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return Win32.User32.IsWindowVisible(Me.Handle)
+			  #If TargetWin32 Then
+			    Return Win32.User32.IsWindowVisible(Me.Handle)
+			  #endif
 			  
 			  Finally
 			    mLastError = WinLib.GetLastError
@@ -535,14 +546,14 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  If value Then
-			    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOW)
-			  Else
-			    Call Win32.User32.ShowWindow(Me.Handle, SW_FORCEMINIMIZE)
-			  End If
-			  
+			  #If TargetWin32 Then
+			    If value Then
+			      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOW)
+			    Else
+			      Call Win32.User32.ShowWindow(Me.Handle, SW_FORCEMINIMIZE)
+			    End If
+			  #endif
 			  mLastError = WinLib.GetLastError
-			  
 			End Set
 		#tag EndSetter
 		Visible As Boolean
@@ -557,11 +568,14 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, value, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
-			    mLastError = 0
-			  Else
-			    mLastError = WinLib.GetLastError
-			  End If
+			  #If TargetWin32 Then
+			    Dim flags As Integer = SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE
+			    If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, value, Me.TrueHeight, flags) Then
+			      mLastError = 0
+			    Else
+			      mLastError = WinLib.GetLastError
+			    End If
+			  #endif
 			End Set
 		#tag EndSetter
 		Width As Integer
@@ -570,14 +584,15 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  Dim info As WINDOWINFO
 			  #If TargetWin32 Then
-			    Dim info As WINDOWINFO
 			    If Win32.User32.GetWindowInfo(Me.Handle, info) Then
 			      mLastError = 0
-			      Return info
+			    Else
+			      mLastError = WinLib.GetLastError
 			    End If
-			    mLastError = WinLib.GetLastError
 			  #endif
+			  Return info
 			End Get
 		#tag EndGetter
 		WindowInfo As WINDOWINFO
