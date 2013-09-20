@@ -1144,7 +1144,13 @@ Protected Module Win32
 	#tag Constant, Name = STD_OUTPUT_HANDLE, Type = Double, Dynamic = False, Default = \"-11", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = SWP_ASYNCWINDOWPOS, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = SWP_FRAMECHANGED, Type = Double, Dynamic = False, Default = \"&h20", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_NOACTIVATE, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = SWP_NOMOVE, Type = Double, Dynamic = False, Default = \"&h2", Scope = Public
@@ -1153,7 +1159,7 @@ Protected Module Win32
 	#tag Constant, Name = SWP_NOSIZE, Type = Double, Dynamic = False, Default = \"&h1", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = SWP_NOZORDER, Type = Double, Dynamic = False, Default = \"&h4", Scope = Public
+	#tag Constant, Name = SWP_NOZORDER, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = SW_FORCEMINIMIZE, Type = Double, Dynamic = False, Default = \"11", Scope = Public
