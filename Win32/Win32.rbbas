@@ -487,6 +487,9 @@ Protected Module Win32
 	#tag Constant, Name = HWND_BROADCAST, Type = Double, Dynamic = False, Default = \"&hffff", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = HWND_MESSAGE, Type = Double, Dynamic = False, Default = \"-3", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = ICU_BROWSER_MODE, Type = Double, Dynamic = False, Default = \"&h2000000", Scope = Public
 	#tag EndConstant
 
@@ -1279,6 +1282,9 @@ Protected Module Win32
 	#tag Constant, Name = WS_EX_LAYERED, Type = Double, Dynamic = False, Default = \"&h80000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = WS_EX_NOREDIRECTIONBITMAP, Type = Double, Dynamic = False, Default = \"&h00200000", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = WS_EX_TOOLWINDOW, Type = Double, Dynamic = False, Default = \"&h00000080", Scope = Public
 	#tag EndConstant
 
@@ -1286,6 +1292,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = WS_EX_WINDOWEDGE, Type = Double, Dynamic = False, Default = \"&h00000100", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WS_VISIBLE, Type = Double, Dynamic = False, Default = \"&h10000000", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = WT_EXECUTEONLYONCE, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public

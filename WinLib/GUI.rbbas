@@ -83,6 +83,24 @@ Protected Module GUI
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function FindWindow(WindowName As String, WindowClass As String) As WindowRef
+		  #If TargetWin32 Then
+		    Dim HWND, err as integer
+		    Dim mbclass, mbname As MemoryBlock
+		    mbclass = WindowClass
+		    mbname = WindowName
+		    HWND = Win32.User32.FindWindow(mbname, mbclass)
+		    err = WinLib.GetLastError
+		    While HWND <= 0 And err = 0
+		      HWND = Win32.User32.GetWindow(HWND, GW_HWNDNEXT)
+		      err = WinLib.GetLastError
+		    wend
+		    If err = 0 Then Return New WindowRef(HWND)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetDesktopWindow() As WindowRef
 		  #If TargetWin32 Then
 		    Dim HWND As Integer = Win32.User32.GetDesktopWindow
@@ -96,6 +114,24 @@ Protected Module GUI
 		  Dim flags As Integer = FR_PRIVATE
 		  #If TargetWin32 Then
 		    Return Win32.GDI32.AddFontResourceEx(FontFile.AbsolutePath, flags, 0) > 0
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function PostMessage(Recipient As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		  'Posts the Window Message to the target window's message queue and returns immediately
+		  #If TargetWin32 Then
+		    Return Win32.User32.PostMessage(Recipient.Handle, Message, WParam, LParam)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function SendMessage(Recipient As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Integer
+		  'Sends the Window Message to the target window and waits for a response
+		  #If TargetWin32 Then
+		    Return Win32.User32.SendMessage(Recipient.Handle, Message, WParam, LParam)
 		  #endif
 		End Function
 	#tag EndMethod

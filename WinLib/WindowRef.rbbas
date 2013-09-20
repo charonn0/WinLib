@@ -111,62 +111,6 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Maximized() As Boolean
-		  #If TargetWin32 Then
-		    Dim wp As WINDOWPLACEMENT
-		    wp.Length = wp.Size
-		    If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
-		      Return wp.ShowCmd = SW_SHOWMAXIMIZED
-		    End If
-		  #endif
-		  
-		Finally
-		  mLastError = WinLib.GetLastError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Maximized(Assigns b As Boolean)
-		  #If TargetWin32 Then
-		    If b Then
-		      Call Win32.User32.ShowWindow(Me.Handle, SW_MAXIMIZE)
-		    Else
-		      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
-		    End If
-		    mLastError = WinLib.GetLastError
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Minimized() As Boolean
-		  #If TargetWin32 Then
-		    Dim wp As WINDOWPLACEMENT
-		    wp.Length = wp.Size
-		    If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
-		      Return wp.ShowCmd = SW_SHOWMINIMIZED
-		    End If
-		  #endif
-		  
-		Finally
-		  mLastError = WinLib.GetLastError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Minimized(Assigns b As Boolean)
-		  #If TargetWin32 Then
-		    If b Then
-		      Call Win32.User32.ShowWindow(Me.Handle, SW_MINIMIZE)
-		    Else
-		      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
-		    End If
-		    mLastError = WinLib.GetLastError
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherWindow As WindowRef) As Integer
 		  If OtherWindow.Handle > Me.Handle Then
 		    Return 1
@@ -175,30 +119,6 @@ Implements Win32Object
 		  Else
 		    Return 0
 		  End If
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function PostMessage(Msg As Integer, WParam As Ptr, LParam As Ptr) As Boolean
-		  'Posts the Window Message to the target window's message queue and returns immediately
-		  #If TargetWin32 Then
-		    Return Win32.User32.PostMessage(Me.Handle, Msg, WParam, LParam)
-		  #endif
-		  
-		Finally
-		  mLastError = WinLib.GetLastError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function SendMessage(Msg As Integer, WParam As Ptr, LParam As Ptr) As Integer
-		  'Sends the Window Message to the target window and waits for a response
-		  #If TargetWin32 Then
-		    Return Win32.User32.SendMessage(Me.Handle, Msg, WParam, LParam)
-		  #endif
-		  
-		Finally
-		  mLastError = WinLib.GetLastError
 		End Function
 	#tag EndMethod
 
@@ -382,9 +302,69 @@ Implements Win32Object
 		Left As Integer
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #If TargetWin32 Then
+			    Dim wp As WINDOWPLACEMENT
+			    wp.Length = wp.Size
+			    If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
+			      Return wp.ShowCmd = SW_SHOWMAXIMIZED
+			    End If
+			  #endif
+			  
+			  Finally
+			    mLastError = WinLib.GetLastError
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  #If TargetWin32 Then
+			    If value Then
+			      Call Win32.User32.ShowWindow(Me.Handle, SW_MAXIMIZE)
+			    Else
+			      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
+			    End If
+			    mLastError = WinLib.GetLastError
+			  #endif
+			End Set
+		#tag EndSetter
+		Maximized As Boolean
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
 		Private mHandle As Integer
 	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  #If TargetWin32 Then
+			    Dim wp As WINDOWPLACEMENT
+			    wp.Length = wp.Size
+			    If Win32.User32.GetWindowPlacement(Me.Handle, wp) Then
+			      Return wp.ShowCmd = SW_SHOWMINIMIZED
+			    End If
+			  #endif
+			  
+			  Finally
+			    mLastError = WinLib.GetLastError
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  #If TargetWin32 Then
+			    If value Then
+			      Call Win32.User32.ShowWindow(Me.Handle, SW_MINIMIZE)
+			    Else
+			      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
+			    End If
+			    mLastError = WinLib.GetLastError
+			  #endif
+			End Set
+		#tag EndSetter
+		Minimized As Boolean
+	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
 		Private mLastError As Integer
@@ -423,7 +403,7 @@ Implements Win32Object
 			    Dim buffer As New MemoryBlock(2048)
 			    Dim sz As New MemoryBlock(4)
 			    sz.Int32Value(0) = buffer.Size
-			    If SendMessage(WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
+			    If WinLib.GUI.SendMessage(Self, WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
 			      Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
 			    End If
 			    mLastError = WinLib.GetLastError
@@ -437,7 +417,7 @@ Implements Win32Object
 			    value = DefineEncoding(value, Encodings.UTF8)
 			    Dim mb As New MemoryBlock(value.Len * 2 + 2)
 			    mb.WString(0) = value
-			    If SendMessage(WM_SETTEXT, Nil, mb) <= 0 Then 'We ask nicely
+			    If WinLib.GUI.SendMessage(Self, WM_SETTEXT, Nil, mb) <= 0 Then 'We ask nicely
 			      Call Win32.User32.SetWindowText(Me.Handle, mb)  'otherwise we try to peek (sometimes crashy!)
 			    End If
 			  #endif
@@ -571,7 +551,6 @@ Implements Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  
 			  Dim size As RECT = Me.WindowInfo.ClientArea
 			  Return size.right - size.left
 			End Get
@@ -637,6 +616,16 @@ Implements Win32Object
 			Name="Left"
 			Group="Behavior"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Maximized"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Minimized"
+			Group="Behavior"
+			Type="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"

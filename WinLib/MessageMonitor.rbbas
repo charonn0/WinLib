@@ -71,6 +71,12 @@ Implements Win32Object
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function Operator_Convert() As WindowRef
+		  Return Me.ParentWindow
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub RemoveMessageFilter(ParamArray MsgIDs() As Integer)
 		  For Each MsgID As Integer In MsgIDs

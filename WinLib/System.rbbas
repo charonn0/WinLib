@@ -51,6 +51,12 @@ Protected Module System
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function RegisterWindowMessage(MessageName As String) As Integer
+		  Return Win32.User32.RegisterWindowMessage(MessageName)
+		End Function
+	#tag EndMethod
+
 
 	#tag ViewBehavior
 		#tag ViewProperty
