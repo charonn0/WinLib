@@ -1,5 +1,5 @@
 #tag Class
-Protected Class WindowRef
+Class WindowRef
 Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
@@ -167,7 +167,7 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Operator_Compare(OtherWindow As WinLib.WindowRef) As Integer
+		Function Operator_Compare(OtherWindow As WindowRef) As Integer
 		  If OtherWindow.Handle > Me.Handle Then
 		    Return 1
 		  ElseIf OtherWindow.Handle < Me.Handle Then
@@ -353,7 +353,11 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Call Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, Me.TrueWidth, value, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE)
+			  If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, Me.TrueWidth, value, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
+			    mLastError = 0
+			  Else
+			    mLastError = WinLib.GetLastError
+			  End If
 			End Set
 		#tag EndSetter
 		Height As Integer
@@ -368,7 +372,11 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Call Win32.User32.SetWindowPos(Me.Handle, 0, value, Me.TrueTop, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE)
+			  If Win32.User32.SetWindowPos(Me.Handle, 0, value, Me.TrueTop, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
+			    mLastError = 0
+			  Else
+			    mLastError = WinLib.GetLastError
+			  End If
 			End Set
 		#tag EndSetter
 		Left As Integer
@@ -447,7 +455,11 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Call Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, value, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE)
+			  If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, value, Me.TrueWidth, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
+			    mLastError = 0
+			  Else
+			    mLastError = WinLib.GetLastError
+			  End If
 			End Set
 		#tag EndSetter
 		Top As Integer
@@ -566,7 +578,11 @@ Implements Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Call Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, value, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE)
+			  If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, value, Me.TrueHeight, SWP_NOZORDER Or SWP_ASYNCWINDOWPOS Or SWP_NOACTIVATE) Then
+			    mLastError = 0
+			  Else
+			    mLastError = WinLib.GetLastError
+			  End If
 			End Set
 		#tag EndSetter
 		Width As Integer

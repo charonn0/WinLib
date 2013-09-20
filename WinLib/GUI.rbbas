@@ -83,10 +83,10 @@ Protected Module GUI
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetDesktopWindow() As WinLib.WindowRef
+		Protected Function GetDesktopWindow() As WindowRef
 		  #If TargetWin32 Then
 		    Dim HWND As Integer = Win32.User32.GetDesktopWindow
-		    Return New WinLib.WindowRef(HWND)
+		    Return New WindowRef(HWND)
 		  #endif
 		End Function
 	#tag EndMethod

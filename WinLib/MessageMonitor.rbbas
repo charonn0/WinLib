@@ -25,7 +25,7 @@ Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub Constructor(HWND As Integer)
 		  If HWND = 0 Then HWND = Window(0).Handle
-		  Me.ParentWindow = New WinLib.WindowRef(HWND)
+		  Me.ParentWindow = New WindowRef(HWND)
 		  Subclass(ParentWindow, Me)
 		End Sub
 	#tag EndMethod
@@ -80,7 +80,7 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Shared Sub Subclass(SuperWin As WinLib.WindowRef, SubWin As MessageMonitor)
+		Protected Shared Sub Subclass(SuperWin As WindowRef, SubWin As MessageMonitor)
 		  #If TargetWin32 Then
 		    If WndProcs.HasKey(SuperWin.Handle) Then
 		      Dim d As New Dictionary
@@ -99,7 +99,7 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Shared Sub UnSubclass(SuperWin As WinLib.WindowRef)
+		Protected Shared Sub UnSubclass(SuperWin As WindowRef)
 		  #If TargetWin32 Then
 		    If Not WndProcs.HasKey(SuperWin.Handle) Then Return
 		    Dim oldWndProc As Ptr = WndProcs.Value(SuperWin.Handle)
@@ -119,14 +119,14 @@ Implements Win32Object
 	#tag Method, Flags = &h21
 		Private Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
 		  If Me.MessageFilter.HasKey(msg) Then
-		    Return WindowMessage(New WinLib.WindowRef(HWND), msg, wParam, lParam)
+		    Return WindowMessage(New WindowRef(HWND), msg, wParam, lParam)
 		  End If
 		End Function
 	#tag EndMethod
 
 
 	#tag Hook, Flags = &h0
-		Event WindowMessage(HWND As WinLib.WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Event WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 	#tag EndHook
 
 
@@ -183,7 +183,7 @@ Implements Win32Object
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected ParentWindow As WinLib.WindowRef
+		Protected ParentWindow As WindowRef
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
