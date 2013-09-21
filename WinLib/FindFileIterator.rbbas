@@ -80,11 +80,11 @@ Implements Win32Object
 		      Else
 		        FindHandle = Win32.Kernel32.FindFirstFile(NamePattern, data)
 		      End If
-		      mLastError = WinLib.GetLastError()
+		      mLastError = GetLastError()
 		    ElseIf Win32.Kernel32.FindNextFile(FindHandle, data) Then
 		      mLastError = 0
 		    Else
-		      mLastError = WinLib.GetLastError()
+		      mLastError = GetLastError()
 		    End If
 		    
 		    Return data

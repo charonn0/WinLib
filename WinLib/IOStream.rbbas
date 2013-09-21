@@ -5,7 +5,7 @@ Implements Readable,Writeable,Win32Object
 		Sub Close()
 		  // Part of the Win32.Win32Object interface.
 		  Me.Flush()
-		  #If TargetWin32 Then Call WinLib.CloseHandle(Me.Handle)
+		  #If TargetWin32 Then Call Win32.Kernel32.CloseHandle(Me.Handle)
 		End Sub
 	#tag EndMethod
 
@@ -36,7 +36,7 @@ Implements Readable,Writeable,Win32Object
 		    If Win32.Kernel32.FlushFileBuffers(Me.Handle) Then
 		      mLastError = 0
 		    Else
-		      mLastError = WinLib.GetLastError()
+		      mLastError = GetLastError()
 		    End If
 		  #endif
 		End Sub
@@ -69,10 +69,10 @@ Implements Readable,Writeable,Win32Object
 		        mLastError = ERROR_HANDLE_EOF
 		      End If
 		    Else
-		      mLastError = WinLib.GetLastError
+		      mLastError = GetLastError
 		      Dim err As New IOException
 		      err.ErrorNumber = Me.LastError
-		      err.Message = WinLib.FormatError(Me.LastError)
+		      err.Message = FormatError(Me.LastError)
 		      Raise err
 		    End If
 		    
@@ -99,10 +99,10 @@ Implements Readable,Writeable,Win32Object
 		    If Win32.Kernel32.WriteFile(Me.Handle, mb, mb.Size, written, Nil) Then
 		      mLastError = 0
 		    Else
-		      mLastError = WinLib.GetLastError()
+		      mLastError = GetLastError()
 		      Dim err As New IOException
 		      err.ErrorNumber = Me.LastError
-		      err.Message = WinLib.FormatError(Me.LastError)
+		      err.Message = FormatError(Me.LastError)
 		      Raise err
 		    End If
 		  #endif
@@ -133,7 +133,7 @@ Implements Readable,Writeable,Win32Object
 			    oldvalue = Me.Position
 			    value = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_END)
 			    Me.Position = oldvalue
-			    mLastError = WinLib.GetLastError()
+			    mLastError = GetLastError()
 			    Return value
 			  #endif
 			End Get
@@ -148,7 +148,7 @@ Implements Readable,Writeable,Win32Object
 			    Dim oldvalue As Integer = Me.Position
 			    Me.Position = value
 			    If Not Win32.Kernel32.SetEndOfFile(Me.Handle) Then
-			      mLastError = WinLib.GetLastError()
+			      mLastError = GetLastError()
 			    Else
 			      mLastError = 0
 			    End If
@@ -172,7 +172,7 @@ Implements Readable,Writeable,Win32Object
 			Get
 			  #If TargetWin32 Then
 			    Dim value As Integer = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_CURRENT)
-			    mLastError = WinLib.GetLastError()
+			    mLastError = GetLastError()
 			    Return value
 			  #endif
 			End Get
@@ -181,7 +181,7 @@ Implements Readable,Writeable,Win32Object
 			Set
 			  #If TargetWin32 Then
 			    Call Win32.Kernel32.SetFilePointer(Me.Handle, value, Nil, FILE_BEGIN)
-			    mLastError = WinLib.GetLastError()
+			    mLastError = GetLastError()
 			  #endif
 			End Set
 		#tag EndSetter

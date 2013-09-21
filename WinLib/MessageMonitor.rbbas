@@ -24,9 +24,16 @@ Implements Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Constructor(HWND As Integer)
-		  If HWND = 0 Then HWND = Window(0).Handle
-		  Me.ParentWindow = New WindowRef(HWND)
-		  Subclass(ParentWindow, Me)
+		  #If TargetHasGUI Then
+		    If HWND = 0 Then HWND = Window(0).Handle
+		    Me.ParentWindow = New WindowRef(HWND)
+		    Subclass(ParentWindow, Me)
+		  #Else
+		    ' Console and Web apps are not supported
+		    #pragma Unused HWND
+		    Raise New PlatformNotSupportedException
+		  #endif
+		  
 		End Sub
 	#tag EndMethod
 

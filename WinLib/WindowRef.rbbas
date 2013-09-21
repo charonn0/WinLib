@@ -5,7 +5,7 @@ Implements Win32Object
 		Sub BringToFront()
 		  #If TargetWin32 Then
 		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
-		    mLastError = WinLib.GetLastError
+		    mLastError = GetLastError
 		  #endif
 		End Sub
 	#tag EndMethod
@@ -35,7 +35,7 @@ Implements Win32Object
 		  End If
 		  
 		  Return WinLib.Gui.CaptureRect(l, t, w, h)
-		  mLastError = WinLib.GetLastError
+		  mLastError = GetLastError
 		End Function
 	#tag EndMethod
 
@@ -55,7 +55,7 @@ Implements Win32Object
 		Sub FlashWindow()
 		  #If TargetWin32 Then
 		    Call Win32.User32.FlashWindow(Me.Handle, True)
-		    mLastError = WinLib.GetLastError
+		    mLastError = GetLastError
 		  #endif
 		End Sub
 	#tag EndMethod
@@ -63,7 +63,7 @@ Implements Win32Object
 	#tag Method, Flags = &h0
 		 Shared Function FromXY(X As Integer, Y As Integer) As WindowRef
 		  #If TargetWin32 Then
-		    Dim p As POINT
+		    Dim p As Win32.POINT
 		    p.X = X
 		    p.Y = Y
 		    Dim hwnd As Integer = Win32.User32.WindowFromPoint(p)
@@ -226,7 +226,7 @@ Implements Win32Object
 			  
 			  
 			  Finally
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -239,7 +239,7 @@ Implements Win32Object
 			  #endif
 			  
 			  Finally
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			    
 			End Set
 		#tag EndSetter
@@ -278,7 +278,7 @@ Implements Win32Object
 			    If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, Me.TrueWidth, value, flags) Then
 			      mLastError = 0
 			    Else
-			      mLastError = WinLib.GetLastError
+			      mLastError = GetLastError
 			    End If
 			  #endif
 			End Set
@@ -300,7 +300,7 @@ Implements Win32Object
 			    If Win32.User32.SetWindowPos(Me.Handle, 0, value, Me.TrueTop, Me.TrueWidth, Me.TrueHeight, flags) Then
 			      mLastError = 0
 			    Else
-			      mLastError = WinLib.GetLastError
+			      mLastError = GetLastError
 			    End If
 			  #endif
 			End Set
@@ -320,7 +320,7 @@ Implements Win32Object
 			  #endif
 			  
 			  Finally
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -331,7 +331,7 @@ Implements Win32Object
 			    Else
 			      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
 			    End If
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			  #endif
 			End Set
 		#tag EndSetter
@@ -354,7 +354,7 @@ Implements Win32Object
 			  #endif
 			  
 			  Finally
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -365,7 +365,7 @@ Implements Win32Object
 			    Else
 			      Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWDEFAULT)
 			    End If
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			  #endif
 			End Set
 		#tag EndSetter
@@ -381,7 +381,7 @@ Implements Win32Object
 			Get
 			  #If TargetWin32 Then
 			    Dim h As Integer = Win32.User32.GetWindow(Me.Handle, GW_OWNER)
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			    Return New WindowRef(h)
 			  #endif
 			End Get
@@ -394,7 +394,7 @@ Implements Win32Object
 			Get
 			  #If TargetWin32 Then
 			    Dim h As Integer = Win32.User32.GetParent(Me.Handle)
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			    Return New WindowRef(h)
 			  #endif
 			End Get
@@ -412,7 +412,7 @@ Implements Win32Object
 			    If WinLib.GUI.SendMessage(Self, WM_GETTEXT, sz, buffer) <= 0 Then 'We ask nicely
 			      Call Win32.User32.GetWindowText(Me.Handle, buffer, buffer.Size)  'otherwise we try to peek (sometimes crashy!)
 			    End If
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			    Return buffer.WString(0).Trim
 			  #endif
 			End Get
@@ -446,7 +446,7 @@ Implements Win32Object
 			    If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, value, Me.TrueWidth, Me.TrueHeight, flags) Then
 			      mLastError = 0
 			    Else
-			      mLastError = WinLib.GetLastError
+			      mLastError = GetLastError
 			    End If
 			  #endif
 			End Set
@@ -480,7 +480,7 @@ Implements Win32Object
 			Get
 			  #If TargetWin32 Then
 			    Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOTOWNER)
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			    Return New WindowRef(h)
 			  #endif
 			End Get
@@ -493,7 +493,7 @@ Implements Win32Object
 			Get
 			  #If TargetWin32 Then
 			    Dim h As Integer = Win32.User32.GetAncestor(Me.Handle, GA_ROOT)
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			    Return New WindowRef(h)
 			  #endif
 			End Get
@@ -541,7 +541,7 @@ Implements Win32Object
 			  #endif
 			  
 			  Finally
-			    mLastError = WinLib.GetLastError
+			    mLastError = GetLastError
 			End Get
 		#tag EndGetter
 		#tag Setter
@@ -553,7 +553,7 @@ Implements Win32Object
 			      Call Win32.User32.ShowWindow(Me.Handle, SW_FORCEMINIMIZE)
 			    End If
 			  #endif
-			  mLastError = WinLib.GetLastError
+			  mLastError = GetLastError
 			End Set
 		#tag EndSetter
 		Visible As Boolean
@@ -573,7 +573,7 @@ Implements Win32Object
 			    If Win32.User32.SetWindowPos(Me.Handle, 0, Me.TrueLeft, Me.TrueTop, value, Me.TrueHeight, flags) Then
 			      mLastError = 0
 			    Else
-			      mLastError = WinLib.GetLastError
+			      mLastError = GetLastError
 			    End If
 			  #endif
 			End Set
@@ -589,7 +589,7 @@ Implements Win32Object
 			    If Win32.User32.GetWindowInfo(Me.Handle, info) Then
 			      mLastError = 0
 			    Else
-			      mLastError = WinLib.GetLastError
+			      mLastError = GetLastError
 			    End If
 			  #endif
 			  Return info

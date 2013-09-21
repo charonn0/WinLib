@@ -26,7 +26,7 @@ Protected Module System
 		    If WinLib.User.SetPrivilege(SE_SHUTDOWN_NAME, True) Then
 		      Call Win32.User32.ExitWindowsEx(mode, reason)
 		    End If
-		    Return WinLib.GetLastError()
+		    Return GetLastError()
 		  #endif
 		End Function
 	#tag EndMethod

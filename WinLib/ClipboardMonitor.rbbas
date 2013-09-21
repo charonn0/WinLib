@@ -2,7 +2,7 @@
 Class ClipboardMonitor
 Inherits WinLib.MessageMonitor
 	#tag Event
-		Function WindowMessage(HWND As WinLib.WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Function WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #pragma Unused HWND
 		  #If TargetWin32 Then
 		    Select Case Message

@@ -1,14 +1,6 @@
 #tag Module
 Protected Module WinLib
 	#tag Method, Flags = &h1
-		Protected Function CloseHandle(Handle As Integer) As Boolean
-		  #If TargetWin32 Then
-		    Return Win32.Kernel32.CloseHandle(Handle)
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function FormatError(WinErrorNumber As Integer) As String
 		  //Returns the error message corresponding to a given windows error number.
 		  
@@ -33,16 +25,6 @@ Protected Module WinLib
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function ShellExecute(Target As String, Parameters As String = "", Operation As String = "open", WorkingDirectory As String = "", ParentWindow As Integer = 0, ShowCommand As Integer = SW_SHOW) As Boolean
-		  #If TargetWin32 Then
-		    If WorkingDirectory = "" Then WorkingDirectory = CurrentDirectory.AbsolutePath
-		    Return Win32.Shell32.ShellExecute(ParentWindow, Operation, Target, Parameters, WorkingDirectory, ShowCommand) > 32
-		    
-		  #endif
-		End Function
-	#tag EndMethod
-
 
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
@@ -63,9 +45,9 @@ Protected Module WinLib
 			  #If TargetWin32 Then
 			    Dim path As String = value.AbsolutePath
 			    If Not Win32.Kernel32.SetCurrentDirectory(path) Then
-			      Dim e As Integer = WinLib.GetLastError
+			      Dim e As Integer = GetLastError
 			      Dim err As New IOException
-			      err.Message = CurrentMethodName + ": " + WinLib.FormatError(e)
+			      err.Message = CurrentMethodName + ": " + FormatError(e)
 			      err.ErrorNumber = e
 			      Raise err
 			    End If

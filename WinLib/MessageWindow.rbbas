@@ -1,7 +1,7 @@
 #tag Class
 Class MessageWindow
 Inherits WinLib.MessageMonitor
-Implements WinLib.Win32Object
+Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  Super.Close
@@ -24,7 +24,7 @@ Implements WinLib.Win32Object
 		    ' FIXME this call returns 0 and LastError=87. 0 is a valid parameter for the superclass constructor, so this class will work
 		    ' in a gui app despite the error.
 		  #endif
-		  mLastError = WinLib.GetLastError
+		  mLastError = GetLastError
 		  Super.Constructor(HWND)
 		End Sub
 	#tag EndMethod

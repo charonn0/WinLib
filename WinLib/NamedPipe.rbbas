@@ -56,7 +56,7 @@ Inherits WinLib.IOStream
 		  Dim err As Integer
 		  Dim hFile As Integer = Win32.Kernel32.CreateNamedPipe("\\.\pipe\" + PipeName, OpenMode Or FILE_FLAG_OVERLAPPED, PipeMode, _
 		  MaxInstances, OutBufferSize, InBufferSize, DefaultTimeout, Nil)
-		  err = WinLib.GetLastError()
+		  err = GetLastError()
 		  If err = 0 Then
 		    Dim over As OVERLAPPED
 		    over.Internal = 0
@@ -66,16 +66,16 @@ Inherits WinLib.IOStream
 		    If Win32.Kernel32.ConnectNamedPipe(hFile, over) Then
 		      Me.mHandle = hFile
 		    Else
-		      err = WinLib.GetLastError
+		      err = GetLastError
 		      Dim error As New IOException
 		      error.ErrorNumber = err
-		      error.Message = WinLib.FormatError(err)
+		      error.Message = FormatError(err)
 		      Raise error
 		    End If
 		  Else
 		    Dim error As New IOException
 		    error.ErrorNumber = err
-		    error.Message = WinLib.FormatError(err)
+		    error.Message = FormatError(err)
 		    Raise error
 		  End If
 		End Sub
@@ -163,7 +163,6 @@ Inherits WinLib.IOStream
 	#tag Note, Name = About this class
 		Implements a socket-like interface for a Win32 Named Pipe. Based on Wayne Golding's code
 		from here: https://forum.xojo.com/4376-pipes/
-		
 	#tag EndNote
 
 
@@ -195,5 +194,72 @@ Inherits WinLib.IOStream
 	#tag EndProperty
 
 
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			InitialValue="-2147483648"
+			Type="Integer"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IsConnected"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Length"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="WinLib.IOStream"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LookAhead"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			Type="String"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="PipeName"
+			Group="Behavior"
+			Type="String"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Position"
+			Group="Behavior"
+			Type="Integer"
+			InheritedFrom="WinLib.IOStream"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			Type="String"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Top"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+	#tag EndViewBehavior
 End Class
 #tag EndClass
