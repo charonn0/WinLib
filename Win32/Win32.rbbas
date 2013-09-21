@@ -475,6 +475,9 @@ Protected Module Win32
 	#tag Constant, Name = GW_HWNDNEXT, Type = Double, Dynamic = False, Default = \"2", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = GW_HWNDPREV, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = GW_OWNER, Type = Double, Dynamic = False, Default = \"4", Scope = Public
 	#tag EndConstant
 

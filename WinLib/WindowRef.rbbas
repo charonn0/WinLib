@@ -61,23 +61,6 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function FromXY(X As Integer, Y As Integer) As WindowRef
-		  #If TargetWin32 Then
-		    Dim p As Win32.POINT
-		    p.X = X
-		    p.Y = Y
-		    Dim hwnd As Integer = Win32.User32.WindowFromPoint(p)
-		    If hwnd > 0 Then
-		      If Win32.User32.ChildWindowFromPoint(hwnd, p) > 0 Then
-		        hwnd = Win32.User32.ChildWindowFromPoint(hwnd, p)
-		      End If
-		    End If
-		    Return New WindowRef(hwnd)
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  return mHandle
 		End Function
@@ -86,27 +69,6 @@ Implements Win32Object
 	#tag Method, Flags = &h0
 		Function LastError() As Integer
 		  Return mLastError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		 Shared Function ListWindows(PartialTitle As String = "") As WindowRef()
-		  #If TargetWin32 Then
-		    Dim wins() As WindowRef
-		    Dim ret as integer
-		    ret = Win32.User32.FindWindow(Nil, Nil)
-		    Dim hidden() As String = Split("MSCTFIME UI,Default IME,Jump List,Start Menu,Start,Program Manager", ",")
-		    while ret > 0
-		      Dim pw As New WindowRef(ret)
-		      If pw.Text.Trim <> "" And hidden.IndexOf(pw.Text.Trim) <= -1 And pw.Visible Then
-		        If PartialTitle.Trim = "" Or InStr(pw.Text, PartialTitle) > 0 Then
-		          wins.Append(pw)
-		        End If
-		      End If
-		      ret = Win32.User32.GetWindow(ret, GW_HWNDNEXT)
-		    wend
-		    Return wins
-		  #endif
 		End Function
 	#tag EndMethod
 
@@ -122,93 +84,10 @@ Implements Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Shared Sub SetWindowStyle(HWND As Integer, flag As Integer, Assigns b As Boolean)
-		  #If TargetWin32 Then
-		    Dim oldFlags as Integer
-		    Dim newFlags as Integer
-		    
-		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_STYLE)
-		    
-		    If Not b Then
-		      newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag))
-		    Else
-		      newFlags = BitOr(oldFlags, flag)
-		    End
-		    
-		    Call Win32.User32.SetWindowLong(HWND, GWL_STYLE, newFlags)
-		    Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Shared Sub SetWindowStyleEx(HWND As Integer, flag As Integer, Assigns b As Boolean)
-		  #If TargetWin32 Then
-		    Dim oldFlags as Integer
-		    Dim newFlags as Integer
-		    
-		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_EXSTYLE)
-		    
-		    If Not b Then
-		      newFlags = BitAnd(oldFlags, Bitwise.OnesComplement(flag)) 'turn off
-		    Else
-		      newFlags = BitOr(oldFlags, flag)  'turn on
-		    End
-		    
-		    Call Win32.User32.SetWindowLong(HWND, GWL_EXSTYLE, newFlags)
-		    Call Win32.User32.SetWindowPos(HWND, 0, 0, 0, 0, 0, SWP_NOMOVE + SWP_NOSIZE + SWP_NOZORDER + SWP_FRAMECHANGED)
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Shared Function TestWindowStyle(HWND As Integer, flag As Integer) As Boolean
-		  #if TargetWin32
-		    Dim oldFlags as Integer
-		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_STYLE)
-		    
-		    Return BitAnd(oldFlags, flag) = flag
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Shared Function TestWindowStyleEx(HWND As Integer, flag As Integer) As Boolean
-		  #if TargetWin32
-		    Dim oldFlags as Integer
-		    oldFlags = Win32.User32.GetWindowLong(HWND, GWL_EXSTYLE)
-		    
-		    Return BitAnd(oldFlags, flag) = flag
-		  #endif
-		End Function
-	#tag EndMethod
-
 
 	#tag Note, Name = About this class
-		This class can represent any win32 window, even those belonging to other applications. 
-		The Class Constructor expects a valid Win32 window handle (HWND).
-		 
-		Use the shared method FromXY to get a reference to the topmost window over a specific screen coordinate.
 		
-		Use the shared method ListWindows to get an array of WindowRef objects corresponding to all the top-level
-		windows on the current desktop matching the optional partial title string. Note that the ListWindows method
-		searches all top-level windows which is a computationally expensive and occasionally buggy thing to do.
-		
-		
-		Examples:
-		
-		  'Minimize all Firefox windows
-		  Dim wins() As WindowRef = WindowRef.ListWindows("Firefox")
-		  For Each win As WindowRef In wins
-		    win.Minimized = True
-		  Next
-		
-		
-		  'Captures a picture of the topmost window under the mouse cursor
-		  Dim cap As Picture
-		  Dim win As WindowRef = WindowRef.FromXY(System.MouseX, System.MouseY)
-		  cap = win.Capture
+		This class represents any win32 window. The Class Constructor expects a valid Win32 window handle (HWND).
 	#tag EndNote
 
 
@@ -232,8 +111,8 @@ Implements Win32Object
 		#tag Setter
 			Set
 			  #If TargetWin32 Then
-			    If Not TestWindowStyleEx(Me.Handle, WS_EX_LAYERED) Then
-			      SetWindowStyleEx(Me.Handle, WS_EX_LAYERED) = True
+			    If Not WinLib.GUI.TestWindowStyleEx(Me.Handle, WS_EX_LAYERED) Then
+			      WinLib.GUI.SetWindowStyleEx(Me.Handle, WS_EX_LAYERED) = True
 			    End If
 			    Call Win32.User32.SetLayeredWindowAttributes(Handle, 0 , value * 255, LWA_ALPHA)
 			  #endif
