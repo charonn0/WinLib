@@ -69,7 +69,7 @@ Protected Module Console
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Sub PutChar(x As Integer, y As Integer, char As String)
+		Protected Sub SetChar(x As Integer, y As Integer, char As String)
 		  //Writes the character specified to the character cell specified in the screen buffer
 		  //On error, raises a Win32Exception with the Last Win32 error code
 		  
@@ -83,10 +83,7 @@ Protected Module Console
 		    Dim e As Integer
 		    If Not Win32.Kernel32.WriteConsoleOutputCharacter(StdOutHandle, mb, mb.Size, cords, p) Then
 		      e = GetLastError
-		      Dim err As New RuntimeException
-		      err.ErrorNumber = e
-		      err.Message = FormatError(e)
-		      Raise err
+		      Raise Win32Exception(e)
 		    End If
 		  #Else
 		    #pragma Unused x
@@ -123,9 +120,15 @@ Protected Module Console
 		#tag Setter
 			Set
 			  //Sets the X (horizontal) position of the cursor
-			  Dim cord As COORD = Buffer.CursorPosition
-			  cord.X = value
-			  Call Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord)
+			  #If Not TargetHasGUI And TargetWin32 Then
+			    Dim cord As COORD = Buffer.CursorPosition
+			    cord.X = value
+			    If Not Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord) Then
+			      Raise Win32Exception(GetLastError)
+			    End If
+			  #Else
+			    #pragma Unused value
+			  #endif
 			End Set
 		#tag EndSetter
 		Protected CursorX As Integer
@@ -141,9 +144,15 @@ Protected Module Console
 		#tag Setter
 			Set
 			  //Sets the Y (vertical) position of the cursor
-			  Dim cord As COORD = Buffer.CursorPosition
-			  cord.Y = value
-			  Call Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord)
+			  #If Not TargetHasGUI And TargetWin32 Then
+			    Dim cord As COORD = Buffer.CursorPosition
+			    cord.Y = value
+			    If Not Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord) Then
+			      Raise Win32Exception(GetLastError)
+			    End If
+			  #Else
+			    #pragma Unused value
+			  #endif
 			End Set
 		#tag EndSetter
 		Protected CursorY As Integer
@@ -158,14 +167,29 @@ Protected Module Console
 			Get
 			  //Gets the console buffer stdin handle.
 			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-			    Static stdHandle As Integer
-			    If stdHandle = INVALID_HANDLE_VALUE Then
-			      stdHandle = Win32.Kernel32.GetStdHandle(STD_ERROR_HANDLE)
-			    End If
-			    Return stdHandle
+			    Return Win32.Kernel32.GetStdHandle(STD_ERROR_HANDLE)
 			  #endif
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  //Sets the console buffer stdin handle.
+			  //See Notes: http://msdn.microsoft.com/en-us/library/windows/desktop/ms686244%28v=vs.85%29.aspx
+			  
+			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+			    Dim e As Integer
+			    If Not Win32.Kernel32.SetStdHandle(STD_ERROR_HANDLE, value) Then
+			      e = GetLastError
+			      Dim err As New RuntimeException
+			      err.ErrorNumber = e
+			      err.Message = FormatError(e)
+			      Raise err
+			    End If
+			  #else
+			    #pragma Unused value
+			  #endif
+			End Set
+		#tag EndSetter
 		Protected StdErrHandle As Integer
 	#tag EndComputedProperty
 
@@ -174,12 +198,21 @@ Protected Module Console
 			Get
 			  //Gets the console buffer stdin handle.
 			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-			    Static stdHandle As Integer
-			    If stdHandle <= 0 Then stdHandle = Win32.Kernel32.GetStdHandle(STD_INPUT_HANDLE)
-			    Return stdHandle
+			    Return Win32.Kernel32.GetStdHandle(STD_INPUT_HANDLE)
 			  #endif
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+			    If Not Win32.Kernel32.SetStdHandle(STD_INPUT_HANDLE, value) Then
+			      Raise Win32Exception(GetLastError)
+			    End If
+			  #else
+			    #pragma Unused value
+			  #endif
+			End Set
+		#tag EndSetter
 		Protected StdInHandle As Integer
 	#tag EndComputedProperty
 
@@ -188,12 +221,21 @@ Protected Module Console
 			Get
 			  //Gets the console buffer stdout handle.
 			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-			    Static stdOutHandle As Integer
-			    If stdOutHandle <= 0 Then stdOutHandle = Win32.Kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
-			    Return stdOutHandle
+			    Return Win32.Kernel32.GetStdHandle(STD_OUTPUT_HANDLE)
 			  #endif
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+			    If Not Win32.Kernel32.SetStdHandle(STD_OUTPUT_HANDLE, value) Then
+			      Raise Win32Exception(GetLastError)
+			    End If
+			  #else
+			    #pragma Unused value
+			  #endif
+			End Set
+		#tag EndSetter
 		Protected StdOutHandle As Integer
 	#tag EndComputedProperty
 
@@ -212,16 +254,10 @@ Protected Module Console
 		#tag Setter
 			Set
 			  //Sets the console window title.
-			  
 			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
 			    If OriginalTitle = "" Then OriginalTitle = WindowTitle
-			    Dim e As Integer
 			    If Not Win32.Kernel32.SetConsoleTitle(value) Then
-			      e = GetLastError
-			      Dim err As New RuntimeException
-			      err.ErrorNumber = e
-			      err.Message = FormatError(e)
-			      Raise err
+			      Raise Win32Exception(GetLastError)
 			    End If
 			  #Else
 			    #pragma Unused value

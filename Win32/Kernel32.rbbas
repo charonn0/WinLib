@@ -229,7 +229,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function GetStdHandle Lib "Kernel32" (hIOStreamType As Integer) As Integer
+		Protected Declare Function GetStdHandle Lib "Kernel32" (HandleType As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -378,6 +378,10 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SetPriorityClass Lib "Kernel32" (ProcessHandle As Integer, NewPriority As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function SetStdHandle Lib "Kernel32" (HandleType As Integer, Handle As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

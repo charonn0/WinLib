@@ -25,6 +25,15 @@ Protected Module WinLib
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function Win32Exception(ErrorNumber As Integer) As RuntimeException
+		  Dim err As New RuntimeException
+		  err.ErrorNumber = ErrorNumber
+		  err.Message = "Win32 error: " + FormatError(ErrorNumber)
+		  Return err
+		End Function
+	#tag EndMethod
+
 
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
