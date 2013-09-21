@@ -11,22 +11,51 @@ Implements Win32Object
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1000
+		Sub Constructor()
+		  Me.Constructor("WinLibMessageWindow")
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
-		Sub Constructor(ClassName As String, WindowName As String)
-		  mClassName = ClassName
-		  mWindowName = WindowName
-		  Dim exflags, flags As Integer
-		  exflags = WS_EX_NOREDIRECTIONBITMAP
-		  flags = WS_VISIBLE
+		Sub Constructor(ClassName As String)
 		  Dim HWND As Integer
 		  #If TargetWin32 Then
-		    HWND = Win32.User32.CreateWindowEx(exflags, mClassName, mWindowName, flags, 0, 0, 0, 0, HWND_MESSAGE, 0, 0, Nil)
-		    ' FIXME this call returns 0 and LastError=87. 0 is a valid parameter for the superclass constructor, so this class will work
-		    ' in a gui app despite the error.
+		    Dim info As WNDCLASSEX
+		    Dim mbClass As New MemoryBlock(512)
+		    mbClass.WString(0) = ClassName
+		    info.ClassName = mbClass
+		    info.cbSize = info.Size
+		    info.Instance = Win32.Kernel32.GetModuleHandle("")
+		    info.WndProc = AddressOf Me.DefWindowProc
+		    If Win32.User32.RegisterClassEx(info) > 0 Then
+		      HWND = Win32.User32.CreateWindowEx(0, mbClass.WString(0), "", 0, 0, 0, 0, 0, HWND_MESSAGE, 0, 0, Nil)
+		    End If
 		  #endif
 		  mLastError = GetLastError
-		  Super.Constructor(HWND)
+		  If HWND <> 0 Then
+		    Super.Constructor(HWND)
+		  Else
+		    Raise Win32Exception(GetLastError)
+		  End If
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
+		  #pragma X86CallingConvention StdCall
+		  #If TargetWin32 Then
+		    Select Case msg
+		    Case WM_CREATE, WM_NCCREATE, WM_NCCALCSIZE, WM_GETMINMAXINFO
+		      ' Windows sends these three messages when the window is first created, but before this class
+		      ' is fully initialized. We must return success else Windows will consider the creation to have failed.
+		      Return 1
+		    Else
+		      ' Let the subclass handle all other messages
+		      Return Super.DefWindowProc(HWND, msg, wParam, lParam)
+		    End Select
+		  #endif
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -39,33 +68,6 @@ Implements Win32Object
 	#tag Note, Name = About this class
 		This class provides an invisible message-reception window.
 	#tag EndNote
-
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mClassName
-			End Get
-		#tag EndGetter
-		ClassName As String
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h1
-		Protected mClassName As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h1
-		Protected mWindowName As String
-	#tag EndProperty
-
-	#tag ComputedProperty, Flags = &h0
-		#tag Getter
-			Get
-			  return mWindowName
-			End Get
-		#tag EndGetter
-		WindowName As String
-	#tag EndComputedProperty
 
 
 	#tag ViewBehavior

@@ -37,8 +37,8 @@ Implements Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
+	#tag Method, Flags = &h1
+		Protected Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
 		  #pragma X86CallingConvention StdCall
 		  #If TargetWin32 Then
 		    For Each wndclass As Dictionary In Subclasses
@@ -129,8 +129,8 @@ Implements Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
+	#tag Method, Flags = &h1
+		Protected Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
 		  If Me.MessageFilter.HasKey(msg) Then
 		    Return WindowMessage(New WindowRef(HWND), msg, wParam, lParam)
 		  End If

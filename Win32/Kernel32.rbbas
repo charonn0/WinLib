@@ -217,11 +217,19 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GetModuleHandle Lib "Kernel32" Alias "GetModuleHandleW" (ModuleName As WString) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Sub GetNativeSystemInfo Lib "Kernel32" (ByRef info As SYSTEM_INFO)
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GetPriorityClass Lib "Kernel32" (ProcessHandle As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function GetProcessHeap Lib "Kernel32" () As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -266,6 +274,18 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function GlobalMemoryStatusEx Lib "Kernel32" (ByRef MemStatus As MEMORYSTATUSEX) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function HeapAlloc Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, Size As Integer) As Ptr
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function HeapFree Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, HMB As Ptr) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function HeapSize Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, HMB As Ptr) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

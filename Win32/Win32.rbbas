@@ -487,6 +487,9 @@ Protected Module Win32
 	#tag Constant, Name = HANDLE_FLAG_PROTECT_FROM_CLOSE, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = HEAP_ZERO_MEMORY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = HWND_BROADCAST, Type = Double, Dynamic = False, Default = \"&hffff", Scope = Public
 	#tag EndConstant
 
@@ -1252,7 +1255,13 @@ Protected Module Win32
 	#tag Constant, Name = WM_CHANGECBCHAIN, Type = Double, Dynamic = False, Default = \"&h030D", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = WM_CREATE, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = WM_DRAWCLIPBOARD, Type = Double, Dynamic = False, Default = \"&h0308", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_GETMINMAXINFO, Type = Double, Dynamic = False, Default = \"&h0024", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = WM_GETTEXT, Type = Double, Dynamic = False, Default = \"&h000D", Scope = Public
@@ -1262,6 +1271,12 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = WM_MOUSEWHEEL, Type = Double, Dynamic = False, Default = \"&h020A", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_NCCALCSIZE, Type = Double, Dynamic = False, Default = \"&h0083", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_NCCREATE, Type = Double, Dynamic = False, Default = \"&h0081", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = WM_PRINT, Type = Double, Dynamic = False, Default = \"&h0317", Scope = Public
@@ -1820,6 +1835,34 @@ Protected Module Win32
 		  FilePath As String*260
 		  fHandle As Integer
 		KnownSubjet As GUID
+	#tag EndStructure
+
+	#tag Structure, Name = WNDCLASS, Flags = &h0
+		Style As UInt32
+		  WndProc As Ptr
+		  ClsExtra As Integer
+		  WndExtra As Integer
+		  Instance As Integer
+		  Icon As Integer
+		  Cursor As Integer
+		  Brush As Integer
+		  MenuName As Ptr
+		ClassName As Ptr
+	#tag EndStructure
+
+	#tag Structure, Name = WNDCLASSEX, Flags = &h0
+		cbSize As Integer
+		  Style As UInt32
+		  WndProc As Ptr
+		  ClsExtra As Integer
+		  WndExtra As Integer
+		  Instance As Integer
+		  Icon As Integer
+		  Cursor As Integer
+		  Brush As Integer
+		  MenuName As Ptr
+		  ClassName As Ptr
+		IconSm As Integer
 	#tag EndStructure
 
 

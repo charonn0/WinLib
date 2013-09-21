@@ -45,6 +45,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CreateWindowEx Lib "User32" Alias "CreateWindowExW" (ExStyle As Integer, ClassNameAtom As Integer, WindowName As WString, Style As Integer, X As Integer, Y As Integer, Width As Integer, Height As Integer, Parent As Integer, Menu As Integer, Instance As Integer, Param As Ptr) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CreateWindowEx Lib "User32" Alias "CreateWindowExW" (ExStyle As Integer, ClassName As WString, WindowName As WString, Style As Integer, X As Integer, Y As Integer, Width As Integer, Height As Integer, Parent As Integer, Menu As Integer, Instance As Integer, Param As Ptr) As Integer
 	#tag EndExternalMethod
 
@@ -190,6 +194,14 @@ Protected Module User32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function PostMessage Lib "User32" Alias "PostMessageW" (HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegisterClass Lib "User32" Alias "RegisterClassW" (ByRef Info As WNDCLASS) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegisterClassEx Lib "User32" Alias "RegisterClassExW" (ByRef Info As WNDCLASSEX) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

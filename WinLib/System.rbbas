@@ -40,6 +40,31 @@ Protected Module System
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function HeapAlloc(Size As Integer, ZeroMemory As Boolean = True) As MemoryBlock
+		  ' Use this method to allocate a block of memory from the default heap. You MUST call HeapFree with the same value returned from HeapAlloc
+		  ' in order to free the memory. If ZeroMemory=True, all needed pages are securely zeroed-out before allocation.
+		  ' Allocating memoryblocks from the heap should only be done if the memory will be passed back to the app by the OS (e.g. for the WParam 
+		  ' and LParam parameters to a window message.)
+		  ' The size of the allocated MemoryBlock will be *at least* the size requested.
+		  ' NOTE: The memory allocated by this method cannot be paged out
+		  
+		  Dim heap As Integer = Win32.Kernel32.GetProcessHeap
+		  Dim flags As Integer
+		  If ZeroMemory Then
+		    flags = HEAP_ZERO_MEMORY
+		  End If
+		  Return Win32.Kernel32.HeapAlloc(heap, flags, Size)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function HeapFree(HMB As Ptr) As Boolean
+		  Dim heap As Integer = Win32.Kernel32.GetProcessHeap
+		  Return Win32.Kernel32.HeapFree(heap, 0, HMB)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function KernelVersion() As Double
 		  //Returns the Kernel version of Windows as a Double (MajorVersion.MinorVersion)
 		  //For example, Windows 2000 returns 5.0, XP Returns 5.1, Vista Returns 6.0 and Windows 7 returns 6.1
@@ -47,14 +72,6 @@ Protected Module System
 		  
 		  #If TargetWin32 Then
 		    Return Win32.OSVersion.MajorVersion + (Win32.OSVersion.MinorVersion / 10)
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function RegisterWindowMessage(MessageName As String) As Integer
-		  #If TargetWin32 Then
-		    Return Win32.User32.RegisterWindowMessage(MessageName)
 		  #endif
 		End Function
 	#tag EndMethod
