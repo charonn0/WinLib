@@ -46,9 +46,9 @@ Implements Win32Object
 		  #pragma X86CallingConvention StdCall
 		  #If TargetWin32 Then
 		    Select Case msg
-		    Case WM_CREATE, WM_NCCREATE', WM_NCCALCSIZE, WM_GETMINMAXINFO
-		      ' Windows sends these three messages when the window is first created, but before this class
-		      ' is fully initialized. We must return success else Windows will consider the creation to have failed.
+		    Case WM_CREATE, WM_NCCREATE
+		      ' Windows sends these messages when the window is first created, but before this class is fully initialized. 
+		      ' We must return success else Windows will consider the creation to have failed.
 		      Return 1
 		    Else
 		      ' Let the subclass handle all other messages

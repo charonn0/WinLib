@@ -5,6 +5,18 @@ Protected Module NTDLL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function RtlCompressBuffer Lib "NTDLL" (Engine As Integer, SourceBuffer As Ptr, SrcSize As Integer, OutputBuffer As Ptr, OutputSize As Integer, SourceChunkSize As Integer, ByRef FinalSize As Integer, Workspace As Ptr) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function RtlDecompressBuffer Lib "NTDLL" (Format As Integer, OutputBuffer As Ptr, OutputSize As Integer, SourceBuffer As Ptr, SourceSize As Integer, ByRef FinalSize As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function RtlGetCompressionWorkSpaceSize Lib "NTDLL" (Format As Integer, ByRef WorkSpaceSize As Integer, ByRef FragmentSize As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function RtlQueryElevationFlags Lib "NTDLL" (ByRef flags As Integer) As Integer
 	#tag EndExternalMethod
 

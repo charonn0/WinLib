@@ -118,6 +118,15 @@ Protected Module Win32
 	#tag Constant, Name = CAPTUREBLT, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = COMPRESSION_ENGINE_MAXIMUM, Type = Double, Dynamic = False, Default = \"&h0100", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = COMPRESSION_ENGINE_STANDARD, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = COMPRESSION_FORMAT_LZNT1, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CREATE_ALWAYS, Type = Double, Dynamic = False, Default = \"2", Scope = Public
 	#tag EndConstant
 
@@ -490,6 +499,9 @@ Protected Module Win32
 	#tag Constant, Name = HEAP_ZERO_MEMORY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = HP_HASHVAL, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = HWND_BROADCAST, Type = Double, Dynamic = False, Default = \"&hffff", Scope = Public
 	#tag EndConstant
 
@@ -682,7 +694,34 @@ Protected Module Win32
 	#tag Constant, Name = MOVEFILE_WRITE_THROUGH, Type = Double, Dynamic = False, Default = \"&h8", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = MS_DEF_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced RSA and AES Cryptogrphic Provider", Scope = Public
+	#tag Constant, Name = MS_DEF_DH_SCHANNEL_PROV, Type = String, Dynamic = False, Default = \"Microsoft DH Schannel Cryptographic Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_DSS_DH_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base DSS and Diffie-Hellman Cryptographic Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_DSS_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base DSS Cryptographic Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Cryptographic Provider v1.0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_RSA_SCHANNEL_PROV, Type = String, Dynamic = False, Default = \"Microsoft RSA Schannel Cryptographic Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_ENHANCED_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced Cryptographic Provider v1.0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_ENH_DSS_DH_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced DSS and Diffie-Hellman Cryptographic Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_ENH_RSA_AES_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced RSA and AES Cryptographic Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_SCARD_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Smart Card Crypto Provider", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MS_STRONG_PROV, Type = String, Dynamic = False, Default = \"Microsoft Strong Cryptographic Provider", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = NIM_ADD, Type = Double, Dynamic = False, Default = \"0", Scope = Public
