@@ -127,6 +127,9 @@ Protected Module Win32
 	#tag Constant, Name = COMPRESSION_FORMAT_LZNT1, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CONSOLE_TEXTMODE_BUFFER, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CREATE_ALWAYS, Type = Double, Dynamic = False, Default = \"2", Scope = Public
 	#tag EndConstant
 

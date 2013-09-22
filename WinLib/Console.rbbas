@@ -1,47 +1,9 @@
 #tag Module
 Protected Module Console
 	#tag Method, Flags = &h1
-		Protected Function ClearScreen() As Boolean
-		  //Clears the screen and moves the cursor to the top left corner (0,0)
-		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-		    Dim cord As Win32.COORD = Buffer.dwSize
-		    Dim charCount As Integer = cord.X * cord.Y
-		    cord.X = 0
-		    cord.Y = 0
-		    
-		    If Win32.Kernel32.FillConsoleOutputCharacter(StdOutHandle, 0, charCount, cord, charCount) Then
-		      Return Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord)
-		    End If
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function GetChar(x As Integer, y As Integer) As String
-		  //Returns the character from the specified character cell in the screen buffer.
-		  //On error, raises a Win32Exception with the Last Win32 error code
-		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-		    Dim mb As New MemoryBlock(4)
-		    Dim p As New MemoryBlock(4)
-		    Dim cords As COORD
-		    cords.X = x
-		    cords.Y = y
-		    Dim e As Integer
-		    If Win32.Kernel32.ReadConsoleOutputCharacter(StdOutHandle, mb, mb.Size, cords, p) Then
-		      Return mb.CString(0)
-		    Else
-		      e = GetLastError
-		      Dim err As New RuntimeException
-		      err.ErrorNumber = e
-		      err.Message = FormatError(e)
-		      Raise err
-		    End If
-		    
-		  #Else
-		    #pragma Unused x
-		    #pragma Unused y
+		Protected Function GetCurrentBuffer() As WinLib.ConsoleBuffer
+		  #If TargetWin32 Then
+		    Return New WinLib.ConsoleBuffer(StdOutHandle)
 		  #endif
 		End Function
 	#tag EndMethod
@@ -58,105 +20,16 @@ Protected Module Console
 		      Call Win32.Kernel32.GetConsoleOriginalTitle(mb, mb.Size)
 		      Return mb.Wstring(0)
 		    Else  //WinXP and earlier
-		      If OriginalTitle = "" Then  //The title was NOT previously changed using Console.ConsoleTitle
-		        Return WindowTitle  //Just return the current title.
+		      If OriginalTitle = "" Then
+		        Return WindowTitle
 		      Else
-		        Return OriginalTitle //Return the saved title
+		        Return OriginalTitle
 		      End If
 		    End If
 		  #endif
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub SetChar(x As Integer, y As Integer, char As String)
-		  //Writes the character specified to the character cell specified in the screen buffer
-		  //On error, raises a Win32Exception with the Last Win32 error code
-		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-		    Dim mb As New MemoryBlock(4)
-		    Dim p As New MemoryBlock(4)
-		    Dim cords As COORD
-		    cords.X = x
-		    cords.Y = y
-		    mb.CString(0) = char
-		    Dim e As Integer
-		    If Not Win32.Kernel32.WriteConsoleOutputCharacter(StdOutHandle, mb, mb.Size, cords, p) Then
-		      e = GetLastError
-		      Raise Win32Exception(e)
-		    End If
-		  #Else
-		    #pragma Unused x
-		    #pragma Unused y
-		    #pragma Unused char
-		  #endif
-		End Sub
-	#tag EndMethod
-
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  //Returns a CONSOLE_SCREEN_BUFFER_INFO structure for the current process's screen buffer
-			  
-			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
-			    Dim buffInfo As CONSOLE_SCREEN_BUFFER_INFO
-			    If Win32.Kernel32.GetConsoleScreenBufferInfo(stdOutHandle, buffInfo) Then
-			      Return buffInfo
-			    End If
-			  #endif
-			End Get
-		#tag EndGetter
-		Protected Buffer As CONSOLE_SCREEN_BUFFER_INFO
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  //Gets the X (horizontal) position of the cursor
-			  Return Buffer.CursorPosition.X
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  //Sets the X (horizontal) position of the cursor
-			  #If Not TargetHasGUI And TargetWin32 Then
-			    Dim cord As COORD = Buffer.CursorPosition
-			    cord.X = value
-			    If Not Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord) Then
-			      Raise Win32Exception(GetLastError)
-			    End If
-			  #Else
-			    #pragma Unused value
-			  #endif
-			End Set
-		#tag EndSetter
-		Protected CursorX As Integer
-	#tag EndComputedProperty
-
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  //Gets the Y (vertical) position of the cursor
-			  Return Buffer.CursorPosition.Y
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  //Sets the Y (vertical) position of the cursor
-			  #If Not TargetHasGUI And TargetWin32 Then
-			    Dim cord As COORD = Buffer.CursorPosition
-			    cord.Y = value
-			    If Not Win32.Kernel32.SetConsoleCursorPosition(StdOutHandle, cord) Then
-			      Raise Win32Exception(GetLastError)
-			    End If
-			  #Else
-			    #pragma Unused value
-			  #endif
-			End Set
-		#tag EndSetter
-		Protected CursorY As Integer
-	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
 		Private OriginalTitle As String

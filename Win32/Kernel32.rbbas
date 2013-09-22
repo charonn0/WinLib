@@ -21,6 +21,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CreateConsoleScreenBuffer Lib "Kernel32" (DesiredAccess As Integer, ShareMode As Integer, SecurityAttributes As Ptr, Flags As Integer, Reserved As Ptr) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CreateFile Lib "Kernel32" Alias "CreateFileW" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -341,6 +345,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function SetConsoleActiveScreenBuffer Lib "Kernel32" (BufferHandle As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SetConsoleCtrlHandler Lib "Kernel32" (handlerRoutine As Ptr, add As Boolean) As Boolean
 	#tag EndExternalMethod
 
@@ -426,6 +434,10 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function WinBeep Lib "Kernel32" Alias "Beep" (freq As Integer, duration As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function WriteConsole Lib "Kernel32" Alias "WriteConsoleW" (cHandle As Integer, chars As Ptr, Length As Integer, ByRef LengthWritten As Integer, Reserved As Ptr) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
