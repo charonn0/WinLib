@@ -129,6 +129,34 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function Tokenize(Input As String) As String()
+		  //Returns a String array containing the space-delimited members of the Input string.
+		  //Like `String.Split(" ")` but honoring quotes
+		  
+		  #If TargetWin32 Then
+		    Dim ret() As String
+		    Dim cmdLine As String = Input
+		    While cmdLine.Len > 0
+		      Dim tmp As String
+		      Dim args As String = Win32.Shlwapi.PathGetArgs(cmdLine)
+		      If Len(args) = 0 Then
+		        tmp = ReplaceAll(cmdLine.Trim, Chr(34), "")
+		        ret.Append(tmp)
+		        Exit While
+		      Else
+		        tmp = Left(cmdLine, cmdLine.Len - args.Len).Trim
+		        tmp = ReplaceAll(tmp, Chr(34), "")
+		        ret.Append(tmp)
+		        cmdLine = args
+		      End If
+		    Wend
+		    Return ret
+		  #endif
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function UserName() As String
 		  //Returns the username of the account under which the application is running.
 		  //On Error, returns an empty string
