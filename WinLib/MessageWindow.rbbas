@@ -47,7 +47,7 @@ Implements Win32Object
 		  #If TargetWin32 Then
 		    Select Case msg
 		    Case WM_CREATE, WM_NCCREATE
-		      ' Windows sends these messages when the window is first created, but before this class is fully initialized. 
+		      ' Windows sends these messages when the window is first created, but before this class is fully initialized.
 		      ' We must return success else Windows will consider the creation to have failed.
 		      Return 1
 		    Else
@@ -65,18 +65,17 @@ Implements Win32Object
 	#tag EndMethod
 
 
+	#tag Hook, Flags = &h0
+		Event Open()
+	#tag EndHook
+
+
 	#tag Note, Name = About this class
 		This class provides an invisible message-reception window.
 	#tag EndNote
 
 
 	#tag ViewBehavior
-		#tag ViewProperty
-			Name="ClassName"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
@@ -110,12 +109,6 @@ Implements Win32Object
 			Group="Position"
 			InitialValue="0"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="WindowName"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

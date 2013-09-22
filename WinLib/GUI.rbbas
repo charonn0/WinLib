@@ -123,7 +123,7 @@ Protected Module GUI
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function PostMessage(Recipient As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Protected Function PostMessage(Recipient As Win32Object, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  'Posts the Window Message to the target window's message queue and returns immediately
 		  #If TargetWin32 Then
 		    Return Win32.User32.PostMessage(Recipient.Handle, Message, WParam, LParam)
@@ -132,7 +132,7 @@ Protected Module GUI
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function SendMessage(Recipient As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Integer
+		Protected Function SendMessage(Recipient As Win32Object, Message As Integer, WParam As Ptr, LParam As Ptr) As Integer
 		  'Sends the Window Message to the target window and waits for a response
 		  #If TargetWin32 Then
 		    Return Win32.User32.SendMessage(Recipient.Handle, Message, WParam, LParam)

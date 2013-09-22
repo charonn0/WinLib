@@ -54,6 +54,16 @@ Implements Win32Object
 		    If nextWndProc <> INVALID_HANDLE_VALUE Then
 		      Return Win32.User32.CallWindowProc(nextWndProc, HWND, msg, wParam, lParam)
 		    End If
+		    Select Case msg
+		    Case WM_CREATE, WM_NCCREATE
+		      ' Windows sends these messages when the window is first created, but before this class is fully initialized.
+		      ' We must return success else Windows will consider the creation to have failed.
+		      Return 1
+		    Else
+		      #If DebugBuild Then
+		        Break ' !!!
+		      #endif
+		    End Select
 		  #endif
 		End Function
 	#tag EndMethod
