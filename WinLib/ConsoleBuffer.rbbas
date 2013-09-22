@@ -5,7 +5,7 @@ Implements WinLib.Win32Object
 		Protected Function BufferInfo() As CONSOLE_SCREEN_BUFFER_INFO
 		  //Returns a CONSOLE_SCREEN_BUFFER_INFO structure for the current process's screen buffer
 		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+		  #If Not TargetHasGUI And TargetWin32 Then
 		    Dim buffInfo As CONSOLE_SCREEN_BUFFER_INFO
 		    If Win32.Kernel32.GetConsoleScreenBufferInfo(mHandle, buffInfo) Then
 		      Return buffInfo
@@ -18,7 +18,7 @@ Implements WinLib.Win32Object
 		Function Clear() As Boolean
 		  //Clears the screen and moves the cursor to the top left corner (0,0)
 		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+		  #If Not TargetHasGUI And TargetWin32 Then
 		    Dim cord As Win32.COORD = BufferInfo.dwSize
 		    Dim charCount As Integer = cord.X * cord.Y
 		    cord.X = 0
@@ -34,7 +34,7 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the WinLib.Win32Object interface.
-		  #If TargetWin32 Then
+		  #If Not TargetHasGUI And TargetWin32 Then
 		    Call Win32.Kernel32.CloseHandle(mHandle)
 		  #endif
 		End Sub
@@ -42,15 +42,21 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Constructor()
-		  mHandle = Win32.Kernel32.CreateConsoleScreenBuffer(GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ, Nil, CONSOLE_TEXTMODE_BUFFER, Nil)
-		  mLastError = WinLib.GetLastError
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    mHandle = Win32.Kernel32.CreateConsoleScreenBuffer(GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ, Nil, CONSOLE_TEXTMODE_BUFFER, Nil)
+		    mLastError = WinLib.GetLastError
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Constructor(Handle As Integer)
 		  // Part of the WinLib.Win32Object interface.
-		  mHandle = Handle
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    mHandle = Handle
+		  #else
+		    #pragma Unused Handle
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -63,9 +69,8 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Function GetChar(x As Integer, y As Integer) As String
 		  //Returns the character from the specified character cell in the screen buffer.
-		  //On error, raises a Win32Exception with the Last Win32 error code
 		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+		  #If Not TargetHasGUI And TargetWin32 Then
 		    Dim mb As New MemoryBlock(4)
 		    Dim p As New MemoryBlock(4)
 		    Dim cords As COORD
@@ -98,7 +103,9 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function MakeActive() As Boolean
-		  Return Win32.Kernel32.SetConsoleActiveScreenBuffer(mHandle)
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    Return Win32.Kernel32.SetConsoleActiveScreenBuffer(mHandle)
+		  #endif
 		End Function
 	#tag EndMethod
 
@@ -106,7 +113,7 @@ Implements WinLib.Win32Object
 		Sub SetChar(x As Integer, y As Integer, char As String)
 		  //Writes the character specified to the character cell specified in the screen buffer
 		  
-		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+		  #If Not TargetHasGUI And TargetWin32 Then
 		    Dim mb As New MemoryBlock(4)
 		    Dim p As New MemoryBlock(4)
 		    Dim cords As COORD
@@ -125,54 +132,71 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Sub SetTextAttribute(TextAttribute As Integer, Combine As Boolean = True)
-		  Dim attribs As Integer
-		  If Combine Then
-		    attribs = Me.BufferInfo.Attribute
-		  End If
-		  attribs = attribs Or TextAttribute
-		  Call Win32.Kernel32.SetConsoleTextAttribute(mHandle, attribs)
-		  mLastError = GetLastError
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    Dim attribs As Integer
+		    If Combine Then
+		      attribs = Me.BufferInfo.Attribute
+		    End If
+		    attribs = attribs Or TextAttribute
+		    Call Win32.Kernel32.SetConsoleTextAttribute(mHandle, attribs)
+		    mLastError = GetLastError
+		  #else
+		    #pragma Unused TextAttribute
+		    #pragma Unused Combine
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function StdErr() As Writeable
-		  Return New WinLib.IOStream(mHandle)
+		  #If TargetHasGUI And TargetWin32 Then
+		    Return New WinLib.IOStream(mHandle)
+		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function StdIn() As Readable
-		  Return New WinLib.IOStream(mHandle)
+		  #If TargetHasGUI And TargetWin32 Then
+		    Return New WinLib.IOStream(mHandle)
+		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function StdOut() As Writeable
-		  Return New WinLib.IOStream(mHandle)
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    Return New WinLib.IOStream(mHandle)
+		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Write(Text As String, Row As Integer = -1, Column As Integer = -1) As Integer
-		  Dim written As Integer
-		  Dim txt As MemoryBlock = Text
-		  Dim currentpos As New REALbasic.Point(CursorColumn, CursorRow)
-		  If Row <> -1 Then
-		    Me.CursorRow = Row
-		  End If
-		  If Column <> -1 Then
-		    Me.CursorColumn = Column
-		  End If
-		  Call Win32.Kernel32.WriteConsole(mHandle, txt, txt.Size, written, Nil)
-		  mLastError = GetLastError
-		  If Row <> -1 Then
-		    Me.CursorRow = currentpos.Y
-		  End If
-		  If Column <> -1 Then
-		    Me.CursorColumn = currentpos.X
-		  End If
-		  Return written
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    Dim written As Integer
+		    Dim txt As MemoryBlock = Text
+		    Dim currentpos As New REALbasic.Point(CursorColumn, CursorRow)
+		    If Row <> -1 Then
+		      Me.CursorRow = Row
+		    End If
+		    If Column <> -1 Then
+		      Me.CursorColumn = Column
+		    End If
+		    Call Win32.Kernel32.WriteConsole(mHandle, txt, txt.Size, written, Nil)
+		    mLastError = GetLastError
+		    If Row <> -1 Then
+		      Me.CursorRow = currentpos.Y
+		    End If
+		    If Column <> -1 Then
+		      Me.CursorColumn = currentpos.X
+		    End If
+		    Return written
+		  #else
+		    #pragma Unused Text
+		    #pragma Unused Row
+		    #pragma Unused Column
+		  #endif
 		End Function
 	#tag EndMethod
 
@@ -185,11 +209,15 @@ Implements WinLib.Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Dim p As COORD
-			  p.X = Me.RowCount
-			  p.Y = value
-			  Call Win32.Kernel32.SetConsoleScreenBufferSize(mHandle, p)
-			  mLastError = GetLastError
+			  #If Not TargetHasGUI And TargetWin32 Then
+			    Dim p As COORD
+			    p.X = Me.RowCount
+			    p.Y = value
+			    Call Win32.Kernel32.SetConsoleScreenBufferSize(mHandle, p)
+			    mLastError = GetLastError
+			  #else
+			    #pragma Unused value
+			  #endif
 			End Set
 		#tag EndSetter
 		ColumnCount As Integer
@@ -257,11 +285,15 @@ Implements WinLib.Win32Object
 		#tag EndGetter
 		#tag Setter
 			Set
-			  Dim p As COORD
-			  p.X = value
-			  p.Y = Me.ColumnCount
-			  Call Win32.Kernel32.SetConsoleScreenBufferSize(mHandle, p)
-			  mLastError = GetLastError
+			  #If Not TargetHasGUI And TargetWin32 Then
+			    Dim p As COORD
+			    p.X = value
+			    p.Y = Me.ColumnCount
+			    Call Win32.Kernel32.SetConsoleScreenBufferSize(mHandle, p)
+			    mLastError = GetLastError
+			  #else
+			    #pragma Unused value
+			  #endif
 			End Set
 		#tag EndSetter
 		RowCount As Integer

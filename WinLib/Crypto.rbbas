@@ -14,12 +14,6 @@ Protected Module Crypto
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function EncryptData(Data As MemoryBlock, Password As String) As MemoryBlock
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function HashData(Data As MemoryBlock, Algorithm As Integer, Key As Integer = 0) As String
 		  ' processes the whole Data and returns a binary hash string
 		  
