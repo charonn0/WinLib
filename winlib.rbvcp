@@ -31,7 +31,6 @@ Module=Crypto;WinLib/Crypto.rbbas;&h14CD17FF;&h7CFB5FFF;false
 Module=Console;WinLib/Console.rbbas;&h3F3D4FFF;&h7CFB5FFF;false
 Class=MessageWindow;WinLib/MessageWindow.rbbas;&h5EAD1FFF;&h7CFB5FFF;false
 Module=Utils;WinLib/Utils.rbbas;&h7757FF;&h7CFB5FFF;false
-Module=User;WinLib/User.rbbas;&h2ECEBFFF;&h7CFB5FFF;false
 Module=GUI;WinLib/GUI.rbbas;&h54C67FFF;&h7CFB5FFF;false
 Class=WindowRef;WinLib/WindowRef.rbbas;&h4C7007FF;&h7CFB5FFF;false
 Interface=Win32Object;WinLib/Win32Object.rbbas;&h62BEE7FF;&h7CFB5FFF;false
