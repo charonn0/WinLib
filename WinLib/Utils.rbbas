@@ -1,9 +1,47 @@
 #tag Module
-Protected Module System
+Protected Module Utils
+	#tag Method, Flags = &h1
+		Protected Function Compress(Data As MemoryBlock, ChunkLen As Integer = 4096) As MemoryBlock
+		  ' based on WFS
+		  #If TargetWin32 Then
+		    Dim engine As Integer = COMPRESSION_FORMAT_LZNT1
+		    Dim sz, outsize  As Integer
+		    If Win32.NTDLL.RtlGetCompressionWorkSpaceSize(engine, sz, outsize) = 0 Then
+		      Dim workspace As New MemoryBlock(sz)
+		      Dim output As New MemoryBlock(sz)
+		      If Win32.NTDLL.RtlCompressBuffer(engine, data, data.Size, output, output.Size, ChunkLen, outsize, workspace) <> 0 Then
+		        Break
+		      Else
+		        Return output.StringValue(0, outsize)
+		      End If
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function CurrentProcessID() As Integer
 		  #If TargetWin32 Then
 		    Return Win32.Kernel32.GetCurrentProcess()
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function Decompress(Data As MemoryBlock) As MemoryBlock
+		  #If TargetWin32 Then
+		    Dim sizeneeded As Integer
+		    Dim output As New MemoryBlock(data.Size)
+		    Dim engine As Integer = COMPRESSION_FORMAT_LZNT1
+		    
+		    If Win32.NTDLL.RtlDecompressBuffer(engine, output, output.Size, Data, Data.Size, sizeneeded) <> 0 Then
+		      output = New MemoryBlock(sizeneeded)
+		      If Win32.NTDLL.RtlDecompressBuffer(engine, output, output.Size, Data, Data.Size, sizeneeded) <> 0 Then
+		        Break
+		      End If
+		    End If
+		    
+		    Return output.StringValue(0, sizeneeded)
 		  #endif
 		End Function
 	#tag EndMethod
@@ -40,31 +78,6 @@ Protected Module System
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function HeapAlloc(Size As Integer, ZeroMemory As Boolean = True) As MemoryBlock
-		  ' Use this method to allocate a block of memory from the default heap. You MUST call HeapFree with the same value returned from HeapAlloc
-		  ' in order to free the memory. If ZeroMemory=True, all needed pages are securely zeroed-out before allocation.
-		  ' Allocating memoryblocks from the heap should only be done if the memory will be passed back to the app by the OS (e.g. for the WParam 
-		  ' and LParam parameters to a window message.)
-		  ' The size of the allocated MemoryBlock will be *at least* the size requested.
-		  ' NOTE: The memory allocated by this method cannot be paged out
-		  
-		  Dim heap As Integer = Win32.Kernel32.GetProcessHeap
-		  Dim flags As Integer
-		  If ZeroMemory Then
-		    flags = HEAP_ZERO_MEMORY
-		  End If
-		  Return Win32.Kernel32.HeapAlloc(heap, flags, Size)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function HeapFree(HMB As Ptr) As Boolean
-		  Dim heap As Integer = Win32.Kernel32.GetProcessHeap
-		  Return Win32.Kernel32.HeapFree(heap, 0, HMB)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function KernelVersion() As Double
 		  //Returns the Kernel version of Windows as a Double (MajorVersion.MinorVersion)
 		  //For example, Windows 2000 returns 5.0, XP Returns 5.1, Vista Returns 6.0 and Windows 7 returns 6.1
@@ -73,6 +86,23 @@ Protected Module System
 		  #If TargetWin32 Then
 		    Return Win32.OSVersion.MajorVersion + (Win32.OSVersion.MinorVersion / 10)
 		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function UUID() As String
+		  Dim mUUID As String
+		  #If TargetWin32 Then
+		    Static mb As New MemoryBlock(16)
+		    Call Win32.Rpcrt4.UuidCreate(mb) //can compare to RPC_S_UUID_LOCAL_ONLY and RPC_S_UUID_NO_ADDRESS for more info
+		    Static ptrUUID As New MemoryBlock(16)
+		    Dim ppAddr As ptr
+		    Call Win32.Rpcrt4.UuidToString(mb, ppAddr)
+		    Dim mb2 As MemoryBlock = ppAddr
+		    mUUID = mb2.CString(0)
+		    Call Win32.Rpcrt4.RpcStringFree(ptrUUID)
+		  #endif
+		  Return mUUID
 		End Function
 	#tag EndMethod
 
