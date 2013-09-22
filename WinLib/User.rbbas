@@ -51,7 +51,7 @@ Protected Module User
 		      Dim retLen As Integer
 		      Dim prevPrivs As Ptr
 		      Dim TokenHandle As Integer
-		      If Win32.AdvApi32.OpenProcessToken(WinLib.System.CurrentProcessID, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, TokenHandle) Then
+		      If Win32.AdvApi32.OpenProcessToken(WinLib.Utils.CurrentProcessID, TOKEN_ADJUST_PRIVILEGES Or TOKEN_QUERY, TokenHandle) Then
 		        Return Win32.AdvApi32.AdjustTokenPrivileges(TokenHandle, False, newState, newState.Size, prevPrivs, retLen)
 		      End If
 		    End If
