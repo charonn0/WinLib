@@ -148,7 +148,7 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function StdErr() As Writeable
+		Function StdInput() As Readable
 		  #If TargetHasGUI And TargetWin32 Then
 		    Return New WinLib.IOStream(mHandle)
 		  #endif
@@ -156,46 +156,9 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function StdIn() As Readable
-		  #If TargetHasGUI And TargetWin32 Then
-		    Return New WinLib.IOStream(mHandle)
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function StdOut() As Writeable
+		Function StdOutput() As Writeable
 		  #If Not TargetHasGUI And TargetWin32 Then
 		    Return New WinLib.IOStream(mHandle)
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Write(Text As String, Row As Integer = -1, Column As Integer = -1) As Integer
-		  #If Not TargetHasGUI And TargetWin32 Then
-		    Dim written As Integer
-		    Dim txt As MemoryBlock = Text
-		    Dim currentpos As New REALbasic.Point(CursorColumn, CursorRow)
-		    If Row <> -1 Then
-		      Me.CursorRow = Row
-		    End If
-		    If Column <> -1 Then
-		      Me.CursorColumn = Column
-		    End If
-		    Call Win32.Kernel32.WriteConsole(mHandle, txt, txt.Size, written, Nil)
-		    mLastError = GetLastError
-		    If Row <> -1 Then
-		      Me.CursorRow = currentpos.Y
-		    End If
-		    If Column <> -1 Then
-		      Me.CursorColumn = currentpos.X
-		    End If
-		    Return written
-		  #else
-		    #pragma Unused Text
-		    #pragma Unused Row
-		    #pragma Unused Column
 		  #endif
 		End Function
 	#tag EndMethod
