@@ -265,12 +265,17 @@ Implements WinLib.Win32Object
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="CursorX"
+			Name="ColumnCount"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="CursorY"
+			Name="CursorColumn"
+			Group="Behavior"
+			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="CursorRow"
 			Group="Behavior"
 			Type="Integer"
 		#tag EndViewProperty
@@ -293,6 +298,11 @@ Implements WinLib.Win32Object
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="RowCount"
+			Group="Behavior"
+			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

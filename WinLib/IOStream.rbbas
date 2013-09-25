@@ -25,8 +25,7 @@ Implements Readable,Writeable,Win32Object
 
 	#tag Method, Flags = &h0
 		Function EOF() As Boolean Implements Readable.EOF
-		  Return LastError = ERROR_HANDLE_EOF
-		  
+		  Return Me.Position >= Me.Length
 		End Function
 	#tag EndMethod
 
@@ -63,11 +62,7 @@ Implements Readable,Writeable,Win32Object
 		    Dim mb As New MemoryBlock(Count)
 		    Dim read As Integer
 		    If Win32.Kernel32.ReadFile(Me.Handle, mb, mb.Size, read, Nil) Then
-		      If read = mb.Size Then
-		        mLastError = 0
-		      Else
-		        mLastError = ERROR_HANDLE_EOF
-		      End If
+		      mLastError = 0
 		    Else
 		      mLastError = GetLastError
 		      Dim err As New IOException
@@ -77,7 +72,7 @@ Implements Readable,Writeable,Win32Object
 		    End If
 		    
 		    If encoding = Nil Then encoding = Encodings.UTF8
-		    Dim data As String = DefineEncoding(mb.StringValue(0, mb.Size), encoding)
+		    Dim data As String = DefineEncoding(mb.StringValue(0, read), encoding)
 		    Return data
 		  #endif
 		End Function
