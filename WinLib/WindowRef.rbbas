@@ -3,6 +3,9 @@ Class WindowRef
 Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
+		  ' This will raise the referenced window to the top of the Z-order if the 
+		  ' current topmost window belongs to the calling process (i.e. this app) 
+		  
 		  #If TargetWin32 Then
 		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
 		    mLastError = GetLastError
@@ -34,8 +37,9 @@ Implements Win32Object
 		    h = Me.TrueHeight
 		  End If
 		  
-		  Return WinLib.Gui.CaptureRect(l, t, w, h)
+		  Dim p As Picture = WinLib.Gui.CaptureRect(l, t, w, h)
 		  mLastError = GetLastError
+		  Return p
 		End Function
 	#tag EndMethod
 
