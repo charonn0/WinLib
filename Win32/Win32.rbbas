@@ -58,6 +58,18 @@ Protected Module Win32
 	#tag Constant, Name = AW_HIDE, Type = Double, Dynamic = False, Default = \"&h00010000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = BACKGROUND_BLUE, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = BACKGROUND_BOLD, Type = Double, Dynamic = False, Default = \"&h0080", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = BACKGROUND_GREEN, Type = Double, Dynamic = False, Default = \"&h0020", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = BACKGROUND_RED, Type = Double, Dynamic = False, Default = \"&h0040", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = BLACKNESS, Type = Double, Dynamic = False, Default = \"&h00000042", Scope = Public
 	#tag EndConstant
 
@@ -1247,6 +1259,18 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = S_OK, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TEXT_BLUE, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TEXT_BOLD, Type = Double, Dynamic = False, Default = \"&h0008", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TEXT_GREEN, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TEXT_RED, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = TH32CS_SNAPPROCESS, Type = Double, Dynamic = False, Default = \"&h2", Scope = Public

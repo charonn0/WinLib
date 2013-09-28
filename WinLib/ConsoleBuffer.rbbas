@@ -167,6 +167,66 @@ Implements WinLib.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
+			  Return BitAnd(TextStyle, BACKGROUND_BOLD) = BACKGROUND_BOLD
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  If value Then
+			    Me.TextStyle = Me.TextStyle Or BACKGROUND_BOLD
+			  Else
+			    Me.TextStyle = Me.TextStyle Or BACKGROUND_BOLD
+			    Me.TextStyle = Me.TextStyle Xor BACKGROUND_BOLD
+			  End If
+			  
+			End Set
+		#tag EndSetter
+		BackgroundBold As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Dim r, g, b As Byte
+			  If BitAnd(TextStyle, BACKGROUND_RED) = BACKGROUND_RED Then
+			    r = 255
+			  End If
+			  
+			  If BitAnd(TextStyle, BACKGROUND_GREEN) = BACKGROUND_GREEN Then
+			    g = 255
+			  End If
+			  
+			  If BitAnd(TextStyle, BACKGROUND_BLUE) = BACKGROUND_BLUE Then
+			    b = 255
+			  End If
+			  
+			  Return RGB(r, g, b)
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  Dim flags As UInt16
+			  If value.Red > 0 Then
+			    flags = flags Or BACKGROUND_RED
+			  End If
+			  
+			  If value.Green > 0 Then
+			    flags = flags Or BACKGROUND_GREEN
+			  End If
+			  
+			  If value.Blue > 0 Then
+			    flags = flags Or BACKGROUND_BLUE
+			  End If
+			  
+			  Me.TextStyle = Me.TextStyle Or flags
+			End Set
+		#tag EndSetter
+		BackgroundColor As Color
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
 			  Return Me.BufferInfo.dwSize.Y
 			End Get
 		#tag EndGetter
@@ -262,8 +322,101 @@ Implements WinLib.Win32Object
 		RowCount As Integer
 	#tag EndComputedProperty
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return BitAnd(TextStyle, TEXT_BOLD) = TEXT_BOLD
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  If value Then
+			    Me.TextStyle = Me.TextStyle Or TEXT_BOLD
+			  Else
+			    Me.TextStyle = Me.TextStyle Or TEXT_BOLD
+			    Me.TextStyle = Me.TextStyle Xor TEXT_BOLD
+			  End If
+			  
+			End Set
+		#tag EndSetter
+		TextBold As Boolean
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Dim r, g, b As Byte
+			  If BitAnd(TextStyle, TEXT_RED) = TEXT_RED Then
+			    r = 255
+			  End If
+			  
+			  If BitAnd(TextStyle, TEXT_GREEN) = TEXT_GREEN Then
+			    g = 255
+			  End If
+			  
+			  If BitAnd(TextStyle, TEXT_BLUE) = TEXT_BLUE Then
+			    b = 255
+			  End If
+			  
+			  Return RGB(r, g, b)
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  Dim flags As UInt16
+			  If value.Red > 0 Then
+			    flags = flags Or TEXT_RED
+			  End If
+			  
+			  If value.Green > 0 Then
+			    flags = flags Or TEXT_GREEN
+			  End If
+			  
+			  If value.Blue > 0 Then
+			    flags = flags Or TEXT_BLUE
+			  End If
+			  
+			  Me.TextStyle = Me.TextStyle Or flags
+			End Set
+		#tag EndSetter
+		TextColor As Color
+	#tag EndComputedProperty
+
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  Return BufferInfo.Attribute
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
+			    If Win32.Kernel32.SetConsoleTextAttribute(mHandle, value) Then
+			      mLastError = 0
+			    Else
+			      mLastError = WinLib.GetLastError
+			    End If
+			  #Else
+			    #pragma Unused value
+			  #endif
+			End Set
+		#tag EndSetter
+		Protected TextStyle As UInt16
+	#tag EndComputedProperty
+
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="BackgroundBold"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="BackgroundColor"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="ColumnCount"
 			Group="Behavior"
@@ -309,6 +462,17 @@ Implements WinLib.Win32Object
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TextBold"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="TextColor"
+			Group="Behavior"
+			InitialValue="&c000000"
+			Type="Color"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"
