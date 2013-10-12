@@ -53,6 +53,7 @@ Implements Win32Object
 	#tag Method, Flags = &h0
 		Function NextItem() As FolderItem
 		  //This function returns a folderitem representing the next file or directory (starting with the first) in the RootDirectory
+		  //whose name matches the search pattern.
 		  //If there are no more files, this function sets LastError=18 (ERROR_NO_MORE_FILES). If no more files or an error occurred,
 		  //returns Nil.
 		  
@@ -113,8 +114,8 @@ Implements Win32Object
 		  Loop Until fe.LastError <> 0
 		
 		Using this class to enumerate a folder can be much faster than FolderItem.Item, especially on large directories. 
-		Execution time of FolderItem.Item rises exponentially relative to the number of items in the directory. The execution 
-		time of FindFileIterator.NextItem rises only linearly relative to the number of items.
+		Execution time of FolderItem.Item rises exponentially relative to the number of items in the directory. FindFileIterator
+		implements a faster, single-pass search.
 	#tag EndNote
 
 

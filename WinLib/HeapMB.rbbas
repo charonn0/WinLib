@@ -3,7 +3,7 @@ Class HeapMB
 Inherits MemoryBlock
 Implements Win32Object
 	#tag Method, Flags = &h0
-		 Shared Function Allocate(Size As Integer, ZeroMemory As Boolean = True, HeapHandle As Integer = -1) As HeapMB
+		 Shared Function Allocate(Size As Integer, ZeroMemory As Boolean = True, HeapHandle As Integer = - 1) As HeapMB
 		  #If TargetWin32 Then
 		    If HeapHandle = -1 Then HeapHandle = DefaultHeap
 		    Dim flags As Integer
@@ -11,7 +11,9 @@ Implements Win32Object
 		      flags = HEAP_ZERO_MEMORY
 		    End If
 		    Dim p As Ptr = Win32.Kernel32.HeapAlloc(HeapHandle, flags, Size)
-		    Return New HeapMB(Integer(p), HeapHandle)
+		    Dim mb As New HeapMB(Integer(p))
+		    mb.HeapHandle = HeapHandle
+		    Return mb
 		  #endif
 		End Function
 	#tag EndMethod
@@ -23,12 +25,10 @@ Implements Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Constructor(Handle As Integer, Heap As Integer = -1) Implements Win32Object.Constructor
+	#tag Method, Flags = &h0
+		Sub Constructor(Handle As Integer) Implements Win32Object.Constructor
 		  // Part of the WinLib.Win32Object interface.
 		  mHandle = Ptr(Handle)
-		  If Heap = -1 Then Heap = DefaultHeap
-		  HeapHandle = Heap
 		End Sub
 	#tag EndMethod
 
