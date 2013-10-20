@@ -4,7 +4,7 @@ Inherits WinLib.IOStream
 	#tag Method, Flags = &h0
 		Sub Close()
 		  PollTimer.Mode = Timer.ModeOff ' Turn off the poll timer
-		  IsConnected = False ' Mark the stream as closed
+		  mIsConnected = False ' Mark the stream as closed
 		  Super.Close
 		  
 		End Sub
@@ -13,46 +13,61 @@ Inherits WinLib.IOStream
 	#tag Method, Flags = &h0
 		Sub Connect()
 		  If IsConnected Then Me.Close
-		  IsConnected = False
+		  mIsConnected = False
 		  If PipeName = "" Then
 		    RaiseEvent Error(106) ' Throw an invalid state error
+		    Return
 		  End If
-		  
-		  Dim hFile As Integer = Win32.Kernel32.CreateFile("\\.\pipe\" + PipeName, GENERIC_READ Or GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0)
-		  If hFile > 0 Then
-		    Me.mHandle = hFile
-		    IsConnected = True
-		    RaiseEvent Connected()
-		    PollTimer.Mode = Timer.ModeMultiple
-		  Else
-		    RaiseEvent Error(103) ' Throw a name resolution error
-		  End If
-		  
+		  #If TargetWin32 Then
+		    Dim hFile As Integer = Win32.Kernel32.CreateFile("\\.\pipe\" + PipeName, GENERIC_READ Or GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0)
+		    If hFile > 0 Then
+		      Me.mHandle = hFile
+		      mIsConnected = True
+		      RaiseEvent Connected()
+		      PollTimer.Mode = Timer.ModeMultiple
+		    Else
+		      RaiseEvent Error(103) ' Throw a name resolution error
+		    End If
+		  #else
+		    RaiseEvent Error(100) ' open driver error
+		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Attributes( Hidden )  Sub Constructor()
+		Sub Constructor(Handle As Integer = 0)
 		  PollTimer = New Timer
-		  AddHandler PollTimer.Action, AddressOf PollAction
+		  AddHandler PollTimer.Action, WeakAddressOf PollAction
 		  PollTimer.Period = 50
-		  Super.Constructor(0)
+		  Super.Constructor(Handle)
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Sub Destructor()
-		  If IsConnected Then
-		    Me.Close
-		  End If
-		  RemoveHandler PollTimer.Action, AddressOf PollAction
+	#tag Method, Flags = &h1
+		Protected Sub Destructor()
 		  PollTimer = Nil
-		  
+		  Super.Destructor
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsConnected() As Boolean
+		  Return mIsConnected
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsListening() As Boolean
+		  Return mIsListening
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Listen(OpenMode As Integer, MaxInstances As Integer = PIPE_UNLIMITED_INSTANCES, OutBufferSize As Integer = 512, InBufferSize As Integer = 512, DefaultTimeout As Integer = - 1, PipeMode As Integer = 0)
+		  ' This method creates a NAMED PIPE SERVER and listens for incoming connections. This is a blocking function;
+		  ' Listen will not return until the first client connects, and your app will stop responding until then.
+		  ' 
+		  
 		  Dim err As Integer
 		  Dim hFile As Integer = Win32.Kernel32.CreateNamedPipe("\\.\pipe\" + PipeName, OpenMode Or FILE_FLAG_OVERLAPPED, PipeMode, _
 		  MaxInstances, OutBufferSize, InBufferSize, DefaultTimeout, Nil)
@@ -81,6 +96,22 @@ Inherits WinLib.IOStream
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function LookAhead() As String
+		  Return mBuffer
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Poll()
+		  If Not IsConnected Or PollTimer = Nil Then
+		    RaiseEvent Error(106) ' invalid state
+		    Return
+		  End If
+		  PollTimer.Mode = Timer.ModeMultiple
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Sub PollAction(Sender As Timer)
 		  #pragma Unused Sender
@@ -94,6 +125,12 @@ Inherits WinLib.IOStream
 		    End If
 		  End If
 		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Purge()
+		  mBuffer = ""
 		End Sub
 	#tag EndMethod
 
@@ -143,6 +180,8 @@ Inherits WinLib.IOStream
 		  End If
 		  
 		  Super.Write(Data)
+		  Me.Flush
+		  RaiseEvent SendComplete()
 		End Sub
 	#tag EndMethod
 
@@ -159,6 +198,10 @@ Inherits WinLib.IOStream
 		Event Error(ErrorNo As Integer)
 	#tag EndHook
 
+	#tag Hook, Flags = &h0
+		Event SendComplete()
+	#tag EndHook
+
 
 	#tag Note, Name = About this class
 		Implements a socket-like interface for a Win32 Named Pipe. Based on Wayne Golding's code
@@ -166,28 +209,36 @@ Inherits WinLib.IOStream
 	#tag EndNote
 
 
-	#tag Property, Flags = &h0
-		IsConnected As Boolean
+	#tag Property, Flags = &h21
+		Private mBuffer As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected mIsConnected As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected mIsListening As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mPipeName As String
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Return mBuffer
-			  
-			  
+			  return mPipeName
 			End Get
 		#tag EndGetter
-		LookAhead As String
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h21
-		Private mBuffer As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
+		#tag Setter
+			Set
+			  Me.Close
+			  mPipeName = value
+			End Set
+		#tag EndSetter
 		PipeName As String
-	#tag EndProperty
+	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
 		Private PollTimer As Timer
@@ -226,6 +277,7 @@ Inherits WinLib.IOStream
 			Name="LookAhead"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -238,6 +290,7 @@ Inherits WinLib.IOStream
 			Name="PipeName"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Position"
