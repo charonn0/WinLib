@@ -88,17 +88,18 @@ Implements Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function Operator_Convert() As WindowRef
-		  Return Me.ParentWindow
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Sub RemoveMessageFilter(ParamArray MsgIDs() As Integer)
 		  For Each MsgID As Integer In MsgIDs
 		    If Me.MessageFilter.HasKey(MsgID) Then Me.MessageFilter.Remove(MsgID)
 		  Next
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub Reparent(NewParentWindow As WindowRef)
+		  Me.Close
+		  Me.Constructor(NewParentWindow.Handle)
 		End Sub
 	#tag EndMethod
 
@@ -205,8 +206,8 @@ Implements Win32Object
 		Private Shared mWndProcs As Dictionary
 	#tag EndProperty
 
-	#tag Property, Flags = &h1
-		Protected ParentWindow As WindowRef
+	#tag Property, Flags = &h21
+		Private ParentWindow As WindowRef
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

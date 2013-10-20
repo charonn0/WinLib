@@ -3,12 +3,7 @@ Class HotKeyMonitor
 Inherits MessageMonitor
 	#tag Event
 		Function WindowMessage(HWND As WinLib.WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
-		  #If DebugBuild Then
-		    ' We should not be getting messages addressed to other windows.
-		    If HWND <> Me.ParentWindow Then Break
-		  #Else
-		    #pragma Unused HWND
-		  #endif
+		  #pragma Unused HWND
 		  If Message = WM_HOTKEY Then
 		    Dim keystring As String = ConstructKeyString(Integer(LParam))
 		    Return HotKeyPressed(Integer(WParam), keystring)
@@ -68,14 +63,14 @@ Inherits MessageMonitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function RegisterKey(modifiers as Integer, virtualKey as Integer) As Integer
+	#tag Method, Flags = &h1
+		Protected Function RegisterKey(modifiers as Integer, virtualKey as Integer) As Integer
 		  #If TargetWin32 Then
 		    Dim id As Integer
 		    id = Win32.Kernel32.GlobalAddAtom("Win32Atom" + Str(NextNum))
 		    KeyIDs.Append(id)
 		    
-		    If Win32.User32.RegisterHotKey(Me.ParentWindow.Handle, id, modifiers, virtualKey) Then
+		    If Win32.User32.RegisterHotKey(Me.Handle, id, modifiers, virtualKey) Then
 		      Return id
 		    Else
 		      Return -1
@@ -85,9 +80,19 @@ Inherits MessageMonitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function RegisterKey(Key As String, ParamArray modifiers() As Integer) As Integer
+		  Dim m As Integer
+		  For i As Integer = 0 To UBound(modifiers)
+		    m = m Or modifiers(i)
+		  Next
+		  Return Me.RegisterKey(m, VirtualKey(key))
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub UnregisterKey(id as Integer)
 		  #If TargetWin32 Then
-		    Call Win32.User32.UnregisterHotkey(Me.ParentWindow.Handle, id)
+		    Call Win32.User32.UnregisterHotkey(Me.Handle, id)
 		    Call Win32.User32.GlobalDeleteAtom(id)
 		    For i As Integer = UBound(KeyIDs) DownTo 0
 		      If KeyIDs(i) = id Then
@@ -98,8 +103,8 @@ Inherits MessageMonitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		 Shared Function VirtualKey(Key As String) As Integer
+	#tag Method, Flags = &h1
+		Protected Shared Function VirtualKey(Key As String) As Integer
 		  #If TargetWin32 Then Return Win32.User32.VkKeyScan(Asc(Key))
 		End Function
 	#tag EndMethod

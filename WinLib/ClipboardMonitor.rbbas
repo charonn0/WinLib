@@ -33,7 +33,7 @@ Inherits WinLib.MessageMonitor
 		  Super.Constructor(ParentHandle)
 		  Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD)
 		  #If TargetWin32 Then
-		    NextViewerWindow = Win32.User32.SetClipboardViewer(Me.ParentWindow.Handle)
+		    NextViewerWindow = Win32.User32.SetClipboardViewer(Me.Handle)
 		  #endif
 		End Sub
 	#tag EndMethod
@@ -42,7 +42,7 @@ Inherits WinLib.MessageMonitor
 		Protected Sub Destructor()
 		  #If TargetWin32 Then
 		    ' We must unlink ourselves from the Clipboard chain without breaking it!
-		    Call Win32.User32.ChangeClipboardChain(Me.ParentWindow.Handle, Me.NextViewerWindow)
+		    Call Win32.User32.ChangeClipboardChain(Me.Handle, Me.NextViewerWindow)
 		  #endif
 		  Super.Destructor()
 		End Sub
