@@ -1,7 +1,9 @@
-The source code in this project is released under the terms of the MIT License,
-reproduced below. In addition to the terms of the license, it is requested that
-anyone with suggestions, bugs, feature requests, or their own code to contribute
+
+The source code in this project is released under the terms of the MIT License, 
+reproduced below. In addition to the terms of the license, it is requested that 
+anyone with suggestions, bugs, feature requests, or their own code to contribute 
 contact me at andrew[at]boredomsoft[dot]org
+
 --------------------------------------------------------------------------------
 Copyright (c) 2013 Andrew Lambert
 
