@@ -611,6 +611,9 @@ Protected Module Win32
 	#tag Constant, Name = MAX_PATH, Type = Double, Dynamic = False, Default = \"260", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = MAX_STR_BLOCKREASON, Type = Double, Dynamic = False, Default = \"256", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = MB_ABORTRETRYIGNORE, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
 	#tag EndConstant
 

@@ -100,6 +100,14 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function LockWorkstation() As Boolean
+		  #If TargetWin32 Then
+		    Return Win32.User32.LockWorkStation()
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function SetPrivilege(PrivilegeName As String, Enabled As Boolean) As Boolean
 		  //Modifies the calling process' security token
 		  //See the SE_* Constants for privilege names.
@@ -124,6 +132,37 @@ Protected Module Utils
 		        Return Win32.AdvApi32.AdjustTokenPrivileges(TokenHandle, False, newState, newState.Size, prevPrivs, retLen)
 		      End If
 		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShutdownBlock(Reason As String) As Boolean
+		  #If TargetWin32 And TargetHasGUI Then
+		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return False ' Vista and newer only
+		    Return Win32.User32.ShutdownBlockReasonCreate(Window(0).Handle, Reason)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShutdownBlockQuery() As String
+		  #If TargetWin32 And TargetHasGUI Then
+		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return "" ' Vista and newer only
+		    Dim mb As New MemoryBlock(MAX_STR_BLOCKREASON)
+		    Dim sz As Integer = mb.Size
+		    If Win32.User32.ShutdownBlockReasonQuery(Window(0).Handle, mb, sz) Then
+		      Return mb.WString(0)
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShutdownUnblock() As Boolean
+		  #If TargetWin32 And TargetHasGUI Then
+		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return False ' Vista and newer only
+		    Return Win32.User32.ShutdownBlockReasonDestroy(Window(0).Handle)
 		  #endif
 		End Function
 	#tag EndMethod

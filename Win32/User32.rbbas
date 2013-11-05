@@ -177,6 +177,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function LockWorkStation Lib "User32" () As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function MapVirtualKey Lib "User32" Alias "MapVirtualKeyW" (key As Integer, type As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -258,6 +262,18 @@ Protected Module User32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function ShowWindow Lib "User32" (HWND As Integer, Command As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function ShutdownBlockReasonCreate Lib "User32" (HWND As Integer, Reason As WString) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function ShutdownBlockReasonDestroy Lib "User32" (HWND As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function ShutdownBlockReasonQuery Lib "User32" (HWND As Integer, Buffer As Ptr, ByRef BufferSz As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
