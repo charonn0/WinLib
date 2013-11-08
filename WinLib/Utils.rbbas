@@ -108,6 +108,18 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function ProcessorCount() As Integer
+		  //Returns the number of LOGICAL processor cores. e.g. a quad core processor with hyperthreading will have 8 logical cores.
+		  
+		  #If TargetWin32 Then
+		    Dim info As SYSTEM_INFO
+		    Win32.Kernel32.GetSystemInfo(info)
+		    Return info.numberOfProcessors
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function SetPrivilege(PrivilegeName As String, Enabled As Boolean) As Boolean
 		  //Modifies the calling process' security token
 		  //See the SE_* Constants for privilege names.
