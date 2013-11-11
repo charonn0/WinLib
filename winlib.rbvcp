@@ -26,6 +26,7 @@ Module=User32;Win32/User32.rbbas;&h4A026FFF;&h561B87FF;false
 Module=AdvApi32;Win32/AdvApi32.rbbas;&h27606FFF;&h561B87FF;false
 Module=Kernel32;Win32/Kernel32.rbbas;&h46716FFF;&h561B87FF;false
 Module=WinLib;WinLib/WinLib.rbbas;&h7CFB5FFF;&h0;false
+Class=UUID;WinLib/UUID.rbbas;&h5A0E5FFF;&h7CFB5FFF;false
 Class=ProcessInfo;WinLib/ProcessInfo.rbbas;&h7339B7FF;&h7CFB5FFF;false
 Class=ConsoleBuffer;WinLib/ConsoleBuffer.rbbas;&h539897FF;&h7CFB5FFF;false
 Class=HeapMB;WinLib/HeapMB.rbbas;&h7458BFFF;&h7CFB5FFF;false
