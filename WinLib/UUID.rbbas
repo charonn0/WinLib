@@ -1,5 +1,5 @@
 #tag Class
-Protected Class UUID
+Class UUID
 	#tag Method, Flags = &h1
 		Protected Sub Constructor(UUIDPtr As MemoryBlock)
 		  Me.mUUID = UUIDPtr
@@ -7,8 +7,8 @@ Protected Class UUID
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Copy() As WinLib.UUID
-		  Return New WinLib.UUID(mUUID)
+		Function Copy() As UUID
+		  Return New UUID(mUUID)
 		End Function
 	#tag EndMethod
 
@@ -18,7 +18,7 @@ Protected Class UUID
 		    Dim mb As New MemoryBlock(16)
 		    Dim id As MemoryBlock = UUIDString
 		    Call Win32.Rpcrt4.UuidFromString(id, mb)
-		    Dim mUUID As New WinLib.UUID(mb)
+		    Dim mUUID As New UUID(mb)
 		    Return mUUID
 		  #endif
 		End Function
@@ -31,14 +31,14 @@ Protected Class UUID
 		    ' and cannot be traced to the generating computer
 		    Dim mb As New MemoryBlock(16)
 		    Call Win32.Rpcrt4.UuidCreate(mb)
-		    Dim mUUID As New WinLib.UUID(mb)
+		    Dim mUUID As New UUID(mb)
 		    Return mUUID
 		  #endif
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Operator_Compare(OtherUUID As WinLib.UUID) As Integer
+		Function Operator_Compare(OtherUUID As UUID) As Integer
 		  #If TargetWin32 Then
 		    Dim status As New MemoryBlock(16)
 		    Dim i As Integer = Win32.Rpcrt4.UuidCompare(mUUID, OtherUUID.mUUID, status)
