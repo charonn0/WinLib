@@ -229,18 +229,9 @@ Protected Module Utils
 
 	#tag Method, Flags = &h1
 		Protected Function UUID() As String
-		  Dim mUUID As String
 		  #If TargetWin32 Then
-		    Static mb As New MemoryBlock(16)
-		    Call Win32.Rpcrt4.UuidCreate(mb) //can compare to RPC_S_UUID_LOCAL_ONLY and RPC_S_UUID_NO_ADDRESS for more info
-		    Static ptrUUID As New MemoryBlock(16)
-		    Dim ppAddr As ptr
-		    Call Win32.Rpcrt4.UuidToString(mb, ppAddr)
-		    Dim mb2 As MemoryBlock = ppAddr
-		    mUUID = mb2.CString(0)
-		    Call Win32.Rpcrt4.RpcStringFree(ptrUUID)
+		    Return WinLib.UUID.NewGUID
 		  #endif
-		  Return mUUID
 		End Function
 	#tag EndMethod
 
