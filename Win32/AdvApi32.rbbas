@@ -1,6 +1,10 @@
 #tag Module
 Protected Module AdvApi32
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function AbortSystemShutdown Lib "AdvApi32" Alias "AbortSystemShutdownW" (MachineName As WString) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function AdjustTokenPrivileges Lib "AdvApi32" (tHandle As Integer, disableAllPrivs As Boolean, newState As Ptr, buffLength As Integer, prevPrivs As Ptr, ByRef retLen As Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -34,6 +38,14 @@ Protected Module AdvApi32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GetUserName Lib "AdvApi32" Alias "GetUserNameW" (buffer As Ptr, ByRef buffSize As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function InitiateSystemShutdown Lib "AdvApi32" (MachineName As WString, Message As WString, TimeOut As Integer, ForceAppsClosed As Boolean, RebootAfterShutdown As Boolean) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function InitiateSystemShutdownEx Lib "AdvApi32" (MachineName As WString, Message As WString, TimeOut As Integer, ForceAppsClosed As Boolean, RebootAfterShutdown As Boolean, Reason As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

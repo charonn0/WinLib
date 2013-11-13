@@ -149,8 +149,20 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function ShutdownAbort() As Boolean
+		  #If TargetWin32 Then
+		    Return Win32.AdvApi32.AbortSystemShutdown("")
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function ShutdownBlock(Reason As String) As Boolean
 		  #If TargetWin32 And TargetHasGUI Then
+		    ' Blocks system shutdown for the specified reason. The user may override a block.
+		    ' Note that blocks only apply to shutdown operations started with InitiateShutdown,
+		    ' not those started by calling ExitWindows 
+		    
 		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return False ' Vista and newer only
 		    Return Win32.User32.ShutdownBlockReasonCreate(Window(0).Handle, Reason)
 		  #endif
@@ -165,6 +177,18 @@ Protected Module Utils
 		    Dim sz As Integer = mb.Size
 		    If Win32.User32.ShutdownBlockReasonQuery(Window(0).Handle, mb, sz) Then
 		      Return mb.WString(0)
+		    End If
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function ShutdownInitiate(Message As String = "", Reboot As Boolean = False, Timeout As Integer = 0, ForceQuit As Boolean = False, Reason As Integer = -1) As Boolean
+		  #If TargetWin32 Then
+		    If Reason = -1 Then
+		      Return Win32.AdvApi32.InitiateSystemShutdown("", Message.Trim, Timeout, ForceQuit, Reboot)
+		    Else
+		      Return Win32.AdvApi32.InitiateSystemShutdownEx("", Message.Trim, Timeout, ForceQuit, Reboot, Reason)
 		    End If
 		  #endif
 		End Function
