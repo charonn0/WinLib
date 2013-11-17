@@ -5,6 +5,10 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CloseServiceHandle Lib "AdvApi32" (ServiceHandle As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CryptAcquireContext Lib "AdvApi32" Alias "CryptAcquireContextW" (ByRef provider as Integer, container as Integer, providerName as WString, providerType as Integer, flags as Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -33,6 +37,14 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GetServiceDisplayName Lib "AdvApi32" (SCManager As Integer, ServiceName As WString, DisplayName As Ptr, ByRef ServiceNameSize As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GetServiceKeyName Lib "AdvApi32" Alias "GetServiceKeyNameW" (SCManager As Integer, DisplayName As WString, ServiceName As Ptr, ByRef ServiceNameSize As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GetUserName Lib "AdvApi32" Alias "GetUserNameW" (buffer As Ptr, ByRef buffSize As Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -46,6 +58,18 @@ Protected Module AdvApi32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function OpenProcessToken Lib "AdvApi32" (handle As Integer, access As Integer, ByRef tHandle As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function OpenSCManager Lib "AdvApi32" Alias "OpenSCManagerW" (MachineName As WString, DatabaseName As WString, DesiredAccess As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function OpenService Lib "AdvApi32" Alias "OpenServiceW" (SCManager As Integer, ServiceName As WString, DesiredAccess As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function QueryServiceConfig Lib "AdvApi32" Alias "QueryServiceConfigW" (SCManager As Integer, DataBuffer As Ptr, BufferSize As Integer, ByRef NeededSize As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

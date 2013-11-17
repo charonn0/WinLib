@@ -986,6 +986,9 @@ Protected Module Win32
 	#tag Constant, Name = REPLACEFILE_WRITE_THROUGH, Type = Double, Dynamic = False, Default = \"1", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = SC_MANAGER_ALL_ACCESS, Type = Double, Dynamic = False, Default = \"&hF003F", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = SE_ASSIGNPRIMARYTOKEN_NAME, Type = String, Dynamic = False, Default = \"SeAssignPrimaryTokenPrivilege", Scope = Public
 	#tag EndConstant
 
@@ -1714,6 +1717,18 @@ Protected Module Win32
 		  flags As Integer
 		  inSpeed As Integer
 		outSpeed As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = QUERY_SERVICE_CONFIG, Flags = &h0
+		ServiceType As Integer
+		  StartType As Integer
+		  ErrorControl As Integer
+		  BinPathName As Ptr
+		  LoadOrderGroup As Ptr
+		  TagID As Integer
+		  Dependencies As Ptr
+		  ServiceStartName As Ptr
+		DisplayName As Ptr
 	#tag EndStructure
 
 	#tag Structure, Name = RECT, Flags = &h0

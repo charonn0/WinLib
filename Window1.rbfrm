@@ -152,12 +152,33 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  MsgBox(WinLib.Utils.UUID)
+		End Sub
+	#tag EndEvent
+
+
 #tag EndWindowCode
 
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  Call WinLib.Utils.ShutdownBlock("For the good of the Republic!")
+		  'Dim u As UUID
+		  'u = u.FromString("04b3a588-84bb-4f79-ad42-e88986fec904")
+		  'Dim y As UUID = u.NewGUID
+		  'If y = u Then
+		  'Break
+		  'Else
+		  'Break
+		  'End If
+		  'Dim s As String = u
+		  'Dim t As String = y
+		  'Break
+		  
+		  Dim s As Service
+		  s = Service.OpenService("ADVService")
+		  Break
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -165,14 +186,6 @@ End
 	#tag Event
 		Sub Action()
 		  Call WinLib.Utils.ShutdownUnblock
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events PushButton3
-	#tag Event
-		Sub Action()
-		  Dim s As String = WinLib.Utils.ShutdownBlockQuery
-		  MsgBox(s)
 		End Sub
 	#tag EndEvent
 #tag EndEvents

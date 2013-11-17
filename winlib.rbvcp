@@ -43,6 +43,7 @@ Class=HotKeyMonitor;WinLib/HotKeyMonitor.rbbas;&h3B6D97FF;&h7CFB5FFF;false
 Class=IOStream;WinLib/IOStream.rbbas;&h10FCCFFF;&h7CFB5FFF;false
 Class=MessageMonitor;WinLib/MessageMonitor.rbbas;&h5A52EFFF;&h7CFB5FFF;false
 Class=NamedPipe;WinLib/NamedPipe.rbbas;&h67A07FF;&h7CFB5FFF;false
+Class=Service;Service.rbbas;&h6A2197FF;&h0;false
 DefaultWindow=Window1
 MajorVersion=1
 MinorVersion=0
