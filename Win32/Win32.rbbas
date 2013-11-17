@@ -989,6 +989,27 @@ Protected Module Win32
 	#tag Constant, Name = SC_MANAGER_ALL_ACCESS, Type = Double, Dynamic = False, Default = \"&hF003F", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = SC_MANAGER_CONNECT, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_CREATE_SERVICE, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_ENUMERATE_SERVICE, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_LOCK, Type = Double, Dynamic = False, Default = \"&h0008", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_MODIFY_BOOT_CONFIG, Type = Double, Dynamic = False, Default = \"&h0020", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_QUERY_LOCK_STATUS, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICES_ACTIVE_DATABASE, Type = String, Dynamic = False, Default = \"ServicesActive", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = SE_ASSIGNPRIMARYTOKEN_NAME, Type = String, Dynamic = False, Default = \"SeAssignPrimaryTokenPrivilege", Scope = Public
 	#tag EndConstant
 

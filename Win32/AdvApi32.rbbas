@@ -41,7 +41,7 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function GetServiceDisplayName Lib "AdvApi32" (SCManager As Integer, ServiceName As WString, DisplayName As Ptr, ByRef ServiceNameSize As Integer) As Boolean
+		Protected Declare Function GetServiceDisplayName Lib "AdvApi32" Alias "GetServiceDisplayNameW" (SCManager As Integer, ServiceName As WString, DisplayName As Ptr, ByRef ServiceNameSize As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
