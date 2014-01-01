@@ -36,7 +36,7 @@ Implements WinLib.Win32Object
 		Protected Function Control(Command As Integer, ByRef Status As SERVICE_STATUS) As Boolean
 		  #If TargetWin32 Then
 		    If Not Win32.AdvApi32.ControlService(Me.Handle, Command, status) Then
-		      mLastError = WinLib.GetLastError()
+		      mLastError = GetLastError()
 		    Else
 		      mLastError = 0
 		    End If
@@ -76,7 +76,7 @@ Implements WinLib.Win32Object
 		    mLastError = 0
 		    Return mb.WString(0)
 		  Else
-		    mLastError = WinLib.GetLastError()
+		    mLastError = GetLastError()
 		  End If
 		End Function
 	#tag EndMethod
@@ -143,7 +143,7 @@ Implements WinLib.Win32Object
 		    err = 0
 		  Else
 		    sHandle = Win32.AdvApi32.OpenSCManager(MachineName, DatabaseName, DesiredAccess)
-		    err = WinLib.GetLastError
+		    err = GetLastError
 		    If err = 0 Then
 		      Dim d As New Dictionary
 		      d.Value("Handle") = sHandle
@@ -153,7 +153,7 @@ Implements WinLib.Win32Object
 		  End If
 		  If err <> 0 Then Return Nil
 		  mhandle = Win32.AdvApi32.OpenService(sHandle, ServiceName, DesiredAccess)
-		  err = WinLib.GetLastError
+		  err = GetLastError()
 		  If err = 0 Then
 		    Dim s As New Service(mhandle)
 		    s.KeyName = ServiceName
@@ -207,7 +207,7 @@ Implements WinLib.Win32Object
 		      count = UBound(Arguments) + 1
 		    End If
 		    If Not Win32.AdvApi32.StartService(Me.Handle, count, mb) Then
-		      mLastError = WinLib.GetLastError()
+		      mLastError = GetLastError()
 		    Else
 		      mLastError = 0
 		    End If
