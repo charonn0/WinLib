@@ -11,7 +11,7 @@ Protected Module Console
 	#tag Method, Flags = &h1
 		Protected Function GetOriginalTitle() As String
 		  //Returns the console window's original title. Only Windows Vista and later support this,
-		  //so for earlier versions we work around it.
+		  //so for earlier versions we emulate it.
 		  
 		  #If Not TargetHasGUI And TargetWin32 Then  //Windows Console Applications only
 		    If System.IsFunctionAvailable("GetConsoleOriginalTitleW", "Kernel32") Then

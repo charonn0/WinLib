@@ -57,11 +57,11 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function InitiateSystemShutdown Lib "AdvApi32" (MachineName As WString, Message As WString, TimeOut As Integer, ForceAppsClosed As Boolean, RebootAfterShutdown As Boolean) As Boolean
+		Protected Declare Function InitiateSystemShutdown Lib "AdvApi32" Alias "InitiateSystemShutdownW" (MachineName As WString, Message As WString, TimeOut As Integer, ForceAppsClosed As Boolean, RebootAfterShutdown As Boolean) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function InitiateSystemShutdownEx Lib "AdvApi32" (MachineName As WString, Message As WString, TimeOut As Integer, ForceAppsClosed As Boolean, RebootAfterShutdown As Boolean, Reason As Integer) As Boolean
+		Protected Declare Function InitiateSystemShutdownEx Lib "AdvApi32" Alias "InitiateSystemShutdownExW" (MachineName As WString, Message As WString, TimeOut As Integer, ForceAppsClosed As Boolean, RebootAfterShutdown As Boolean, Reason As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
