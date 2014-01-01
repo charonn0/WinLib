@@ -3,8 +3,8 @@ Class WindowRef
 Implements Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
-		  ' This will raise the referenced window to the top of the Z-order if the 
-		  ' current topmost window belongs to the calling process (i.e. this app) 
+		  ' This will raise the referenced window to the top of the Z-order if the
+		  ' current topmost window belongs to the calling process (i.e. this app)
 		  
 		  #If TargetWin32 Then
 		    Call Win32.User32.ShowWindow(Me.Handle, SW_SHOWNORMAL)
@@ -19,7 +19,7 @@ Implements Win32Object
 		  'If the optional IncludeBorder parameter is False, then only the client area of the window
 		  'is captured; if True then the client area, borders, and titlebar are included in the capture.
 		  'If the window is a ContainerControl or similar construct (AKA child windows), only the contents of the container
-		  'are captured. To always capture the topmost containing window, use ForeignWindow.TrueParent.Capture
+		  'are captured. To always capture the topmost containing window, use WindowRef.TrueParent.Capture
 		  'If all or part of the Window is overlapped by other windows, then the capture will include the overlapping
 		  'parts of the other windows.
 		  
@@ -78,13 +78,28 @@ Implements Win32Object
 
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherWindow As WindowRef) As Integer
-		  If OtherWindow.Handle > Me.Handle Then
-		    Return 1
-		  ElseIf OtherWindow.Handle < Me.Handle Then
-		    Return -1
-		  Else
-		    Return 0
-		  End If
+		  #If TargetWin32 Then
+		    Dim selfexists As Boolean = Win32.User32.IsWindow(Me.Handle)
+		    If OtherWindow = Nil Then
+		      If selfexists Then
+		        Return 1 ' windowref exists and is being compared to Nil
+		      Else
+		        Return 0 ' windowref does not exist and is being compared to Nil
+		      End If
+		    ElseIf Win32.User32.IsWindow(OtherWindow.Handle) And selfexists Then
+		      If OtherWindow.Handle <> Me.Handle Then
+		        Return 1 ' both windowrefs exist but they do not refer to the same window
+		      Else
+		        Return 0 ' both windowrefs exist and they refer to the same window
+		      End If
+		    Else
+		      If selfexists Then
+		        Return 1 ' windowref exists and is not being compared to Nil, but the OtherWindow doesn't exist
+		      Else
+		        Return -1' windowref does not exist and is not being compared to Nil, but the OtherWindow doesn't exist either
+		      End If
+		    End If
+		  #endif
 		End Function
 	#tag EndMethod
 

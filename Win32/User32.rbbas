@@ -169,6 +169,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function IsWindow Lib "User32" (HWND As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function IsWindowVisible Lib "User32" (HWND As Integer) As Boolean
 	#tag EndExternalMethod
 
