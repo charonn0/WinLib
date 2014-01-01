@@ -1010,6 +1010,24 @@ Protected Module Win32
 	#tag Constant, Name = SERVICES_ACTIVE_DATABASE, Type = String, Dynamic = False, Default = \"ServicesActive", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = SERVICE_CONTROL_CONTINUE, Type = Double, Dynamic = False, Default = \"&h00000003", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_CONTROL_PAUSE, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_CONTROL_STOP, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_PAUSE_CONTINUE, Type = Double, Dynamic = False, Default = \"&h0040", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_START, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_STOP, Type = Double, Dynamic = False, Default = \"&h0020", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = SE_ASSIGNPRIMARYTOKEN_NAME, Type = String, Dynamic = False, Default = \"SeAssignPrimaryTokenPrivilege", Scope = Public
 	#tag EndConstant
 
@@ -1763,6 +1781,16 @@ Protected Module Win32
 		Length As Integer
 		  secDescriptor As Ptr
 		InheritHandle As Boolean
+	#tag EndStructure
+
+	#tag Structure, Name = SERVICE_STATUS, Flags = &h0
+		ServiceType As Integer
+		  CurrentState As Integer
+		  ControlsAccepted As Integer
+		  Win32ExitCode As Integer
+		  ServiceSpecificExitCode As Integer
+		  CheckPoint As Integer
+		WaitHint As Integer
 	#tag EndStructure
 
 	#tag Structure, Name = SHELLFLAGSTATE, Flags = &h0

@@ -13,6 +13,10 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function ControlService Lib "AdvApi32" (ServiceHandle As Integer, Control As Integer, ByRef Status As SERVICE_STATUS) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CryptAcquireContext Lib "AdvApi32" Alias "CryptAcquireContextW" (ByRef provider as Integer, container as Integer, providerName as WString, providerType as Integer, flags as Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -86,6 +90,10 @@ Protected Module AdvApi32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SaferiIsExecutableFileType Lib "AdvApi32" (FilePath As WString, OmitEXE As Boolean) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function StartService Lib "AdvApi32" Alias "StartServiceW" (ServiceHandle As Integer, NumServiceArgs As Integer, ServiceArguments As Ptr) As Boolean
 	#tag EndExternalMethod
 
 

@@ -32,6 +32,19 @@ Implements WinLib.Win32Object
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function Control(Command As Integer, ByRef Status As SERVICE_STATUS) As Boolean
+		  #If TargetWin32 Then
+		    If Not Win32.AdvApi32.ControlService(Me.Handle, Command, status) Then
+		      mLastError = WinLib.GetLastError()
+		    Else
+		      mLastError = 0
+		    End If
+		    Return LastError = 0
+		  #endif
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function Dependencies() As String()
 		  Dim qc As MemoryBlock = QueryConfig
@@ -119,7 +132,7 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		 Shared Function OpenService(ServiceName As String, MachineName As String = "", DatabaseName As String = "", DesiredAccess As Integer = - 1) As Service
-		  If DesiredAccess = -1 Then DesiredAccess = SC_MANAGER_CONNECT Or SC_MANAGER_ENUMERATE_SERVICE
+		  If DesiredAccess = -1 Then DesiredAccess = SC_MANAGER_CONNECT Or SC_MANAGER_ENUMERATE_SERVICE Or SERVICE_START Or SERVICE_STOP' Or SERVICE_PAUSE_CONTINUE
 		  If DatabaseName = "" Then DatabaseName = SERVICES_ACTIVE_DATABASE
 		  If SCHandles = Nil Then SCHandles = New Dictionary
 		  Dim sHandle, mhandle, err As Integer
@@ -152,6 +165,15 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Pause() As Boolean
+		  #If TargetWin32 Then
+		    Dim status As SERVICE_STATUS
+		    Return Me.Control(SERVICE_CONTROL_PAUSE, status)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function QueryConfig() As MemoryBlock
 		  #If TargetWin32 Then
 		    Dim sz As Integer
@@ -165,8 +187,47 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Resume() As Boolean
+		  #If TargetWin32 Then
+		    Dim status As SERVICE_STATUS
+		    Return Me.Control(SERVICE_CONTROL_CONTINUE, status)
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Start(Optional Arguments() As String) As Boolean
+		  #If TargetWin32 Then
+		    Dim args As String = Join(Arguments, Chr(0))
+		    Dim mb As New MemoryBlock(0)
+		    Dim count As Integer
+		    If Arguments <> Nil And UBound(Arguments) > -1 Then
+		      mb = New MemoryBlock(LenB(args) * 2)
+		      mb.WString(0) = Join(Arguments, Chr(0))
+		      count = UBound(Arguments) + 1
+		    End If
+		    If Not Win32.AdvApi32.StartService(Me.Handle, count, mb) Then
+		      mLastError = WinLib.GetLastError()
+		    Else
+		      mLastError = 0
+		    End If
+		    Return LastError = 0 Or LastError = 1056 ' 1056=ERROR_SERVICE_ALREADY_RUNNING
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function StartType() As Integer
 		  Return QueryConfig.Int32Value(4)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Stop() As Boolean
+		  #If TargetWin32 Then
+		    Dim status As SERVICE_STATUS
+		    Return Me.Control(SERVICE_CONTROL_STOP, status)
+		  #endif
 		End Function
 	#tag EndMethod
 
