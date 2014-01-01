@@ -11,7 +11,6 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h1
 		Protected Shared Sub CloseService(ServiceHandle As Integer)
 		  Call Win32.AdvApi32.CloseServiceHandle(ServiceHandle)
-		  
 		  Dim ref As String = SCHandles.Lookup(ServiceHandle, "")
 		  If ref <> "" Then
 		    Dim d As Dictionary = SCHandles.Value(ref)
@@ -20,7 +19,9 @@ Implements WinLib.Win32Object
 		      ' No more references to this controller
 		      Dim h As Integer = d.Value("Handle")
 		      Call Win32.AdvApi32.CloseServiceHandle(h)
+		      SCHandles.Remove(ref)
 		    End If
+		    If SCHandles.HasKey(ServiceHandle) Then SCHandles.Remove(ServiceHandle)
 		  End If
 		End Sub
 	#tag EndMethod
@@ -42,6 +43,12 @@ Implements WinLib.Win32Object
 		  
 		  
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Destructor()
+		  Me.Close()
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -111,7 +118,7 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function OpenService(ServiceName As String, MachineName As String = "", DatabaseName As String = "", DesiredAccess As Integer = -1) As Service
+		 Shared Function OpenService(ServiceName As String, MachineName As String = "", DatabaseName As String = "", DesiredAccess As Integer = - 1) As Service
 		  If DesiredAccess = -1 Then DesiredAccess = SC_MANAGER_CONNECT Or SC_MANAGER_ENUMERATE_SERVICE
 		  If DatabaseName = "" Then DatabaseName = SERVICES_ACTIVE_DATABASE
 		  If SCHandles = Nil Then SCHandles = New Dictionary
