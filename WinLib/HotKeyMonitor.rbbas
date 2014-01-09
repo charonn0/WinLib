@@ -56,8 +56,8 @@ Inherits MessageMonitor
 
 	#tag Method, Flags = &h1
 		Protected Sub Destructor()
-		  For Each key As Integer In KeyIDs
-		    Me.UnregisterKey(key)
+		  For i As Integer = UBound(KeyIDs) DownTo 0
+		    Me.UnregisterKey(KeyIDs(i))
 		  Next
 		  Super.Destructor
 		End Sub
@@ -121,7 +121,7 @@ Inherits MessageMonitor
 		For example:
 		
 		     Dim hotkey As New HotKeyMonitor()
-		     Dim hotkeyID As Integer = HotKey.RegisterKey(MOD_CONTROL Or MOD_ALT, HotKey.VirtualKey("a"))
+		     Dim hotkeyID As Integer = HotKey.RegisterKey("a", MOD_CONTROL, MOD_ALT)
 		
 		The above snippet would raise the HotKeyMonitor.HotKeyPressed event whenever the global hotkey combo Ctrl+Alt+a is pressed.
 		Each instance of the HotKeyMonitor class can handle an arbitrary number of hotkey combinations, each being uniquely
