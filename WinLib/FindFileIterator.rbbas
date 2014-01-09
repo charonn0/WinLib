@@ -62,7 +62,7 @@ Implements Win32Object
 		    ' if the next item is either the current directory (".") or parent directory (".."), then skip it.
 		    If data.FileName.Trim = "." Or data.FileName.Trim = ".." Then Return NextItem()
 		    ' otherwise, return it.
-		    Return Me.RootDirectory.TrueChild(data.FileName)
+		    If Me.LastError = 0 Then Return Me.RootDirectory.TrueChild(data.FileName)
 		  End If
 		End Function
 	#tag EndMethod
