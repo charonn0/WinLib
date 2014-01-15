@@ -61,3 +61,12 @@ End
 #tag WindowCode
 #tag EndWindowCode
 
+#tag Events PushButton1
+	#tag Event
+		Sub Action()
+		  'ClipboardMonitorDemo.Show
+		  'FindFileIteratorDemo.Show
+		  HotKeyMonitorDemo.Show
+		End Sub
+	#tag EndEvent
+#tag EndEvents

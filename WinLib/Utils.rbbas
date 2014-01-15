@@ -134,7 +134,7 @@ Protected Module Utils
 		      If Enabled Then
 		        newState.UInt32Value(12) = SE_PRIVILEGE_ENABLED
 		      Else
-		        newState.UInt32Value(12) = SE_PRIVILEGE_REMOVED
+		        newState.UInt32Value(12) = 0
 		      End If
 		      
 		      Dim retLen As Integer
@@ -161,10 +161,12 @@ Protected Module Utils
 		  #If TargetWin32 And TargetHasGUI Then
 		    ' Blocks system shutdown for the specified reason. The user may override a block.
 		    ' Note that blocks only apply to shutdown operations started with InitiateShutdown,
-		    ' not those started by calling ExitWindows 
+		    ' not those started by calling ExitWindows
 		    
-		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return False ' Vista and newer only
+		    If Not System.IsFunctionAvailable("ShutdownBlockReasonCreate", "User32") Then Return False ' Vista and newer only
 		    Return Win32.User32.ShutdownBlockReasonCreate(Window(0).Handle, Reason)
+		  #else
+		    #pragma Unused Reason
 		  #endif
 		End Function
 	#tag EndMethod
@@ -183,7 +185,7 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShutdownInitiate(Message As String = "", Reboot As Boolean = False, Timeout As Integer = 0, ForceQuit As Boolean = False, Reason As Integer = -1) As Boolean
+		Protected Function ShutdownInitiate(Message As String = "", Reboot As Boolean = False, Timeout As Integer = 0, ForceQuit As Boolean = False, Reason As Integer = - 1) As Boolean
 		  #If TargetWin32 Then
 		    If Reason = -1 Then
 		      Return Win32.AdvApi32.InitiateSystemShutdown("", Message.Trim, Timeout, ForceQuit, Reboot)
@@ -197,7 +199,7 @@ Protected Module Utils
 	#tag Method, Flags = &h1
 		Protected Function ShutdownUnblock() As Boolean
 		  #If TargetWin32 And TargetHasGUI Then
-		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return False ' Vista and newer only
+		    If Not System.IsFunctionAvailable("ShutdownBlockReasonDestroy", "User32") Then Return False ' Vista and newer only
 		    Return Win32.User32.ShutdownBlockReasonDestroy(Window(0).Handle)
 		  #endif
 		End Function
