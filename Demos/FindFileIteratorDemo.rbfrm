@@ -229,7 +229,7 @@ Begin Window FindFileIteratorDemo
       Left            =   360
       LockedInPosition=   False
       Mode            =   2
-      Period          =   1
+      Period          =   10
       Scope           =   0
       TabPanelIndex   =   0
       Top             =   34
@@ -261,11 +261,19 @@ End
 #tag Events PushButton2
 	#tag Event
 		Sub Action()
-		  If RootFolder <> Nil And RootFolder.Exists And RootFolder.Directory And TextField1.Text <> "" Then
-		    Thread1.Run
+		  If TextField1.Text.Trim = "" Then
+		    MsgBox("You must enter a search pattern (e.g. '*.*')")
+		  ElseIf RootFolder = Nil Then 
+		    MsgBox("You must select a folder to search within")
+		  ElseIf Not RootFolder.Exists Then
+		    MsgBox("The selected search folder does not exist or is inaccessible")
+		  ElseIf Not RootFolder.Directory Then
+		    MsgBox("You must select a folder to search within")
 		  Else
-		    MsgBox("Missing data")
+		    Thread1.Run
+		    App.YieldToNextThread
 		  End If
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -287,8 +295,9 @@ End
 #tag Events Timer1
 	#tag Event
 		Sub Action()
-		  While Listed.Ubound > -1 
+		  While Listed.Ubound > -1
 		    Listbox1.AddRow(Listed.Pop.AbsolutePath)
+		    App.YieldToNextThread
 		  Wend
 		End Sub
 	#tag EndEvent

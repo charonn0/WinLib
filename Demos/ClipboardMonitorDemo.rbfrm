@@ -99,17 +99,23 @@ Begin Window ClipboardMonitorDemo
    Begin ClipboardMonitor ClipboardMonitor1
       Height          =   32
       Index           =   -2147483648
-      Left            =   5.63e+2
+      Left            =   563
       LockedInPosition=   False
       Scope           =   0
       TabPanelIndex   =   0
-      Top             =   0.0e+
+      Top             =   0
       Width           =   32
    End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Function CancelClose(appQuitting as Boolean) As Boolean
+		  ClipboardMonitor1.Close
+		End Function
+	#tag EndEvent
+
 	#tag Event
 		Sub Open()
 		  CheckClipboard()
@@ -132,6 +138,9 @@ End
 		  End If
 		  
 		  Canvas1.Invalidate(True)
+		  
+		Exception
+		  Return
 		End Sub
 	#tag EndMethod
 

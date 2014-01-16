@@ -7,7 +7,7 @@ Begin Window Window1
    Frame           =   0
    FullScreen      =   False
    HasBackColor    =   False
-   Height          =   400
+   Height          =   4.0e+2
    ImplicitInstance=   True
    LiveResize      =   True
    MacProcID       =   0
@@ -21,15 +21,15 @@ Begin Window Window1
    MinWidth        =   64
    Placement       =   0
    Resizeable      =   True
-   Title           =   "Untitled"
+   Title           =   "WinLib"
    Visible         =   True
-   Width           =   600
+   Width           =   6.0e+2
    Begin PushButton PushButton1
       AutoDeactivate  =   True
       Bold            =   ""
       ButtonStyle     =   0
       Cancel          =   ""
-      Caption         =   "Untitled"
+      Caption         =   "Hotkey Demo"
       Default         =   ""
       Enabled         =   True
       Height          =   22
@@ -37,7 +37,7 @@ Begin Window Window1
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   ""
-      Left            =   260
+      Left            =   20
       LockBottom      =   ""
       LockedInPosition=   False
       LockLeft        =   True
@@ -50,10 +50,106 @@ Begin Window Window1
       TextFont        =   "System"
       TextSize        =   0
       TextUnit        =   0
-      Top             =   189
+      Top             =   14
       Underline       =   ""
       Visible         =   True
-      Width           =   80
+      Width           =   103
+   End
+   Begin PushButton PushButton2
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "Clipboard Demo"
+      Default         =   ""
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   135
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   1
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   14
+      Underline       =   ""
+      Visible         =   True
+      Width           =   103
+   End
+   Begin PushButton PushButton3
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "FindFile Demo"
+      Default         =   ""
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   250
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   2
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   14
+      Underline       =   ""
+      Visible         =   True
+      Width           =   103
+   End
+   Begin Label Label1
+      AutoDeactivate  =   True
+      Bold            =   ""
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   "Visit the WinLib project page"
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   365
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Multiline       =   ""
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      Text            =   "Copyright (c) 2013-14 Andrew Lambert"
+      TextAlign       =   2
+      TextColor       =   &h000080FF
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   380
+      Transparent     =   False
+      Underline       =   ""
+      Visible         =   True
+      Width           =   228
    End
 End
 #tag EndWindow
@@ -64,9 +160,56 @@ End
 #tag Events PushButton1
 	#tag Event
 		Sub Action()
-		  'ClipboardMonitorDemo.Show
-		  'FindFileIteratorDemo.Show
 		  HotKeyMonitorDemo.Show
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton2
+	#tag Event
+		Sub Action()
+		  ClipboardMonitorDemo.Show
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton3
+	#tag Event
+		Sub Action()
+		  FindFileIteratorDemo.Show
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Label1
+	#tag Event
+		Sub Open()
+		  Dim d As New Date
+		  Dim year As String = Format(d.Year - 2000, "00")
+		  Me.Text = "Copyright " + &uA9 + "2013-" + year +" Andrew Lambert"
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseEnter()
+		  Me.MouseCursor = System.Cursors.FingerPointer
+		  Me.Underline = Not Me.Underline
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub MouseExit()
+		  Me.MouseCursor = System.Cursors.StandardPointer
+		  Me.Underline = Not Me.Underline
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Function MouseDown(X As Integer, Y As Integer) As Boolean
+		  #pragma Unused X
+		  #pragma Unused Y
+		  Return True
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub MouseUp(X As Integer, Y As Integer)
+		  If X >= 0 And Y >= 0 Then
+		    ShowURL("http://www.boredomsoft.org/winlib.bs")
+		  End If
 		End Sub
 	#tag EndEvent
 #tag EndEvents
