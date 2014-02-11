@@ -151,10 +151,58 @@ Begin Window Window1
       Visible         =   True
       Width           =   228
    End
+   Begin PushButton PushButton4
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "File Change Detector"
+      Default         =   ""
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   365
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   14
+      Underline       =   ""
+      Visible         =   True
+      Width           =   136
+   End
 End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h21
+		Private Sub WaitProcHandler(Sender As WinLib.Waiter, WaitFired As Boolean)
+		  System.DebugLog(CurrentMethodName)
+		  MsgBox("Change detected")
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		MonHandle As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Waiter As WinLib.Waiter
+	#tag EndProperty
+
+
 #tag EndWindowCode
 
 #tag Events PushButton1
@@ -209,6 +257,20 @@ End
 		Sub MouseUp(X As Integer, Y As Integer)
 		  If X >= 0 And Y >= 0 Then
 		    ShowURL("http://www.boredomsoft.org/winlib.bs")
+		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton4
+	#tag Event
+		Sub Action()
+		  Dim f As FolderItem = SelectFolder()
+		  If f <> Nil Then
+		    Dim filters As Integer = FILE_NOTIFY_CHANGE_FILE_NAME Or FILE_NOTIFY_CHANGE_DIR_NAME
+		    Waiter = New WinLib.Waiter
+		    AddHandler Waiter.WaitSignalled, WeakAddressOf WaitProcHandler
+		    MonHandle = Win32.Kernel32.FindFirstChangeNotification(SpecialFolder.Desktop.AbsolutePath, False, filters)
+		    Call Waiter.WaitOnce(MonHandle)
 		  End If
 		End Sub
 	#tag EndEvent
