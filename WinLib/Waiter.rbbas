@@ -1,5 +1,31 @@
 #tag Class
 Protected Class Waiter
+Implements WinLib.Win32Object
+	#tag Method, Flags = &h0
+		Sub Close()
+		  // Part of the WinLib.Win32Object interface.
+		  If Not Win32.Kernel32.UnregisterWait(Me.Handle) Then
+		    mLastError = Win32.Kernel32.GetLastError()
+		  Else
+		    mLastError = 0
+		  End If
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor()
+		  // Part of the WinLib.Win32Object interface.
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Constructor(Handle As Integer)
+		  // Part of the WinLib.Win32Object interface.
+		  mHandle = Handle
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Shared Sub DefWaitProc(Parameter As Ptr, WaitFired As Boolean)
 		  #pragma X86CallingConvention StdCall
@@ -22,6 +48,13 @@ Protected Class Waiter
 	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  Return mHandle
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LastError() As Integer
+		  // Part of the WinLib.Win32Object interface.
+		  Return mLastError
 		End Function
 	#tag EndMethod
 
@@ -64,6 +97,10 @@ Protected Class Waiter
 
 	#tag Property, Flags = &h1
 		Protected mHandle As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected mLastError As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

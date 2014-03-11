@@ -333,6 +333,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function ReadDirectoryChangesW Lib "Kernel32" (DirHandle As Integer, Buffer As Ptr, BufferLen As Integer, WatchSubtree As Boolean, NotifyFilter As Integer, ByRef BytesReturned As Integer, Overlapped As Ptr, CompletionRoutine As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function ReadFile Lib "Kernel32" (hFile As Integer, Buffer As Ptr, BytesToRead As Integer, ByRef BytesRead As Integer, Overlapped As Ptr) As Boolean
 	#tag EndExternalMethod
 

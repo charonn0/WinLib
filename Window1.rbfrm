@@ -186,6 +186,19 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  Dim p As WinLib.Service = WinLib.Service.OpenService("spooler")
+		  If p.State = WinLib.Service.States.Stopped Then
+		    Call p.Start()
+		  Else
+		    Call p.Stop()
+		  End If
+		  
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h21
 		Private Sub WaitProcHandler(Sender As WinLib.Waiter, WaitFired As Boolean)
 		  System.DebugLog(CurrentMethodName)
