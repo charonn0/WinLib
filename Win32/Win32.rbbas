@@ -1381,6 +1381,9 @@ Protected Module Win32
 	#tag Constant, Name = SYNCHRONIZE, Type = Double, Dynamic = False, Default = \"&h00100000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = SYSTEM_HANDLE_INFORMATION, Type = Double, Dynamic = False, Default = \"16", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = S_OK, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
@@ -2002,6 +2005,15 @@ Protected Module Win32
 		  EstimatedTimer As Integer
 		  DefaultAlert1 As Integer
 		DefaultAlert2 As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = SYSTEM_HANDLE_TABLE_ENTRY_INFO, Flags = &h0
+		ProcessID As Integer
+		  ObjectType As Byte
+		  Flags As Byte
+		  Value As Int16
+		  Address As Ptr
+		GrantedAccess As Integer
 	#tag EndStructure
 
 	#tag Structure, Name = SYSTEM_INFO, Flags = &h0

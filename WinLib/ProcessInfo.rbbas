@@ -130,6 +130,28 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function OpenedFiles() As FolderItem
+		  #If TargetWin32 Then
+		    Dim mb As New MemoryBlock(SYSTEM_HANDLE_TABLE_ENTRY_INFO.Size * 64)
+		    Dim newSize, tries As Integer
+		    While Win32.NTDLL.NtQuerySystemInformation(SYSTEM_HANDLE_INFORMATION, mb, mb.Size, newSize) <> 0
+		      tries = tries + 1
+		      If tries > 10 Then Exit While
+		    Wend
+		    
+		    Dim info() As SYSTEM_HANDLE_TABLE_ENTRY_INFO
+		    For i As Integer = 0 To newSize Step SYSTEM_HANDLE_TABLE_ENTRY_INFO.Size
+		      Dim item As SYSTEM_HANDLE_TABLE_ENTRY_INFO
+		      item.StringValue(TargetLittleEndian) = mb.StringValue(i, SYSTEM_HANDLE_TABLE_ENTRY_INFO.Size)
+		      info.Append(item)
+		    Next
+		    
+		    Break
+		  #endif
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Terminate(ExitCode As Integer = 0) As Boolean
 		  Dim prochandle As Integer = Win32.Kernel32.OpenProcess(PROCESS_TERMINATE, False, Me.ProcessID)
 		  mLastError = Win32.Kernel32.GetLastError()
@@ -216,11 +238,6 @@ Implements Win32Object
 			Group="ID"
 			InitialValue="-2147483648"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LastWin32Error"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
