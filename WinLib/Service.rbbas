@@ -89,7 +89,10 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function Executable() As FolderItem
-		  Return GetFolderItem(QueryConfig.WString(12))
+		  Dim mb As MemoryBlock = QueryConfig 
+		  If mb.WString(36).Trim <> "" Then
+		    Return GetFolderItem(mb.WString(36))'12))
+		  End If
 		End Function
 	#tag EndMethod
 
@@ -187,6 +190,20 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function QueryStatus() As SERVICE_STATUS
+		  #If TargetWin32 Then
+		    Dim stat As SERVICE_STATUS
+		    If Not Win32.AdvApi32.QueryServiceStatus(Me.Handle, stat) Then
+		      mLastError = Win32.Kernel32.GetLastError()
+		      Exit Function
+		    End If
+		    Return stat
+		  #endif
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Resume() As Boolean
 		  #If TargetWin32 Then
 		    Dim status As SERVICE_STATUS
@@ -219,6 +236,12 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Function StartType() As Integer
 		  Return QueryConfig.Int32Value(4)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function State() As WinLib.Service.States
+		  Return States(QueryStatus.CurrentState)
 		End Function
 	#tag EndMethod
 
@@ -261,6 +284,17 @@ Implements WinLib.Win32Object
 	#tag Property, Flags = &h1
 		Protected ServiceHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
+
+
+	#tag Enum, Name = States, Type = Integer, Flags = &h0
+		Stopped=1
+		  StartPending
+		  StopPending
+		  Running
+		  ContinuePending
+		  PausePending
+		Paused
+	#tag EndEnum
 
 
 	#tag ViewBehavior
