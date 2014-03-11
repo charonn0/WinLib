@@ -182,18 +182,49 @@ Begin Window Window1
       Visible         =   True
       Width           =   136
    End
+   Begin PushButton PushButton5
+      AutoDeactivate  =   True
+      Bold            =   ""
+      ButtonStyle     =   0
+      Cancel          =   ""
+      Caption         =   "WebCam Demo"
+      Default         =   ""
+      Enabled         =   True
+      Height          =   22
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   20
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   48
+      Underline       =   ""
+      Visible         =   True
+      Width           =   103
+   End
 End
 #tag EndWindow
 
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  Dim p As WinLib.Service = WinLib.Service.OpenService("spooler")
-		  If p.State = WinLib.Service.States.Stopped Then
-		    Call p.Start()
-		  Else
-		    Call p.Stop()
-		  End If
+		  'Dim p As WinLib.Service = WinLib.Service.OpenService("spooler")
+		  'If p.State = WinLib.Service.States.Stopped Then
+		  'Call p.Start()
+		  'Else
+		  'Call p.Stop()
+		  'End If
 		  
 		End Sub
 	#tag EndEvent
@@ -285,6 +316,14 @@ End
 		    MonHandle = Win32.Kernel32.FindFirstChangeNotification(SpecialFolder.Desktop.AbsolutePath, False, filters)
 		    Call Waiter.WaitOnce(MonHandle)
 		  End If
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events PushButton5
+	#tag Event
+		Sub Action()
+		  Dim w As New WebCamDemo
+		  w.Show
 		End Sub
 	#tag EndEvent
 #tag EndEvents

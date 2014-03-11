@@ -197,6 +197,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function MoveWindow Lib "User32" (HWND As Integer, X As Integer, Y As Integer, Width As Integer, Height As Integer, Repaint As Boolean) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function OpenInputDesktop Lib "User32" (flags As Integer, inherit As Boolean, access As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -222,6 +226,10 @@ Protected Module User32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function ReleaseDC Lib "User32" (HWND As Integer, DC As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function ScreenToClient Lib "User32" (HWND As Integer, Point As Ptr) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

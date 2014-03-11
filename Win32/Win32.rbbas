@@ -64,6 +64,56 @@ Protected Module Win32
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function ScreenToClient(LParam As Ptr, HWND As Integer) As REALbasic.Point
+		  Dim p As New MemoryBlock(8)
+		  Dim i As Integer = Integer(lParam)
+		  p.Int32Value(0) = BitAnd(i, &hFFFF)
+		  p.Int32Value(4) = ShiftRight(i, 16)
+		  If Not Win32.User32.ScreenToClient(HWND, p) Then
+		    p.Int32Value(0) = -1
+		    p.Int32Value(4) = -1
+		  End If
+		  Return New REALbasic.Point(p.Int32Value(0), p.Int32Value(4))
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function WM_CAP_DRIVER_GET_CAPS() As Integer
+		  Return WM_USER + 14
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function WM_CAP_EDIT_COPY() As Integer
+		  Return WM_USER + 30
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function WM_CAP_GET_SEQUENCE_SETUP() As Integer
+		  Return WM_USER + 65
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function WM_CAP_SET_CALLBACK_ERROR() As Integer
+		  Return WM_USER + 102
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function WM_CAP_SET_SCROLL() As Integer
+		  Return WM_USER + 55
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function WM_CAP_SET_SEQUENCE_SETUP() As Integer
+		  Return WM_USER + 64
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function WS_EX_PALETTEWINDOW() As Integer
 		  Return WS_EX_WINDOWEDGE Or WS_EX_TOOLWINDOW Or WS_EX_TOPMOST
@@ -1391,7 +1441,37 @@ Protected Module Win32
 	#tag Constant, Name = WHITENESS, Type = Double, Dynamic = False, Default = \"&h00FF0062", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = WM_CAP_DLG_VIDEOFORMAT, Type = Double, Dynamic = False, Default = \"1065", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_DLG_VIDEOSOURCE, Type = Double, Dynamic = False, Default = \"1066", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_DRIVER_CONNECT, Type = Double, Dynamic = False, Default = \"1034", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_DRIVER_DISCONNECT, Type = Double, Dynamic = False, Default = \"1035", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_EDIT_COPY1, Type = Double, Dynamic = False, Default = \"1054", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_GRAB_FRAME, Type = Double, Dynamic = False, Default = \"1084", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_SET_PREVIEW, Type = Double, Dynamic = False, Default = \"1074", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_SET_PREVIEWRATE, Type = Double, Dynamic = False, Default = \"1076", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_SET_SCALE, Type = Double, Dynamic = False, Default = \"1077", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = WM_CHANGECBCHAIN, Type = Double, Dynamic = False, Default = \"&h030D", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CLOSE, Type = Double, Dynamic = False, Default = \"&h10", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = WM_CREATE, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
@@ -1436,6 +1516,9 @@ Protected Module Win32
 	#tag Constant, Name = WRITE_OWNER, Type = Double, Dynamic = False, Default = \"&h00080000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = WS_CHILD, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = WS_EX_LAYERED, Type = Double, Dynamic = False, Default = \"&h80000", Scope = Public
 	#tag EndConstant
 
@@ -1464,6 +1547,47 @@ Protected Module Win32
 		  DaysOfWeek As Byte
 		  Flags As Byte
 		Command As Ptr
+	#tag EndStructure
+
+	#tag Structure, Name = CAPDRIVERCAPS, Flags = &h0
+		DeviceIndex As Integer
+		  HasOverlay As Boolean
+		  HasSourceSelectDialog As Boolean
+		  HasFormatSelectDialog As Boolean
+		  HasDisplayDialog As Boolean
+		  CaptureInitialized As Boolean
+		  DriverSuppliesPalettes As Boolean
+		  VideoIn As Integer
+		  VideoOut As Integer
+		  VideoExtIn As Integer
+		VideoExtOut As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = CAPTUREPARMS, Flags = &h0
+		RequestMicroSecPerFrame As Integer
+		  MakeUserHitOKToCapure As Boolean
+		  PercentDropForError As UInt32
+		  Yield As Boolean
+		  IndexSize As Integer
+		  ChunkGranularity As UInt32
+		  UsingDOSMemory As Boolean
+		  NumVideoRequested As UInt32
+		  CaptureAudio As Boolean
+		  NumAudioRequested As UInt32
+		  KeyAbort As UInt32
+		  AbortLeftMouse As Boolean
+		  AbortRightMouse As Boolean
+		  LimitEnabled As Boolean
+		  TimeLimit As UInt32
+		  MCIControl As Boolean
+		  StepMCIDevice As Boolean
+		  MCIStartTime As Integer
+		  MCIStopTime As Integer
+		  StepCaptureAt2x As Boolean
+		  StepCaptureAverageFrames As UInt32
+		  AudioBufferSize As Integer
+		  DisableWriteCache As Boolean
+		AVStreamMaster As UInt32
 	#tag EndStructure
 
 	#tag Structure, Name = CHAR_INFO, Flags = &h0
