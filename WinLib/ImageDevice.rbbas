@@ -19,12 +19,6 @@ Implements WinLib.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function CopyFrameToClipboard() As Boolean
-		  Return Win32.User32.SendMessage(CapWin, WM_CAP_EDIT_COPY, Nil, Nil) > 0
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h1
 		Protected Sub Destructor()
 		  Me.Close
@@ -49,6 +43,7 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Sub EmbedPreviewWithin(Parent As Integer, X As Integer, Y As Integer, W As Integer, H As Integer)
+		  Me.Close
 		  CapWin = Win32.Avicap32.capCreateCaptureWindow(Me.Name, WS_VISIBLE Or WS_CHILD, 0, 0, W, H, Parent, 0)
 		  If CapWin <= 0 Then
 		    mLastError = Win32.Kernel32.GetLastError()
@@ -70,7 +65,7 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub EmbedPreviewWithin(Parent As RectControl, X As Integer = 0, Y As Integer = 0, W As Integer = -1, H As Integer = -1)
+		Sub EmbedPreviewWithin(Parent As RectControl, X As Integer = 0, Y As Integer = 0, W As Integer = - 1, H As Integer = - 1)
 		  If X = -1 Then X = 0
 		  If Y = -1 Then Y = 0
 		  If W = -1 Then W = Parent.Width
@@ -81,10 +76,10 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub EmbedPreviewWithin(Parent As Window, X As Integer = -1, Y As Integer = -1, W As Integer = -1, H As Integer = -1)
+		Sub EmbedPreviewWithin(Parent As Window, X As Integer = - 1, Y As Integer = - 1, W As Integer = - 1, H As Integer = - 1)
 		  If X = -1 Then X = 0
 		  If Y = -1 Then Y = 0
-		  If W = -1 Then W = Parent.Width 
+		  If W = -1 Then W = Parent.Width
 		  If H = -1 Then H = Parent.Height
 		  
 		  Me.EmbedPreviewWithin(Parent.Handle, X, Y, W, H)
@@ -97,6 +92,13 @@ Implements WinLib.Win32Object
 		  If Index <= DeviceCount Then
 		    Return New ImageDevice(Index)
 		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GrabFrame() As Picture
+		  Dim win As New WinLib.WindowRef(CapWin)
+		  Return win.Capture(False)
 		End Function
 	#tag EndMethod
 
