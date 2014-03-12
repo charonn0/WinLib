@@ -5,7 +5,7 @@ Implements WinLib.Win32Object
 		Sub Close()
 		  // Part of the WinLib.Win32Object interface.
 		  If CapWin <> 0 Then
-		    Call Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_DISCONNECT, Ptr(mIndex), Nil)
+		    Call Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_DISCONNECT, mIndex, 0)
 		    Call Win32.User32.DestroyWindow(CapWin)
 		    CapWin = 0
 		  End If
@@ -49,7 +49,7 @@ Implements WinLib.Win32Object
 		    mLastError = Win32.Kernel32.GetLastError()
 		    Return
 		  End If
-		  If Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_CONNECT, Ptr(mIndex), Nil) > 0 Then
+		  If Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_CONNECT, mIndex, 0) > 0 Then
 		    'Dim parms As CAPTUREPARMS
 		    'parms.CaptureAudio = True
 		    'parms.MakeUserHitOKToCapure = True
@@ -127,29 +127,29 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub PreviewRate(Assigns Millisecs As Integer)
-		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEWRATE, Ptr(Millisecs), Nil)
+		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEWRATE, Millisecs, 0)
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ScalePreview(Assigns NewBool As Boolean)
 		  If NewBool Then
-		    Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_SCALE, Ptr(1), Nil)
+		    Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_SCALE, 1, 0)
 		  Else
-		    Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_SCALE, Ptr(0), Nil)
+		    Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_SCALE, 0, 0)
 		  End If
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub StartPreview()
-		  If Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, Ptr(1), Nil) = 0 Then Break
+		  If Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 1, 0) = 0 Then Break
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub StopPreview()
-		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, Ptr(0), Nil)
+		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 0, 0)
 		End Sub
 	#tag EndMethod
 
