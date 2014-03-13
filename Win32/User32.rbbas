@@ -229,7 +229,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function ScreenToClient Lib "User32" (HWND As Integer, Point As Ptr) As Boolean
+		Protected Declare Function ScreenToClient Lib "User32" (HWND As Integer, ByRef Point As Win32 . POINT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

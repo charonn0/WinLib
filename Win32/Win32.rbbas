@@ -65,16 +65,15 @@ Protected Module Win32
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ScreenToClient(LParam As Ptr, HWND As Integer) As REALbasic.Point
-		  Dim p As New MemoryBlock(8)
-		  Dim i As Integer = Integer(lParam)
-		  p.Int32Value(0) = BitAnd(i, &hFFFF)
-		  p.Int32Value(4) = ShiftRight(i, 16)
+		Protected Function ScreenToClient(ScreenPoint As Realbasic.Point, HWND As Integer) As REALbasic.Point
+		  Dim p As Win32.POINT
+		  p.X = ScreenPoint.X
+		  p.Y = ScreenPoint.Y
 		  If Not Win32.User32.ScreenToClient(HWND, p) Then
-		    p.Int32Value(0) = -1
-		    p.Int32Value(4) = -1
+		    p.X = -1
+		    p.Y = -1
 		  End If
-		  Return New REALbasic.Point(p.Int32Value(0), p.Int32Value(4))
+		  Return New REALbasic.Point(p.X, p.Y)
 		End Function
 	#tag EndMethod
 
