@@ -114,6 +114,12 @@ Protected Module Win32
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function WM_CAP_SET_VIDEOFORMAT() As Integer
+		  Return WM_USER + 45
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function WS_EX_PALETTEWINDOW() As Integer
 		  Return WS_EX_WINDOWEDGE Or WS_EX_TOOLWINDOW Or WS_EX_TOPMOST
 		End Function
@@ -1549,6 +1555,25 @@ Protected Module Win32
 		  DaysOfWeek As Byte
 		  Flags As Byte
 		Command As Ptr
+	#tag EndStructure
+
+	#tag Structure, Name = BITMAPINFO, Flags = &h0
+		Header As BITMAPINFOHEADER
+		RGBQUAD As Ptr
+	#tag EndStructure
+
+	#tag Structure, Name = BITMAPINFOHEADER, Flags = &h0
+		sSize As Integer
+		  Width As Integer
+		  Height As Integer
+		  Planes As Int16
+		  BitCount As Int16
+		  Compression As Integer
+		  SizeImage As Integer
+		  XPelsPerMeter As Integer
+		  YPelsPerMeter As Integer
+		  ClrUsed As Integer
+		ClrImportant As Integer
 	#tag EndStructure
 
 	#tag Structure, Name = CAPDRIVERCAPS, Flags = &h0
