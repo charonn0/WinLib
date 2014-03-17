@@ -25,7 +25,7 @@ Class UUID
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function NewGUID() As WinLib.UUID
+		 Shared Function NewUUID() As WinLib.UUID
 		  #If TargetWin32 Then
 		    ' UUIDs returned from this method are guaranteed to be globally unique
 		    ' and cannot be traced to the generating computer

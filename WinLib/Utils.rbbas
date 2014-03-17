@@ -256,7 +256,7 @@ Protected Module Utils
 	#tag Method, Flags = &h1
 		Protected Function UUID() As String
 		  #If TargetWin32 Then
-		    Return WinLib.UUID.NewGUID
+		    Return WinLib.UUID.NewUUID
 		  #endif
 		End Function
 	#tag EndMethod
