@@ -50,12 +50,12 @@ Class UUID
 	#tag Method, Flags = &h0
 		Function Operator_Convert() As String
 		  #If TargetWin32 Then
-		    Dim ptrUUID As New MemoryBlock(16)
-		    Dim ppAddr As ptr
-		    Call Win32.Rpcrt4.UuidToString(mUUID, ppAddr)
-		    Dim mb2 As MemoryBlock = ppAddr
-		    Call Win32.Rpcrt4.RpcStringFree(ptrUUID)
-		    Return mb2.CString(0)
+		    Dim pBuffer As Ptr
+		    Call Win32.Rpcrt4.UuidToString(mUUID, pBuffer)
+		    Dim mb As MemoryBlock = pBuffer
+		    Dim data As String = mb.CString(0)
+		    Call Win32.Rpcrt4.RpcStringFree(pBuffer)
+		    Return data
 		  #endif
 		End Function
 	#tag EndMethod
