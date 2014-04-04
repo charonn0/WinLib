@@ -157,14 +157,14 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShutdownBlock(Reason As String) As Boolean
+		Protected Function ShutdownBlock(Reason As String, OwnerWindow As Window = Nil) As Boolean
 		  #If TargetWin32 And TargetHasGUI Then
 		    ' Blocks system shutdown for the specified reason. The user may override a block.
 		    ' Note that blocks only apply to shutdown operations started with InitiateShutdown,
 		    ' not those started by calling ExitWindows
-		    
+		    If OwnerWindow = Nil Then OwnerWindow = Window(0)
 		    If Not System.IsFunctionAvailable("ShutdownBlockReasonCreate", "User32") Then Return False ' Vista and newer only
-		    Return Win32.User32.ShutdownBlockReasonCreate(Window(0).Handle, Reason)
+		    Return Win32.User32.ShutdownBlockReasonCreate(OwnerWindow.Handle, Reason)
 		  #else
 		    #pragma Unused Reason
 		  #endif
@@ -172,12 +172,13 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShutdownBlockQuery() As String
+		Protected Function ShutdownBlockQuery(OwnerWindow As Window = Nil) As String
 		  #If TargetWin32 And TargetHasGUI Then
 		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return "" ' Vista and newer only
+		    If OwnerWindow = Nil Then OwnerWindow = Window(0)
 		    Dim mb As New MemoryBlock(MAX_STR_BLOCKREASON)
 		    Dim sz As Integer = mb.Size
-		    If Win32.User32.ShutdownBlockReasonQuery(Window(0).Handle, mb, sz) Then
+		    If Win32.User32.ShutdownBlockReasonQuery(OwnerWindow.Handle, mb, sz) Then
 		      Return mb.WString(0)
 		    End If
 		  #endif
@@ -197,10 +198,11 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function ShutdownUnblock() As Boolean
+		Protected Function ShutdownUnblock(OwnerWindow As Window = Nil) As Boolean
 		  #If TargetWin32 And TargetHasGUI Then
 		    If Not System.IsFunctionAvailable("ShutdownBlockReasonDestroy", "User32") Then Return False ' Vista and newer only
-		    Return Win32.User32.ShutdownBlockReasonDestroy(Window(0).Handle)
+		    If OwnerWindow = Nil Then OwnerWindow = Window(0)
+		    Return Win32.User32.ShutdownBlockReasonDestroy(OwnerWindow.Handle)
 		  #endif
 		End Function
 	#tag EndMethod
