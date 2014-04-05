@@ -78,7 +78,12 @@ Implements WinLib.Win32Object
 		    token = Rand.InRange(&hFF, &hFFFFFFFF)
 		  Loop Until Not Waiters.HasKey(token)
 		  Waiters.Value(token) = Me
-		  Return Win32.Kernel32.RegisterWaitForSingleObject(mHandle, Waitable, AddressOf DefWaitProc, Ptr(token), Timeout, WT_EXECUTEONLYONCE)
+		  If Not Win32.Kernel32.RegisterWaitForSingleObject(mHandle, Waitable, AddressOf DefWaitProc, Ptr(token), Timeout, WT_EXECUTEONLYONCE) Then
+		    mLastError = Win32.Kernel32.GetLastError()
+		  Else
+		    mLastError = 0
+		  End If
+		  Return Me.LastError = 0
 		End Function
 	#tag EndMethod
 

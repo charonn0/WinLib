@@ -193,7 +193,16 @@ End
 		    Device.EmbedPreviewWithin(Canvas1)
 		    Device.ScalePreview = True
 		    Device.PreviewRate = 10
-		    Device.StartPreview
+		    If Not Device.StartPreview Then
+		      Call MsgBox( _
+		      "Unable to start preview." + EndOfLine + _
+		      "Error number: " + Str(Device.LastError) + EndOfLine + _
+		      "Message: " + WinLib.FormatError(Device.LastError), _
+		      16, "Image device error")
+		      Me.Value = False
+		      Device.StopPreview
+		      Device.Close
+		    End If
 		  Else
 		    Device.StopPreview
 		    Device.Close

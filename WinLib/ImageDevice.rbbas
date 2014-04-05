@@ -6,7 +6,8 @@ Implements WinLib.Win32Object
 		  // Part of the WinLib.Win32Object interface.
 		  If CapWin <> 0 Then
 		    Call Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_DISCONNECT, mIndex, 0)
-		    Call Win32.User32.DestroyWindow(CapWin)
+		    mLastError = Win32.Kernel32.GetLastError()
+		    If Not Win32.User32.DestroyWindow(CapWin) Then mLastError = Win32.Kernel32.GetLastError()
 		    CapWin = 0
 		  End If
 		End Sub
@@ -89,8 +90,13 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		 Shared Function GetDeviceByIndex(Index As Integer) As WinLib.ImageDevice
 		  ' Index may be 0 to DeviceCount-1
-		  If Index <= DeviceCount Then
+		  If Index < DeviceCount And Index >= 0 Then
 		    Return New ImageDevice(Index)
+		  Else
+		    Dim err As New OutOfBoundsException
+		    err.Message = "There is no image device at that index."
+		    err.ErrorNumber = Index
+		    Raise err
 		  End If
 		End Function
 	#tag EndMethod
@@ -98,7 +104,9 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Function GrabFrame() As Picture
 		  Dim win As New WinLib.WindowRef(CapWin)
-		  Return win.Capture(False)
+		  Dim p As Picture = win.Capture(False)
+		  mLastError = win.LastError
+		  Return p
 		End Function
 	#tag EndMethod
 
@@ -128,6 +136,7 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub PreviewRate(Assigns Millisecs As Integer)
 		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEWRATE, Millisecs, 0)
+		  mLastError = Win32.Kernel32.GetLastError()
 		End Sub
 	#tag EndMethod
 
@@ -138,18 +147,26 @@ Implements WinLib.Win32Object
 		  Else
 		    Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_SCALE, 0, 0)
 		  End If
+		  mLastError = Win32.Kernel32.GetLastError()
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub StartPreview()
-		  If Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 1, 0) = 0 Then Break
-		End Sub
+		Function StartPreview() As Boolean
+		  If Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 1, 0) = 0 Then
+		    mLastError = Win32.Kernel32.GetLastError()
+		    Return False
+		  Else
+		    mLastError = 0
+		    Return True
+		  End If
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub StopPreview()
 		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 0, 0)
+		  mLastError = Win32.Kernel32.GetLastError()
 		End Sub
 	#tag EndMethod
 

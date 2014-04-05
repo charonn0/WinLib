@@ -71,9 +71,7 @@ Implements Readable,Writeable,Win32Object
 		      Raise err
 		    End If
 		    
-		    If encoding = Nil Then encoding = Encodings.UTF8
-		    Dim data As String = DefineEncoding(mb.StringValue(0, read), encoding)
-		    Return data
+		    Return DefineEncoding(mb.StringValue(0, read), encoding)
 		  #endif
 		End Function
 	#tag EndMethod
