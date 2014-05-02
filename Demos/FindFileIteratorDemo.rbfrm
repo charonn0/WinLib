@@ -263,7 +263,7 @@ End
 		Sub Action()
 		  If TextField1.Text.Trim = "" Then
 		    MsgBox("You must enter a search pattern (e.g. '*.*')")
-		  ElseIf RootFolder = Nil Then 
+		  ElseIf RootFolder = Nil Then
 		    MsgBox("You must select a folder to search within")
 		  ElseIf Not RootFolder.Exists Then
 		    MsgBox("The selected search folder does not exist or is inaccessible")
@@ -281,11 +281,9 @@ End
 	#tag Event
 		Sub Run()
 		  Dim fe As New FindFileIterator(RootFolder, TextField1.Text)
-		  
-		  Do Until fe.LastError <> 0
-		    Dim item As FolderItem = fe.NextItem
-		    If item = Nil Then Continue
-		    Listed.Insert(0, item)
+		  Do Until Not fe.NextItem
+		    If fe.CurrentItem = Nil Then Continue
+		    Listed.Insert(0, fe.CurrentItem)
 		    App.YieldToNextThread
 		  Loop
 		  fe.Close

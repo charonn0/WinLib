@@ -1,6 +1,6 @@
 #tag Class
 Class FindFileIterator
-Implements Win32Object
+Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the Win32.Win32Object interface.
@@ -8,8 +8,9 @@ Implements Win32Object
 		  #If TargetWin32 Then
 		    Call Win32.Kernel32.FindClose(FindHandle)
 		  #endif
-		  FindHandle = -1
+		  FindHandle = INVALID_HANDLE_VALUE
 		  mLastError = 0
+		  mCurrentItem = Nil
 		End Sub
 	#tag EndMethod
 
@@ -28,6 +29,12 @@ Implements Win32Object
 		  // Part of the Win32.Win32Object interface.
 		  FindHandle = Handle
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function CurrentItem() As FolderItem
+		  Return mCurrentItem
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -51,19 +58,21 @@ Implements Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function NextItem() As FolderItem
-		  //This function returns a folderitem representing the next file or directory (starting with the first) in the RootDirectory
-		  //whose name matches the search pattern.
-		  //If there are no more files, this function sets LastError=18 (ERROR_NO_MORE_FILES). If no more files or an error occurred,
-		  //returns Nil.
+		Function NextItem() As Boolean
+		  //This function advances the search position by 1 and stores a folderitem representing the next file or directory (starting with the first)
+		  //in FindFileIterator.CurrentItem and returns True
+		  //If no more files or an error occurred, returns False and sets LastError
 		  
+		  mCurrentItem = Nil
 		  Dim data As WIN32_FIND_DATA = Me.NextItemRaw
 		  If Me.LastError = 0 Then
 		    ' if the next item is either the current directory (".") or parent directory (".."), then skip it.
 		    If data.FileName.Trim = "." Or data.FileName.Trim = ".." Then Return NextItem()
 		    ' otherwise, return it.
-		    Return Me.RootDirectory.TrueChild(data.FileName)
+		    mCurrentItem = Me.RootDirectory.TrueChild(data.FileName)
+		    Return mCurrentItem <> Nil
 		  End If
+		  
 		End Function
 	#tag EndMethod
 
@@ -99,19 +108,17 @@ Implements Win32Object
 		file/folder names against. The search patterns allowed are the same as those accepted by the cmd.exe 'dir' command, 
 		e.g. "*.*" matches all names; "*.EXE" matches all .exe files; etc.
 		
-		Call NextItem to receive the next file's or folder's FolderItem. Calling this function will advance the search 
-		position by 1.
+		Call NextItem to advance the search position by 1. The first call to NextItem will find the first matching item. If a
+		matching file or folder is found, NextItem returns True and stores the item in FindFileIterator.CurrentItem. Otherwise, 
+		CurrentItem will be set to Nil.
 		
 		Example, finding all EXE files in a user selected folder:
 		
 		  Dim fe As New FindFileIterator(SelectFolder, "*.exe")
 		  Dim files() As FolderItem
-		  Do
-		    Dim file As FolderItem = fe.NextItem()
-		    If file <> Nil Then
-		      files.Append(file)
-		    End If
-		  Loop Until fe.LastError <> 0
+		  Do Until Not fe.NextItem
+		      files.Append(fe.CurrentItem)
+		  Loop
 		
 		Using this class to enumerate a folder can be much faster than FolderItem.Item, especially on large directories. 
 		Execution time of FolderItem.Item rises exponentially relative to the number of items in the directory. FindFileIterator
@@ -121,6 +128,10 @@ Implements Win32Object
 
 	#tag Property, Flags = &h21
 		Private FindHandle As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mCurrentItem As FolderItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
