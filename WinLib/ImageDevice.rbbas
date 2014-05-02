@@ -45,7 +45,7 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h1
 		Protected Sub EmbedPreviewWithin(Parent As Integer, X As Integer, Y As Integer, W As Integer, H As Integer)
 		  Me.Close
-		  CapWin = Win32.Avicap32.capCreateCaptureWindow(Me.Name, WS_VISIBLE Or WS_CHILD, 0, 0, W, H, Parent, 0)
+		  CapWin = Win32.Avicap32.capCreateCaptureWindow(Me.Name, WS_VISIBLE Or WS_CHILD, X, Y, W, H, Parent, 0)
 		  If CapWin <= 0 Then
 		    mLastError = Win32.Kernel32.GetLastError()
 		    Return
