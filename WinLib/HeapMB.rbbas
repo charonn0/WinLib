@@ -11,8 +11,8 @@ Implements WinLib.Win32Object
 		      flags = HEAP_ZERO_MEMORY
 		    End If
 		    Dim p As Ptr = Win32.Kernel32.HeapAlloc(HeapHandle, flags, Size)
-		    Dim mb As New HeapMB(Integer(p))
-		    mb.HeapHandle = HeapHandle
+		    Dim mb As New HeapMB(p, HeapHandle)
+		    'mb.HeapHandle = HeapHandle
 		    Return mb
 		  #endif
 		End Function
@@ -25,10 +25,19 @@ Implements WinLib.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Constructor(Handle As Integer) Implements Win32Object.Constructor
+	#tag Method, Flags = &h21
+		Attributes( deprecated = "WinLib.HeapMB.Allocate" ) Private Sub Constructor(Handle As Integer) Implements Win32Object.Constructor
 		  // Part of the WinLib.Win32Object interface.
+		  Break ' Do not use this Constructor. Use HeapMB.Allocate
 		  mHandle = Ptr(Handle)
+		  HeapHandle = DefaultHeap
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1001
+		Protected Sub Constructor(hmb As Ptr, Heap As Integer) Implements Win32Object.Constructor
+		  mHandle = hmb
+		  HeapHandle = Heap
 		End Sub
 	#tag EndMethod
 
@@ -54,7 +63,7 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Handle() As Integer
+		Attributes( deprecated = "WinLib.HeapMB.Value" )  Function Handle() As Integer
 		  // Part of the WinLib.Win32Object interface.
 		  Return Integer(mHandle)
 		End Function
@@ -64,6 +73,12 @@ Implements WinLib.Win32Object
 		Function LastError() As Integer
 		  // Part of the WinLib.Win32Object interface.
 		  Return mLastError
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Value() As Ptr
+		  Return mHandle
 		End Function
 	#tag EndMethod
 
@@ -81,5 +96,54 @@ Implements WinLib.Win32Object
 	#tag EndProperty
 
 
+	#tag ViewBehavior
+		#tag ViewProperty
+			Name="Index"
+			Visible=true
+			Group="ID"
+			InitialValue="-2147483648"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Left"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="LittleEndian"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Boolean"
+			InheritedFrom="MemoryBlock"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Name"
+			Visible=true
+			Group="ID"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Size"
+			Group="Behavior"
+			InitialValue="0"
+			Type="Integer"
+			InheritedFrom="MemoryBlock"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Super"
+			Visible=true
+			Group="ID"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Top"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
+		#tag EndViewProperty
+	#tag EndViewBehavior
 End Class
 #tag EndClass
