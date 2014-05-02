@@ -433,6 +433,30 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function VirtualAlloc Lib "Kernel32" (Address As Integer, Size As Integer, AllocationType As Integer, Protect As Integer) As Ptr
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function VirtualFree Lib "Kernel32" (Address As Ptr, Size As Integer, FreeType As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function VirtualLock Lib "Kernel32" (Address As Ptr, Size As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function VirtualProtect Lib "Kernel32" (Address As Ptr, Size As Integer, NewProtect As Integer, ByRef OldProtect As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Ptr, ByRef InfoBuffer As MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function VirtualUnlock Lib "Kernel32" (Address As Ptr, Size As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function WaitForSingleObject Lib "Kernel32" (HWND as Integer, Period as Integer) As Integer
 	#tag EndExternalMethod
 

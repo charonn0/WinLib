@@ -645,7 +645,7 @@ Protected Module Win32
 	#tag Constant, Name = IMAGE_ICON, Type = Double, Dynamic = False, Default = \"1", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = INVALID_HANDLE_VALUE, Type = Double, Dynamic = False, Default = \"&hffffffff", Scope = Public
+	#tag Constant, Name = INVALID_HANDLE_VALUE, Type = Double, Dynamic = False, Default = \"-1", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = INVALID_SET_FILE_POINTER, Type = Double, Dynamic = False, Default = \"-1", Scope = Public
@@ -754,6 +754,30 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = MB_YESNOCANCEL, Type = Double, Dynamic = False, Default = \"&h00000003", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_COMMIT, Type = Double, Dynamic = False, Default = \"&h00001000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_DECOMMIT, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_LARGE_PAGES, Type = Double, Dynamic = False, Default = \"&h20000000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_PHYSICAL, Type = Double, Dynamic = False, Default = \"&h00400000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_RELEASE, Type = Double, Dynamic = False, Default = \"&h8000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_RESERVE, Type = Double, Dynamic = False, Default = \"&h00002000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_TOP_DOWN, Type = Double, Dynamic = False, Default = \"&h00100000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_WRITE_WATCH, Type = Double, Dynamic = False, Default = \"&h00200000", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = MERGECOPY, Type = Double, Dynamic = False, Default = \"&h00C000CA", Scope = Public
@@ -958,6 +982,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = OS_XPORGREATER, Type = Double, Dynamic = False, Default = \"18", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PAGE_EXECUTE_READWRITE, Type = Double, Dynamic = False, Default = \"&h40", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = PAGE_READONLY, Type = Double, Dynamic = False, Default = \"&h02", Scope = Public
@@ -1779,6 +1806,16 @@ Protected Module Win32
 		  PerProcessAddressSpace As UInt64
 		  CurrentProcessAvailableAddressSpace As UInt64
 		reserved As UInt64
+	#tag EndStructure
+
+	#tag Structure, Name = MEMORY_BASIC_INFORMATION, Flags = &h0
+		BaseAddress As Ptr
+		  AllocationBase As Ptr
+		  AllocationProtect As Integer
+		  RegionSize As Integer
+		  State As Integer
+		  Protect As Integer
+		Type As Integer
 	#tag EndStructure
 
 	#tag Structure, Name = MIB_IPSTATS, Flags = &h0

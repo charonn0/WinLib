@@ -26,6 +26,7 @@ Module=User32;Win32/User32.rbbas;&h4A026FFF;&h561B87FF;false
 Module=AdvApi32;Win32/AdvApi32.rbbas;&h27606FFF;&h561B87FF;false
 Module=Kernel32;Win32/Kernel32.rbbas;&h46716FFF;&h561B87FF;false
 Module=WinLib;WinLib/WinLib.rbbas;&h7CFB5FFF;&h0;false
+Class=VirtualMB;WinLib/VirtualMB.rbbas;&h666D07FF;&h7CFB5FFF;false
 Class=ImageDevice;WinLib/ImageDevice.rbbas;&hCA92FFF;&h7CFB5FFF;false
 Class=Waiter;WinLib/Waiter.rbbas;&h21675FFF;&h7CFB5FFF;false
 Class=ProcessInfo;WinLib/ProcessInfo.rbbas;&h7339B7FF;&h7CFB5FFF;false
