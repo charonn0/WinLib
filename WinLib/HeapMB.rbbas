@@ -1,7 +1,7 @@
 #tag Class
 Class HeapMB
 Inherits MemoryBlock
-Implements Win32Object
+Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		 Shared Function Allocate(Size As Integer, ZeroMemory As Boolean = True, HeapHandle As Integer = - 1) As HeapMB
 		  #If TargetWin32 Then

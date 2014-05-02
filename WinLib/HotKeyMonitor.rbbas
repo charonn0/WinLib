@@ -1,8 +1,8 @@
 #tag Class
 Class HotKeyMonitor
-Inherits MessageMonitor
+Inherits WinLib.MessageMonitor
 	#tag Event
-		Function WindowMessage(HWND As WinLib.WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Function WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #pragma Unused HWND
 		  If Message = WM_HOTKEY Then
 		    Dim keystring As String = ConstructKeyString(Integer(LParam))

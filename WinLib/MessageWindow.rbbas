@@ -1,7 +1,7 @@
 #tag Class
 Class MessageWindow
 Inherits WinLib.MessageMonitor
-Implements Win32Object
+Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  Super.Close

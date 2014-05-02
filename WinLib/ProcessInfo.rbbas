@@ -1,6 +1,6 @@
 #tag Class
 Protected Class ProcessInfo
-Implements Win32Object
+Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Attributes( hidden )  Sub Close()
 		  ' nothing to close; just satisfying Win32Object

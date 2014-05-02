@@ -1,6 +1,6 @@
 #tag Class
 Class WindowRef
-Implements Win32Object
+Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub BringToFront()
 		  ' This will raise the referenced window to the top of the Z-order if the

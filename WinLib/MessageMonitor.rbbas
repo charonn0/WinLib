@@ -1,6 +1,6 @@
 #tag Class
 Protected Class MessageMonitor
-Implements Win32Object
+Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub AddMessageFilter(ParamArray MsgIDs() As Integer)
 		  For Each MsgID As Integer In MsgIDs

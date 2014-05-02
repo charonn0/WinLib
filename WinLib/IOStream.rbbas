@@ -1,6 +1,6 @@
 #tag Class
 Class IOStream
-Implements Readable,Writeable,Win32Object
+Implements Readable,Writeable,WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the Win32.Win32Object interface.
