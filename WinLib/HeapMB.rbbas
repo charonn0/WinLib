@@ -1,6 +1,5 @@
 #tag Class
 Class HeapMB
-Inherits MemoryBlock
 Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		 Shared Function Allocate(Size As Integer, ZeroMemory As Boolean = True, HeapHandle As Integer = - 1) As HeapMB
@@ -57,7 +56,7 @@ Implements WinLib.Win32Object
 		 Shared Function Free(HMB As HeapMB) As Boolean
 		  #If TargetWin32 Then
 		    Dim HeapHandle As Integer = HMB.HeapHandle
-		    Return Win32.Kernel32.HeapFree(HeapHandle, 0, HMB)
+		    Return Win32.Kernel32.HeapFree(HeapHandle, 0, HMB.Value)
 		  #endif
 		End Function
 	#tag EndMethod
