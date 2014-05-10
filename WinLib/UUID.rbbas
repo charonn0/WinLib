@@ -25,12 +25,19 @@ Class UUID
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function NewUUID() As WinLib.UUID
+		 Shared Function NewUUID(Sequential As Boolean = False) As WinLib.UUID
 		  #If TargetWin32 Then
-		    ' UUIDs returned from this method are guaranteed to be globally unique
-		    ' and cannot be traced to the generating computer
+		    ' When Sequential=False, UUIDs returned from this method are guaranteed to be globally unique and cannot be traced to the
+		    ' generating computer (i.e. version 4 UUIDs.)
+		    ' When Sequential=True, the returned UUID was generated using the computer's MAC address and is traceable to that computer;
+		    ' if the computer lacks an ethernet port then the returned UUID is guaranteed unique ONLY on that computer.
+		    
 		    Dim mb As New MemoryBlock(16)
-		    Call Win32.Rpcrt4.UuidCreate(mb)
+		    If Not Sequential Then
+		      Call Win32.Rpcrt4.UuidCreate(mb)
+		    Else
+		      Call Win32.Rpcrt4.UuidCreateSequential(mb)
+		    End If
 		    Dim mUUID As New UUID(mb)
 		    Return mUUID
 		  #endif
@@ -40,9 +47,16 @@ Class UUID
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherUUID As UUID) As Integer
 		  #If TargetWin32 Then
-		    Dim status As New MemoryBlock(16)
-		    Dim i As Integer = Win32.Rpcrt4.UuidCompare(mUUID, OtherUUID.mUUID, status)
-		    Return i
+		    If OtherUUID Is Nil Then Return 1 ' comparing Self to Nil
+		    If mUUID <> Nil And OtherUUID.mUUID <> Nil Then
+		      Dim status As New MemoryBlock(16)
+		      Dim i As Integer = Win32.Rpcrt4.UuidCompare(mUUID, OtherUUID.mUUID, status)
+		      Return i
+		    ElseIf OtherUUID.mUUID <> Nil Then
+		      Return -1
+		    Else
+		      Return 0
+		    End If
 		  #endif
 		End Function
 	#tag EndMethod
