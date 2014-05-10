@@ -165,7 +165,9 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  Device = WinLib.ImageDevice.GetDeviceByIndex(0)
+		  If WinLib.ImageDevice.DeviceCount > 0 Then
+		    Device = WinLib.ImageDevice.GetDeviceByIndex(0)
+		  End If
 		End Sub
 	#tag EndEvent
 
@@ -215,7 +217,9 @@ End
 		Sub Paint(g As Graphics)
 		  Dim d As WinLib.ImageDevice = ComboBox1.RowTag(ComboBox1.ListIndex)
 		  Dim s As String
-		  If d <> Nil And Device.Handle <= 0 Then
+		  If Device = Nil Then
+		    s = "No imaging devices detected."
+		  ElseIf d <> Nil And Device.Handle <= 0 Then
 		    ' dev selected but not connected
 		    s = "Click 'Preview' to activate " + d.Name
 		  ElseIf Device.Handle > 0 Then
