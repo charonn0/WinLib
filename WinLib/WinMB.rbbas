@@ -47,7 +47,7 @@ Implements WinLib.Win32Object
 		  #If TargetWin32 Then
 		    Dim flags As Integer
 		    If ZeroMemory Then
-		      flags = HEAP_ZERO_MEMORY
+		      flags = GMEM_ZEROINIT
 		    End If
 		    Dim p As Integer = Win32.Kernel32.GlobalAlloc(flags, Size)
 		    Dim mb As New WinMB(p)
@@ -91,23 +91,45 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Function Lock() As Boolean
+		  Dim ret As Boolean
 		  Select Case HeapHandle
 		  Case TypeGlobal ' GlobalAllocate
-		    Return Win32.Kernel32.GlobalLock(Me.Handle) <> Nil
+		    ret = (Win32.Kernel32.GlobalLock(Me.Handle) <> Nil)
 		  Case TypeVirtual ' VirtualAllocate
-		    Return Win32.Kernel32.VirtualLock(Me.Handle, mSize)
+		    ret = Win32.Kernel32.VirtualLock(Me.Handle, mSize)
 		  Else ' HeapAllocate
-		    Return Win32.Kernel32.HeapLock(Me.Handle)
+		    ret = Win32.Kernel32.HeapLock(Me.Handle)
 		  End Select
+		  mLastError = Win32.Kernel32.GetLastError()
+		  Return ret
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Size() As Integer
-		  If mSize = -1 And HeapHandle = TypeGlobal And Me.Lock Then
-		    mSize = Win32.Kernel32.GlobalSize(Me.Handle)
-		    Call Me.Unlock
-		    mLastError = Win32.Kernel32.GetLastError()
+		  If mSize = -1 Then
+		    Select Case HeapHandle
+		    Case TypeGlobal ' GlobalAllocate
+		      If Not Me.Lock Then Raise New RuntimeException
+		      mSize = Win32.Kernel32.GlobalSize(Me.Handle)
+		      mLastError = Win32.Kernel32.GetLastError()
+		      Call Me.Unlock
+		    Case TypeVirtual ' VirtualAllocate
+		      #pragma Warning "FIXME" ' This doesn't return the size of the block
+		      Dim meta As MEMORY_BASIC_INFORMATION
+		      If Win32.Kernel32.VirtualQuery(Me.Handle, meta, meta.Size) = meta.Size Then
+		        Do Until meta.AllocationBase <> Me.Handle
+		          mSize = mSize + meta.RegionSize
+		          Call Win32.Kernel32.VirtualQuery(Me.Handle + mSize, meta, meta.Size)
+		        Loop
+		      Else
+		        mLastError = Win32.Kernel32.GetLastError()
+		        Return 0
+		      End If
+		    Else ' HeapAllocate
+		      mSize = Win32.Kernel32.HeapSize(HeapHandle, Me.Handle, 0)
+		      mLastError = Win32.Kernel32.GetLastError()
+		    End Select
 		  End If
 		  Return mSize
 		End Function
@@ -115,30 +137,32 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Function Unlock() As Boolean
+		  Dim ret As Boolean
 		  Select Case HeapHandle
-		  Case TypeGlobal ' GlobalAllocate
-		    Return Win32.Kernel32.GlobalUnlock(Me.Handle)
+		  Case TypeGlobal  ' GlobalAllocate
+		    ret = Win32.Kernel32.GlobalUnlock(Me.Handle)
 		  Case TypeVirtual ' VirtualAllocate
-		    Return Win32.Kernel32.VirtualUnlock(Me.Handle, mSize)
-		  Else ' HeapAllocate
-		    Return Win32.Kernel32.HeapUnlock(Me.Handle)
+		    ret = Win32.Kernel32.VirtualUnlock(Me.Handle, mSize)
+		  Else             ' HeapAllocate
+		    ret = Win32.Kernel32.HeapUnlock(Me.Handle)
 		  End Select
+		  mLastError = Win32.Kernel32.GetLastError()
+		  Return ret
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Value(OffSet As Integer = 0) As MemoryBlock
+		  Dim p As New MemoryBlock(Me.Size - OffSet)
 		  If HeapHandle = TypeGlobal Then
-		    Dim p As New MemoryBlock(Me.Size)
-		    If Me.Lock Then
-		      Dim m As MemoryBlock = Ptr(mHandle)
-		      p.StringValue(0, p.Size) = m.StringValue(Offset, Offset + p.Size)
-		      Call Me.Unlock
-		      Return p
-		    End If
+		    If Not Me.Lock Then Raise New RuntimeException
 		  End If
+		  Dim m As MemoryBlock = Ptr(mHandle)
+		  p.StringValue(0, p.Size) = m.StringValue(Offset, Offset + p.Size)
+		  If HeapHandle = TypeGlobal Then Call Me.Unlock
+		  Return p
 		  
-		  Return Ptr(mHandle)
+		  
 		End Function
 	#tag EndMethod
 

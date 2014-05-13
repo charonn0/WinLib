@@ -651,6 +651,9 @@ Protected Module Win32
 	#tag Constant, Name = GMEM_MOVEABLE, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = GMEM_ZEROINIT, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = GWL_EXSTYLE, Type = Double, Dynamic = False, Default = \"-20", Scope = Public
 	#tag EndConstant
 
@@ -1890,8 +1893,8 @@ Protected Module Win32
 	#tag EndStructure
 
 	#tag Structure, Name = MEMORY_BASIC_INFORMATION, Flags = &h0
-		BaseAddress As Ptr
-		  AllocationBase As Ptr
+		BaseAddress As Integer
+		  AllocationBase As Integer
 		  AllocationProtect As Integer
 		  RegionSize As Integer
 		  State As Integer
