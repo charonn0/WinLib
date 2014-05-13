@@ -37,6 +37,10 @@ Protected Module GDI32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GetObject Lib "GDI32" Alias "GetObjectW" (hObject As Integer, BuffSz As Integer, Buffer As Ptr) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function RemoveFontResourceEx Lib "GDI32" Alias "RemoveFontResourceExW" (FontFile As WString, Flags As Integer, Reserved As Integer) As Boolean
 	#tag EndExternalMethod
 
