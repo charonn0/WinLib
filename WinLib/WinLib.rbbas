@@ -1,5 +1,17 @@
 #tag Module
 Protected Module WinLib
+	#tag Method, Flags = &h0
+		Function CF_BITMAP() As WinLib.ClipboardFormat
+		  Return New WinLib.ClipboardFormat(Win32.CF_BITMAP)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function CF_TEXT() As WinLib.ClipboardFormat
+		  Return New WinLib.ClipboardFormat(Win32.CF_TEXT)
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function FormatError(WinErrorNumber As Integer) As String
 		  //Returns the error message corresponding to a given windows error number.

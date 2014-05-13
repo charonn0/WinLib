@@ -240,7 +240,7 @@ Protected Module Win32
 	#tag Constant, Name = CAPTUREBLT, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CF_BITMAP, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag Constant, Name = CF_BITMAP, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = CF_DIB, Type = Double, Dynamic = False, Default = \"8", Scope = Public
@@ -279,7 +279,7 @@ Protected Module Win32
 	#tag Constant, Name = CF_SYLK, Type = Double, Dynamic = False, Default = \"4", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CF_TEXT, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag Constant, Name = CF_TEXT, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = CF_TIFF, Type = Double, Dynamic = False, Default = \"6", Scope = Public
