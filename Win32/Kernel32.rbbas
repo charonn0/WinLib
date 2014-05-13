@@ -281,6 +281,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GlobalFree Lib "Kernel32" (hGlobal As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GlobalLock Lib "Kernel32" (hMem As Integer) As Ptr
 	#tag EndExternalMethod
 
@@ -297,19 +301,39 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function HeapAlloc Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, Size As Integer) As Ptr
+		Protected Soft Declare Function HeapAlloc Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, Size As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function HeapFree Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, HMB As Ptr) As Boolean
+		Protected Soft Declare Function HeapFree Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, HMB As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function HeapSize Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, HMB As Ptr) As Integer
+		Protected Soft Declare Function HeapLock Lib "Kernel32" (hHeap As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function HeapSize Lib "Kernel32" (HeapHandle As Integer, Flags As Integer, HMB As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function HeapUnlock Lib "Kernel32" (hHeap As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function IsWow64Process Lib "Kernel32" (handle As Integer, ByRef is64 As Boolean) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function LocalAlloc Lib "Kernel32" (flags As UInt32, Bytes As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function LocalFree Lib "Kernel32" (hMem As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function LocalLock Lib "Kernel32" (hMem As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -449,27 +473,27 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualAlloc Lib "Kernel32" (Address As Integer, Size As Integer, AllocationType As Integer, Protect As Integer) As Ptr
+		Protected Declare Function VirtualAlloc Lib "Kernel32" (Address As Integer, Size As Integer, AllocationType As Integer, Protect As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualFree Lib "Kernel32" (Address As Ptr, Size As Integer, FreeType As Integer) As Boolean
+		Protected Declare Function VirtualFree Lib "Kernel32" (Address As Integer, Size As Integer, FreeType As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualLock Lib "Kernel32" (Address As Ptr, Size As Integer) As Boolean
+		Protected Declare Function VirtualLock Lib "Kernel32" (Address As Integer, Size As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualProtect Lib "Kernel32" (Address As Ptr, Size As Integer, NewProtect As Integer, ByRef OldProtect As Integer) As Boolean
+		Protected Declare Function VirtualProtect Lib "Kernel32" (Address As Integer, Size As Integer, NewProtect As Integer, ByRef OldProtect As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Ptr, ByRef InfoBuffer As MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
+		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Integer, ByRef InfoBuffer As MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualUnlock Lib "Kernel32" (Address As Ptr, Size As Integer) As Boolean
+		Protected Declare Function VirtualUnlock Lib "Kernel32" (Address As Integer, Size As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
