@@ -52,7 +52,7 @@ Implements WinLib.Win32Object
 		    Dim p As Integer = Win32.Kernel32.GlobalAlloc(flags, Size)
 		    Dim mb As New WinMB(p)
 		    mb.HeapHandle = TypeGlobal
-		    mb.mSize = Size
+		    'mb.mSize = Size
 		    Return mb
 		  #endif
 		End Function
@@ -76,7 +76,7 @@ Implements WinLib.Win32Object
 		    Dim p As Integer = Win32.Kernel32.HeapAlloc(HeapHandle, flags, Size)
 		    Dim mb As New WinMB(p)
 		    mb.HeapHandle = HeapHandle
-		    mb.mSize = Size
+		    'mb.mSize = Size
 		    Return mb
 		  #endif
 		End Function
@@ -127,7 +127,7 @@ Implements WinLib.Win32Object
 		        Return 0
 		      End If
 		    Else ' HeapAllocate
-		      mSize = Win32.Kernel32.HeapSize(HeapHandle, Me.Handle, 0)
+		      mSize = Win32.Kernel32.HeapSize(HeapHandle, 0, Me.Handle)
 		      mLastError = Win32.Kernel32.GetLastError()
 		    End Select
 		  End If
