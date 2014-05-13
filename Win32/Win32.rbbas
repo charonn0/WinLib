@@ -27,6 +27,18 @@ Protected Module Win32
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function HBITMAP(p As Picture) As Integer
+		  Dim pp As New Picture(p.Width, p.Height, 32)
+		  Dim srcDC As Integer = pp.Graphics.Handle(1)
+		  Dim bmp As Integer = Win32.GDI32.CreateCompatibleBitmap(srcDC, p.Width, p.Height)
+		  Dim dstDC As Integer = Win32.GDI32.CreateCompatibleDC(srcDC)
+		  Call Win32.GDI32.SelectObject(dstDC, bmp)
+		  Call Win32.GDI32.BitBlt(dstDC, 0, 0, p.Width, p.Height, srcDC, 0, 0, SRCCOPY)
+		  Return bmp
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function HighBits(Extends BigInt As Int64) As Integer
 		  'Gets the high-order bits of the passed Int64
