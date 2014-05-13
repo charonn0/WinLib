@@ -125,17 +125,32 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub CheckClipboard()
-		  Dim cp As New Clipboard
-		  If cp.PictureAvailable Then
-		    ClipPic = cp.Picture
+		  Dim cp As New WinLib.Clip_Board(Self.Handle)
+		  If cp.HasFormat(New WinLib.ClipboardFormat(CF_TEXT)) Then
+		    TextArea1.Text = cp.Data(New WinLib.ClipboardFormat(CF_TEXT))
+		  ElseIf cp.HasFormat(New WinLib.ClipboardFormat(CF_BITMAP)) Then
+		    Dim hMem As Integer = cp.Data(New WinLib.ClipboardFormat(CF_BITMAP))
+		    ClipPic = Win32.HBITMAP(hMem)
 		    TextArea1.Text = ""
-		  ElseIf cp.TextAvailable Then
-		    TextArea1.Text = cp.Text
-		    ClipPic = Nil
-		  Else
-		    TextArea1.Text = ""
-		    ClipPic = Nil
 		  End If
+		  
+		  
+		  
+		  
+		  
+		  
+		  '
+		  'Dim cp As New Clipboard
+		  'If cp.PictureAvailable Then
+		  'ClipPic = cp.Picture
+		  'TextArea1.Text = ""
+		  'ElseIf cp.TextAvailable Then
+		  'TextArea1.Text = cp.Text
+		  'ClipPic = Nil
+		  'Else
+		  'TextArea1.Text = ""
+		  'ClipPic = Nil
+		  'End If
 		  
 		  Canvas1.Invalidate(True)
 		  
