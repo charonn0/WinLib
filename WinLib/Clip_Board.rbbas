@@ -92,7 +92,7 @@ Implements WinLib.Win32Object
 		  Next
 		  Me.Close
 		  If hClip > 0 Then
-		    Return WinLib.ClipboardFormat.GetRegisteredFormat(hClip)
+		    Return New WinLib.ClipboardFormat(hClip)
 		  End If
 		  Raise New OutOfBoundsException
 		  

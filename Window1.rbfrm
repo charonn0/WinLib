@@ -139,6 +139,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Copyright (c) 2013-14 Andrew Lambert"
       TextAlign       =   2
       TextColor       =   &h000080FF

@@ -16,12 +16,6 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function GetRegisteredFormat(hClipFormat As Integer) As WinLib.ClipboardFormat
-		  Return New WinLib.ClipboardFormat(hClipFormat)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  // Part of the WinLib.Win32Object interface.
 		  Return mHandle
