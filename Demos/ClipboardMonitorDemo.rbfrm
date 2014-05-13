@@ -112,6 +112,7 @@ End
 #tag WindowCode
 	#tag Event
 		Function CancelClose(appQuitting as Boolean) As Boolean
+		  #pragma Unused appQuitting
 		  ClipboardMonitor1.Close
 		End Function
 	#tag EndEvent

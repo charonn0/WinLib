@@ -233,8 +233,13 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub WaitProcHandler(Sender As WinLib.Waiter, WaitFired As Boolean)
+		  #pragma Unused Sender
 		  System.DebugLog(CurrentMethodName)
-		  MsgBox("Change detected")
+		  If WaitFired Then
+		    MsgBox("Change detected")
+		  Else
+		    MsgBox("Wait timed out")
+		  End If
 		End Sub
 	#tag EndMethod
 
