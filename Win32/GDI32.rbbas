@@ -17,6 +17,14 @@ Protected Module GDI32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CreateCompatibleBitmap Lib "GDI32" (hDC As Integer, Width As Integer, Height As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CreateCompatibleDC Lib "GDI32" (hDC As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CreateRectRgn Lib "GDI32" (Left As Integer, Top As Integer, Right As Integer, Bottom As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -25,7 +33,15 @@ Protected Module GDI32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GetBitmapDimensionEx Lib "GDI32" (hBitmap As Integer, Dimensions As Ptr) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function RemoveFontResourceEx Lib "GDI32" Alias "RemoveFontResourceExW" (FontFile As WString, Flags As Integer, Reserved As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function SelectObject Lib "GDI32" (hDC As Integer, hObject As Integer) As Integer
 	#tag EndExternalMethod
 
 

@@ -213,6 +213,57 @@ Protected Module Win32
 	#tag Constant, Name = CAPTUREBLT, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CF_BITMAP, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_DIB, Type = Double, Dynamic = False, Default = \"8", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_DIBV5, Type = Double, Dynamic = False, Default = \"17", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_DIF, Type = Double, Dynamic = False, Default = \"5", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_ENHMETAFILE, Type = Double, Dynamic = False, Default = \"14", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_HDROP, Type = Double, Dynamic = False, Default = \"15", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_LOCALE, Type = Double, Dynamic = False, Default = \"16", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_METAFILEPICT, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_OEMTEXT, Type = Double, Dynamic = False, Default = \"7", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_PALETTE, Type = Double, Dynamic = False, Default = \"9", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_PENDATA, Type = Double, Dynamic = False, Default = \"10", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_RIFF, Type = Double, Dynamic = False, Default = \"11", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_SYLK, Type = Double, Dynamic = False, Default = \"4", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_TEXT, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_TIFF, Type = Double, Dynamic = False, Default = \"6", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_UNICODETEXT, Type = Double, Dynamic = False, Default = \"13", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CF_WAVE, Type = Double, Dynamic = False, Default = \"12", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = COMPRESSION_ENGINE_MAXIMUM, Type = Double, Dynamic = False, Default = \"&h0100", Scope = Public
 	#tag EndConstant
 
@@ -568,6 +619,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = GENERIC_WRITE, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = GMEM_MOVEABLE, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = GWL_EXSTYLE, Type = Double, Dynamic = False, Default = \"-20", Scope = Public
