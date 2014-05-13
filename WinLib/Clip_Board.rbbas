@@ -27,15 +27,11 @@ Implements WinLib.Win32Object
 		    Me.Close
 		    Raise New RuntimeException
 		  End If
-		  Dim sz As Integer = Win32.Kernel32.GlobalSize(hMem)
-		  If sz > 0 Then
-		    Dim data As String
-		    Dim mb As MemoryBlock = Win32.Kernel32.GlobalLock(hMem)
-		    mLastError = Win32.Kernel32.GetLastError()
-		    If mb <> Nil Then
-		      data = mb.StringValue(0, sz)
-		      Call Win32.Kernel32.GlobalUnlock(hMem)
-		      mLastError = Win32.Kernel32.GetLastError()
+		  Dim hGlobal As WinMB = WinMB.Acquire(hMem, WinMB.TypeGlobal)
+		  If hGlobal.Size > -1 Then
+		    Dim data As String 
+		    If hGlobal.Value <> Nil Then
+		      data = hGlobal.Value.StringValue(0, hGlobal.Size)
 		      Me.Close
 		      Return data
 		    End If
@@ -55,11 +51,10 @@ Implements WinLib.Win32Object
 		    Me.Close
 		    Raise New RuntimeException
 		  End If
-		  Dim mb As MemoryBlock = Win32.Kernel32.GlobalLock(hMem)
-		  If mb <> Nil Then
-		    mb.StringValue(0, NewData.Size) = NewData.StringValue(0, NewData.Size)
-		    Call Win32.Kernel32.GlobalUnlock(hMem)
-		    Call Win32.User32.SetClipboardData(Format.Handle, hMem)
+		  Dim hGlobal As WinMB = WinMB.Acquire(hMem, 0)
+		  If hGlobal <> Nil And hGlobal.Value <> Nil Then
+		    hGlobal.Value.StringValue(0, NewData.Size) = NewData.StringValue(0, NewData.Size)
+		    Call Win32.User32.SetClipboardData(Format.Handle, Integer(hMem))
 		  End If
 		  Me.Close
 		End Sub

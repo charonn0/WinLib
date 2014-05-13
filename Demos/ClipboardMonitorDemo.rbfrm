@@ -125,13 +125,14 @@ End
 
 	#tag Method, Flags = &h21
 		Private Sub CheckClipboard()
+		  ClipPic = Nil
+		  TextArea1.Text = ""
 		  Dim cp As New WinLib.Clip_Board(Self.Handle)
-		  If cp.HasFormat(New WinLib.ClipboardFormat(CF_TEXT)) Then
-		    TextArea1.Text = cp.Data(New WinLib.ClipboardFormat(CF_TEXT))
-		  ElseIf cp.HasFormat(New WinLib.ClipboardFormat(CF_BITMAP)) Then
-		    Dim hMem As Integer = cp.Data(New WinLib.ClipboardFormat(CF_BITMAP))
+		  If cp.HasFormat(CF_BITMAP) Then
+		    Dim hMem As Integer = cp.Data(CF_BITMAP)
 		    ClipPic = Win32.HBITMAP(hMem)
-		    TextArea1.Text = ""
+		  ElseIf cp.HasFormat(CF_TEXT) Then
+		    TextArea1.Text = cp.Data(CF_TEXT)
 		  End If
 		  
 		  
