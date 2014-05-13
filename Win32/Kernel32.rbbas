@@ -293,6 +293,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function GlobalReAlloc Lib "Kernel32" (hMem As Integer, Size As Integer, Flags As UInt32) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GlobalSize Lib "Kernel32" (hMem As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -310,6 +314,10 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function HeapLock Lib "Kernel32" (hHeap As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function HeapReAlloc Lib "Kernel32" (hHeap As Integer, Flags As Integer, hMem As Integer, NewSize As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
