@@ -1,62 +1,30 @@
 #tag Class
-Class IOStream
-Implements Readable,Writeable,WinLib.Win32Object
+Protected Class IOStream
+Inherits FileObject
+Implements Readable, Writeable
 	#tag Method, Flags = &h0
-		Sub Close()
-		  // Part of the Win32.Win32Object interface.
-		  Me.Flush()
-		  #If TargetWin32 Then Call Win32.Kernel32.CloseHandle(Me.Handle)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Constructor(FileHandle As Integer)
-		  // Part of the Win32.Win32Object interface.
-		  Me.mHandle = FileHandle
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Sub Destructor()
-		  Me.Close()
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function EOF() As Boolean Implements Readable.EOF
+		Function EOF() As Boolean
+		  // Part of the Readable interface.
 		  Return Me.Position >= Me.Length
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Flush() Implements Writeable.Flush
+		Sub Flush()
+		  // Part of the Writeable interface.
 		  #If TargetWin32 Then
 		    If Win32.Kernel32.FlushFileBuffers(Me.Handle) Then
 		      mLastError = 0
 		    Else
-		      mLastError = GetLastError()
+		      mLastError = Win32.Kernel32.GetLastError()
 		    End If
 		  #endif
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Handle() As Integer
-		  // Part of the Win32Object interface.
-		  return mHandle
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function LastError() As Integer
-		  // Part of the Win32Object interface.
-		  return mLastError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Read(Count As Integer, encoding As TextEncoding = Nil) As String Implements Readable.Read
+		Function Read(Count As Integer, encoding As TextEncoding = Nil) As String
+		  // Part of the Readable interface.
 		  #pragma BoundsChecking Off
 		  #If TargetWin32 Then
 		    Dim mb As New MemoryBlock(Count)
@@ -64,10 +32,10 @@ Implements Readable,Writeable,WinLib.Win32Object
 		    If Win32.Kernel32.ReadFile(Me.Handle, mb, mb.Size, read, Nil) Then
 		      mLastError = 0
 		    Else
-		      mLastError = GetLastError
+		      mLastError = Win32.Kernel32.GetLastError
 		      Dim err As New IOException
 		      err.ErrorNumber = Me.LastError
-		      err.Message = FormatError(Me.LastError)
+		      err.Message = WinLib.FormatError(Me.LastError)
 		      Raise err
 		    End If
 		    
@@ -77,7 +45,8 @@ Implements Readable,Writeable,WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ReadError() As Boolean Implements Readable.ReadError
+		Function ReadError() As Boolean
+		  // Part of the Readable interface.
 		  Return LastError <> 0
 		  
 		  
@@ -85,17 +54,18 @@ Implements Readable,Writeable,WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Write(text As String) Implements Writeable.Write
+		Sub Write(text As String)
+		  // Part of the Writeable interface.
 		  #If TargetWin32 Then
 		    Dim mb As MemoryBlock = text
 		    Dim written As Integer
 		    If Win32.Kernel32.WriteFile(Me.Handle, mb, mb.Size, written, Nil) Then
 		      mLastError = 0
 		    Else
-		      mLastError = GetLastError()
+		      mLastError = Win32.Kernel32.GetLastError()
 		      Dim err As New IOException
 		      err.ErrorNumber = Me.LastError
-		      err.Message = FormatError(Me.LastError)
+		      err.Message = WinLib.FormatError(Me.LastError)
 		      Raise err
 		    End If
 		  #endif
@@ -103,19 +73,11 @@ Implements Readable,Writeable,WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function WriteError() As Boolean Implements Writeable.WriteError
+		Function WriteError() As Boolean
+		  // Part of the Writeable interface.
 		  Return LastError <> 0
 		End Function
 	#tag EndMethod
-
-
-	#tag Note, Name = About this class
-		This class emulates RB's built-in BinaryStream class using Winapi calls like ReadFile, WriteFile, etc. and implements the Writeable and Readable interfaces.
-		Pass any Win32 handle (that's supported by ReadFile, etc.) to the class constructor. Some types of handles don't represent an object with properties like 
-		'length' and 'position' but are still readable and writable, so do be careful.
-		
-		Errors work just like the BinaryStream. If a read or write fails, an IOException is raised with the Win32 error code.
-	#tag EndNote
 
 
 	#tag ComputedProperty, Flags = &h0
@@ -126,7 +88,7 @@ Implements Readable,Writeable,WinLib.Win32Object
 			    oldvalue = Me.Position
 			    value = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_END)
 			    Me.Position = oldvalue
-			    mLastError = GetLastError()
+			    mLastError = Win32.Kernel32.GetLastError()
 			    Return value
 			  #endif
 			End Get
@@ -141,7 +103,7 @@ Implements Readable,Writeable,WinLib.Win32Object
 			    Dim oldvalue As Integer = Me.Position
 			    Me.Position = value
 			    If Not Win32.Kernel32.SetEndOfFile(Me.Handle) Then
-			      mLastError = GetLastError()
+			      mLastError = Win32.Kernel32.GetLastError()
 			    Else
 			      mLastError = 0
 			    End If
@@ -152,20 +114,12 @@ Implements Readable,Writeable,WinLib.Win32Object
 		Length As Integer
 	#tag EndComputedProperty
 
-	#tag Property, Flags = &h1
-		Protected mHandle As Integer
-	#tag EndProperty
-
-	#tag Property, Flags = &h1
-		Protected mLastError As Integer
-	#tag EndProperty
-
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
 			  #If TargetWin32 Then
 			    Dim value As Integer = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_CURRENT)
-			    mLastError = GetLastError()
+			    mLastError = Win32.Kernel32.GetLastError()
 			    Return value
 			  #endif
 			End Get
@@ -174,7 +128,7 @@ Implements Readable,Writeable,WinLib.Win32Object
 			Set
 			  #If TargetWin32 Then
 			    Call Win32.Kernel32.SetFilePointer(Me.Handle, value, Nil, FILE_BEGIN)
-			    mLastError = GetLastError()
+			    mLastError = Win32.Kernel32.GetLastError()
 			  #endif
 			End Set
 		#tag EndSetter
@@ -188,7 +142,6 @@ Implements Readable,Writeable,WinLib.Win32Object
 			Visible=true
 			Group="ID"
 			InitialValue="-2147483648"
-			Type="Integer"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -196,7 +149,6 @@ Implements Readable,Writeable,WinLib.Win32Object
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -208,7 +160,6 @@ Implements Readable,Writeable,WinLib.Win32Object
 			Name="Name"
 			Visible=true
 			Group="ID"
-			Type="String"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -220,7 +171,6 @@ Implements Readable,Writeable,WinLib.Win32Object
 			Name="Super"
 			Visible=true
 			Group="ID"
-			Type="String"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
@@ -228,7 +178,6 @@ Implements Readable,Writeable,WinLib.Win32Object
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
 			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior

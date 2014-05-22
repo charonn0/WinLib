@@ -19,7 +19,7 @@ Inherits WinLib.IOStream
 		    Return
 		  End If
 		  #If TargetWin32 Then
-		    Dim hFile As Integer = Win32.Kernel32.CreateFile("\\.\pipe\" + PipeName, GENERIC_READ Or GENERIC_WRITE, 0, 0, OPEN_EXISTING, 0, 0)
+		    Dim hFile As Integer = Win32.Kernel32.CreateFile("\\.\pipe\" + PipeName, GENERIC_READ Or GENERIC_WRITE, 0, Nil, OPEN_EXISTING, 0, 0)
 		    If hFile > 0 Then
 		      Me.mHandle = hFile
 		      mIsConnected = True
@@ -45,8 +45,7 @@ Inherits WinLib.IOStream
 
 	#tag Method, Flags = &h1
 		Protected Sub Destructor()
-		  PollTimer = Nil
-		  Super.Destructor
+		  Me.Close
 		End Sub
 	#tag EndMethod
 
@@ -66,7 +65,7 @@ Inherits WinLib.IOStream
 		Sub Listen(OpenMode As Integer, MaxInstances As Integer = PIPE_UNLIMITED_INSTANCES, OutBufferSize As Integer = 512, InBufferSize As Integer = 512, DefaultTimeout As Integer = - 1, PipeMode As Integer = 0)
 		  ' This method creates a NAMED PIPE SERVER and listens for incoming connections. This is a blocking function;
 		  ' Listen will not return until the first client connects, and your app will stop responding until then.
-		  ' 
+		  '
 		  
 		  Dim err As Integer
 		  Dim hFile As Integer = Win32.Kernel32.CreateNamedPipe("\\.\pipe\" + PipeName, OpenMode Or FILE_FLAG_OVERLAPPED, PipeMode, _
@@ -255,11 +254,6 @@ Inherits WinLib.IOStream
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="IsConnected"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Left"
 			Visible=true
 			Group="Position"
@@ -272,12 +266,6 @@ Inherits WinLib.IOStream
 			Group="Behavior"
 			Type="Integer"
 			InheritedFrom="WinLib.IOStream"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="LookAhead"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
