@@ -198,12 +198,12 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function StringValue(OffSet As Integer, Length As Integer) As MemoryBlock
-		  Dim p As New MemoryBlock(Me.Size - OffSet)
+		  Dim p As New MemoryBlock(Length)
 		  If HeapHandle = TypeGlobal Then
 		    If Not Me.Lock Then Raise New RuntimeException
 		  End If
 		  Dim m As MemoryBlock = Ptr(mHandle)
-		  p.StringValue(0, p.Size) = m.StringValue(Offset, Offset + p.Size)
+		  p.StringValue(0, Length) = m.StringValue(Offset, Length)
 		  If HeapHandle = TypeGlobal Then Call Me.Unlock
 		  Return p
 		  
@@ -217,7 +217,7 @@ Implements WinLib.Win32Object
 		    If Not Me.Lock Then Raise New RuntimeException
 		  End If
 		  Dim m As MemoryBlock = Ptr(mHandle)
-		  m.StringValue(OffSet, OffSet + NewData.Size) = NewData.StringValue(0, NewData.Size)
+		  m.StringValue(OffSet, Length) = NewData.StringValue(0, Length)
 		  If HeapHandle = TypeGlobal Then Call Me.Unlock
 		  
 		End Sub
