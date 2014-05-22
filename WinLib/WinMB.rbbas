@@ -124,11 +124,26 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Operator_Compare(OtherMB As WinLib.WinMB) As Integer
+		  If OtherMB Is Nil Then Return 1
+		  If OtherMB.Handle = Me.Handle Then Return 0
+		  If OtherMB.Handle > Me.Handle Then Return -1
+		  If OtherMB.Handle < Me.Handle Then Return 1
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Operator_Convert() As Ptr
+		  Return Ptr(Me.Handle)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function ReAlloc(NewSize As Integer) As Boolean
 		  Dim ret As Boolean
 		  Select Case HeapHandle
 		  Case TypeGlobal  ' GlobalAllocate
-		    If Not Me.Lock Then Raise New RuntimeException
+		    If Not Me.Lock Then Return False
 		    Dim i As Integer = Win32.Kernel32.GlobalReAlloc(Me.Handle, NewSize, 0)
 		    mLastError = Win32.Kernel32.GetLastError()
 		    If i <> 0 Then
@@ -181,6 +196,33 @@ Implements WinLib.Win32Object
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function StringValue(OffSet As Integer, Length As Integer) As MemoryBlock
+		  Dim p As New MemoryBlock(Me.Size - OffSet)
+		  If HeapHandle = TypeGlobal Then
+		    If Not Me.Lock Then Raise New RuntimeException
+		  End If
+		  Dim m As MemoryBlock = Ptr(mHandle)
+		  p.StringValue(0, p.Size) = m.StringValue(Offset, Offset + p.Size)
+		  If HeapHandle = TypeGlobal Then Call Me.Unlock
+		  Return p
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub StringValue(OffSet As Integer, Length As Integer, Assigns NewData As MemoryBlock)
+		  If HeapHandle = TypeGlobal Then
+		    If Not Me.Lock Then Raise New RuntimeException
+		  End If
+		  Dim m As MemoryBlock = Ptr(mHandle)
+		  m.StringValue(OffSet, OffSet + NewData.Size) = NewData.StringValue(0, NewData.Size)
+		  If HeapHandle = TypeGlobal Then Call Me.Unlock
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function Unlock() As Boolean
 		  Dim ret As Boolean
@@ -196,33 +238,6 @@ Implements WinLib.Win32Object
 		  MemLock.Release
 		  Return ret
 		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Value(OffSet As Integer = 0) As MemoryBlock
-		  Dim p As New MemoryBlock(Me.Size - OffSet)
-		  If HeapHandle = TypeGlobal Then
-		    If Not Me.Lock Then Raise New RuntimeException
-		  End If
-		  Dim m As MemoryBlock = Ptr(mHandle)
-		  p.StringValue(0, p.Size) = m.StringValue(Offset, Offset + p.Size)
-		  If HeapHandle = TypeGlobal Then Call Me.Unlock
-		  Return p
-		  
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Value(OffSet As Integer = 0, Assigns NewData As MemoryBlock)
-		  If HeapHandle = TypeGlobal Then
-		    If Not Me.Lock Then Raise New RuntimeException
-		  End If
-		  Dim m As MemoryBlock = Ptr(mHandle)
-		  m.StringValue(OffSet, OffSet + NewData.Size) = NewData.StringValue(0, NewData.Size)
-		  If HeapHandle = TypeGlobal Then Call Me.Unlock
-		  
-		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0

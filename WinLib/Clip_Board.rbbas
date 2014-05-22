@@ -29,9 +29,9 @@ Implements WinLib.Win32Object
 		  End If
 		  Dim hGlobal As WinMB = WinMB.Acquire(hMem, WinMB.TypeGlobal)
 		  If hGlobal.Size > -1 Then
-		    Dim data As String 
-		    If hGlobal.Value <> Nil Then
-		      data = hGlobal.Value.StringValue(0, hGlobal.Size)
+		    Dim data As String
+		    If hGlobal <> Nil Then
+		      data = hGlobal.StringValue(0, hGlobal.Size)
 		      Me.Close
 		      Return data
 		    End If
@@ -52,8 +52,8 @@ Implements WinLib.Win32Object
 		    Raise New RuntimeException
 		  End If
 		  Dim hGlobal As WinMB = WinMB.Acquire(hMem, 0)
-		  If hGlobal <> Nil And hGlobal.Value <> Nil Then
-		    hGlobal.Value.StringValue(0, NewData.Size) = NewData.StringValue(0, NewData.Size)
+		  If hGlobal <> Nil Then
+		    hGlobal.StringValue(0, NewData.Size) = NewData.StringValue(0, NewData.Size)
 		    Call Win32.User32.SetClipboardData(Format.Handle, Integer(hMem))
 		  End If
 		  Me.Close
