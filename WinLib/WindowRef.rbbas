@@ -15,15 +15,31 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function Capture(IncludeBorder As Boolean = True) As Picture
-		  'Calls CaptureWindow on the specified Window.
+		  'Calls CaptureRect on the specified Window.
 		  'If the optional IncludeBorder parameter is False, then only the client area of the window
 		  'is captured; if True then the client area, borders, and titlebar are included in the capture.
 		  'If the window is a ContainerControl or similar construct (AKA child windows), only the contents of the container
 		  'are captured. To always capture the topmost containing window, use WindowRef.TrueParent.Capture
-		  'If all or part of the Window is overlapped by other windows and IncludeBorder=True, then the capture 
-		  'will include the overlapping parts of the other windows.
+		  'If all or part of the Window is overlapped by other windows, then the capture will include the overlapping
+		  'parts of the other windows.
 		  
-		  Return WinLib.GUI.CaptureWindow(Me, IncludeBorder)
+		  Dim l, t, w, h As Integer
+		  If Not IncludeBorder Then
+		    l = Me.Left
+		    t = Me.Top
+		    w = Me.Width
+		    h = Me.Height
+		    
+		  Else
+		    l = Me.TrueLeft
+		    t = Me.TrueTop
+		    w = Me.TrueWidth
+		    h = Me.TrueHeight
+		  End If
+		  
+		  Dim p As Picture = WinLib.Gui.CaptureRect(l, t, w, h)
+		  mLastError = GetLastError
+		  Return p
 		End Function
 	#tag EndMethod
 
