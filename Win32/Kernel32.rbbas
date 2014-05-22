@@ -25,7 +25,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function CreateFile Lib "Kernel32" Alias "CreateFileW" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As Integer, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
+		Protected Declare Function CreateFile Lib "Kernel32" Alias "CreateFileW" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As Ptr, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -349,11 +349,15 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function MapViewOfFile Lib "Kernel32" (hFilemap As Integer, DesiredAccess As Integer, OffsetHi As Integer, Offsetlo As Integer, ByteCount As UInt32) As Integer
+		Protected Declare Function MapViewOfFile Lib "Kernel32" (hFilemap As Integer, DesiredAccess As Integer, OffsetHi As Integer, Offsetlo As Integer, ByteCount As UInt32) As Ptr
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function MoveFileEx Lib "Kernel32" Alias "MoveFileExW" (sourceFile As WString, destinationFile As WString, flags As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function OpenFileMapping Lib "Kernel32" Alias "OpenFileMappingW" (DesiredAccess As Integer, InheritHandle As Boolean, MapName As WString) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -474,6 +478,10 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function UnlockFile Lib "Kernel32" (FileHandle As Integer, dwFileOffsetLow As integer, dwFileOffsetHigh As integer, nNumberOfBytesToUnlockLow As integer, nNumberOfBytesToUnlockHigh As integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function UnmapViewOfFile Lib "Kernel32" (BaseAddress As Ptr) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

@@ -489,7 +489,13 @@ Protected Module Win32
 	#tag Constant, Name = FILE_LIST_DIRECTORY, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = FILE_MAP_COPY, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = FILE_MAP_READ, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = FILE_MAP_WRITE, Type = Double, Dynamic = False, Default = \"2", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = FILE_NAMED_STREAMS, Type = Double, Dynamic = False, Default = \"&h00040000", Scope = Public
