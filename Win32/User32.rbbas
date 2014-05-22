@@ -273,7 +273,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetClipboardData Lib "User32" (format As UInt32, hMem As Integer) As Integer
+		Protected Declare Function SetClipboardData Lib "User32" (format As UInt32, hMem As Ptr) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

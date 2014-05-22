@@ -2,6 +2,12 @@
 Class WinMB
 Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
+		 Shared Sub Acquire(ByRef hMem As WinLib.WinMB)
+		  hMem.Freeable = False
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		 Shared Function Acquire(hMem As Integer, Type As Integer, Size As Integer = - 1) As WinMB
 		  Dim m As New WinMB(hMem)
 		  m.HeapHandle = Type
@@ -74,12 +80,11 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function HeapAllocate(Size As Integer, ZeroMemory As Boolean = True, HeapHandle As Integer = - 1) As WinMB
+		 Shared Function HeapAllocate(Size As Integer, ZeroMemory As Boolean = True, HeapHandle As Integer = - 1, Flags As Integer = 0) As WinMB
 		  #If TargetWin32 Then
 		    If HeapHandle = -1 Then HeapHandle = Win32.Kernel32.GetProcessHeap
-		    Dim flags As Integer
 		    If ZeroMemory Then
-		      flags = HEAP_ZERO_MEMORY
+		      flags = flags Or HEAP_ZERO_MEMORY
 		    End If
 		    Dim p As Integer = Win32.Kernel32.HeapAlloc(HeapHandle, flags, Size)
 		    If p <> 0 Then
@@ -176,7 +181,7 @@ Implements WinLib.Win32Object
 		      mLastError = Win32.Kernel32.GetLastError()
 		      Call Me.Unlock
 		    Case TypeVirtual ' VirtualAllocate
-		      #pragma Warning "FIXME" ' This doesn't return the size of the block
+		      '#pragma Warning "FIXME" ' This doesn't return the size of the block
 		      Dim meta As MEMORY_BASIC_INFORMATION
 		      If Win32.Kernel32.VirtualQuery(Me.Handle, meta, meta.Size) = meta.Size Then
 		        Do Until meta.AllocationBase <> Me.Handle
@@ -261,7 +266,7 @@ Implements WinLib.Win32Object
 
 
 	#tag Property, Flags = &h21
-		Private Freeable As Boolean = True
+		Private Freeable As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

@@ -18,7 +18,7 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Data(Format As WinLib.ClipboardFormat) As Variant
+		Function Data(Format As WinLib.ClipboardFormat) As MemoryBlock
 		  'System.DebugLog(CurrentMethodName)
 		  If Not Me.Open Then Raise New RuntimeException
 		  Dim hMem As Integer = Win32.User32.GetClipboardData(Format.Handle)
@@ -36,7 +36,7 @@ Implements WinLib.Win32Object
 		      Return data
 		    End If
 		  Else
-		    Return hMem
+		    Return Ptr(hMem)
 		    Me.Close
 		  End If
 		End Function
@@ -45,16 +45,14 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Data(Format As WinLib.ClipboardFormat, Assigns NewData As MemoryBlock)
 		  'System.DebugLog(CurrentMethodName)
-		  If Not Me.Open Then Raise New RuntimeException
-		  Dim hMem As Integer = Win32.Kernel32.GlobalAlloc(GMEM_MOVEABLE, NewData.Size)
-		  If hMem = 0 Then
-		    Me.Close
-		    Raise New RuntimeException
-		  End If
-		  Dim hGlobal As WinMB = WinMB.Acquire(hMem, 0)
+		  If Not Me.Open Or Not Me.Empty Then Raise New RuntimeException
+		  Dim hGlobal As WinMB = WinMB.HeapAllocate(NewData.Size, True, -1, GMEM_MOVEABLE)
 		  If hGlobal <> Nil Then
+		    WinMB.Acquire(hGlobal) ' mark as not freeable.
 		    hGlobal.StringValue(0, NewData.Size) = NewData.StringValue(0, NewData.Size)
-		    Call Win32.User32.SetClipboardData(Format.Handle, Integer(hMem))
+		    Call Win32.User32.SetClipboardData(Format.Handle, hGlobal)
+		    mLastError = Win32.Kernel32.GetLastError()
+		    Break
 		  End If
 		  Me.Close
 		End Sub
