@@ -2,7 +2,7 @@
 Class WinMB
 Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
-		 Shared Function Acquire(hMem As Integer, Type As Integer, Size As Integer = -1) As WinMB
+		 Shared Function Acquire(hMem As Integer, Type As Integer, Size As Integer = - 1) As WinMB
 		  Dim m As New WinMB(hMem)
 		  m.HeapHandle = Type
 		  If Type <> TypeGlobal Then m.mSize = Size
@@ -14,7 +14,7 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the WinLib.Win32Object interface.
-		  Call Unlock()
+		  'Call Unlock()
 		  If Freeable Then
 		    Select Case HeapHandle
 		    Case TypeGlobal ' GlobalAllocate
@@ -50,10 +50,18 @@ Implements WinLib.Win32Object
 		      flags = GMEM_ZEROINIT
 		    End If
 		    Dim p As Integer = Win32.Kernel32.GlobalAlloc(flags, Size)
-		    Dim mb As New WinMB(p)
-		    mb.HeapHandle = TypeGlobal
-		    'mb.mSize = Size
-		    Return mb
+		    If p <> 0 Then
+		      Dim mb As New WinMB(p)
+		      mb.HeapHandle = TypeGlobal
+		      'mb.mSize = Size
+		      Return mb
+		    Else
+		      p = Win32.Kernel32.GetLastError
+		      Dim err As New RuntimeException
+		      err.ErrorNumber = p
+		      err.Message = WinLib.FormatError(p)
+		      Raise err
+		    End If
 		  #endif
 		End Function
 	#tag EndMethod
@@ -74,10 +82,18 @@ Implements WinLib.Win32Object
 		      flags = HEAP_ZERO_MEMORY
 		    End If
 		    Dim p As Integer = Win32.Kernel32.HeapAlloc(HeapHandle, flags, Size)
-		    Dim mb As New WinMB(p)
-		    mb.HeapHandle = HeapHandle
-		    'mb.mSize = Size
-		    Return mb
+		    If p <> 0 Then
+		      Dim mb As New WinMB(p)
+		      mb.HeapHandle = HeapHandle
+		      'mb.mSize = Size
+		      Return mb
+		    Else
+		      p = Win32.Kernel32.GetLastError
+		      Dim err As New RuntimeException
+		      err.ErrorNumber = p
+		      err.Message = WinLib.FormatError(p)
+		      Raise err
+		    End If
 		  #endif
 		End Function
 	#tag EndMethod
@@ -91,6 +107,8 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Function Lock() As Boolean
+		  If MemLock = Nil Then MemLock = New Semaphore
+		  MemLock.Signal
 		  Dim ret As Boolean
 		  Select Case HeapHandle
 		  Case TypeGlobal ' GlobalAllocate
@@ -138,7 +156,7 @@ Implements WinLib.Win32Object
 		  If mSize = -1 Then
 		    Select Case HeapHandle
 		    Case TypeGlobal ' GlobalAllocate
-		      If Not Me.Lock Then Raise New RuntimeException
+		      If Not Me.Lock Then Return -1
 		      mSize = Win32.Kernel32.GlobalSize(Me.Handle)
 		      mLastError = Win32.Kernel32.GetLastError()
 		      Call Me.Unlock
@@ -175,6 +193,7 @@ Implements WinLib.Win32Object
 		    ret = Win32.Kernel32.HeapUnlock(Me.Handle)
 		  End Select
 		  mLastError = Win32.Kernel32.GetLastError()
+		  MemLock.Release
 		  Return ret
 		End Function
 	#tag EndMethod
@@ -196,7 +215,7 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Value(OffSet As Integer = 0, Assigns NewData As MemoryBlock)
-		  If HeapHandle = TypeGlobal Then 
+		  If HeapHandle = TypeGlobal Then
 		    If Not Me.Lock Then Raise New RuntimeException
 		  End If
 		  Dim m As MemoryBlock = Ptr(mHandle)
@@ -209,11 +228,17 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		 Shared Function VirtualAllocate(Size As Integer, StartAddress As Integer = 0, Protection As Integer = PAGE_EXECUTE_READWRITE, AllocType As Integer = MEM_COMMIT) As WinLib.WinMB
 		  Dim p As Integer = Win32.Kernel32.VirtualAlloc(StartAddress, Size, AllocType, Protection)
-		  If p <> 0 Then 
+		  If p <> 0 Then
 		    Dim m As New WinMB(p)
 		    m.HeapHandle = TypeVirtual
 		    m.mSize = Size
 		    Return m
+		  Else
+		    p = Win32.Kernel32.GetLastError
+		    Dim err As New RuntimeException
+		    err.ErrorNumber = p
+		    err.Message = WinLib.FormatError(p)
+		    Raise err
 		  End If
 		  
 		End Function
@@ -226,6 +251,10 @@ Implements WinLib.Win32Object
 
 	#tag Property, Flags = &h1
 		Protected HeapHandle As Integer = -1
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private MemLock As Semaphore
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
