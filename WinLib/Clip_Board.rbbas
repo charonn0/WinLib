@@ -60,7 +60,8 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function Empty() As Boolean
-		  Return Win32.User32.EmptyClipboard
+		  If Win32.User32.EmptyClipboard Then Return True
+		  mLastError = Win32.Kernel32.GetLastError
 		End Function
 	#tag EndMethod
 
@@ -74,6 +75,7 @@ Implements WinLib.Win32Object
 		    If hClip = 0 Then Exit Do
 		    c = c + 1
 		  Loop
+		  mLastError = Win32.Kernel32.GetLastError
 		  Me.Close
 		  Return c
 		  
@@ -88,6 +90,7 @@ Implements WinLib.Win32Object
 		  For i As Integer = 0 To Index
 		    hClip = Win32.User32.EnumClipboardFormats(hClip)
 		  Next
+		  mLastError = Win32.Kernel32.GetLastError
 		  Me.Close
 		  If hClip > 0 Then
 		    Return New WinLib.ClipboardFormat(hClip)
@@ -108,12 +111,15 @@ Implements WinLib.Win32Object
 		Function HasFormat(Format As WinLib.ClipboardFormat) As Boolean
 		  If Not Me.Open Then Raise New RuntimeException
 		  Dim hClip As Integer
+		  Dim ret As Boolean
 		  Do
 		    hClip = Win32.User32.EnumClipboardFormats(hClip)
+		    mLastError = Win32.Kernel32.GetLastError
 		    If hClip = 0 Then Exit Do
-		    If hClip = Format.Handle Then Return True
+		    If hClip = Format.Handle Then ret = True
 		  Loop
 		  Me.Close
+		  Return ret
 		End Function
 	#tag EndMethod
 
@@ -127,7 +133,8 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Function Open() As Boolean
 		  'System.DebugLog(CurrentMethodName)
-		  Return Win32.User32.OpenClipboard(mHandle)
+		  If Win32.User32.OpenClipboard(mHandle) Then Return True
+		  mLastError = Win32.Kernel32.GetLastError
 		End Function
 	#tag EndMethod
 
