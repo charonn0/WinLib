@@ -31,15 +31,10 @@ Inherits FileObject
 
 	#tag Method, Flags = &h1000
 		 Shared Function CreateFileMapping(File As FileObject, PageProtection As Integer, MaximumSize As Int64 = 0, Name As String = "") As Mapping
-		  Dim hi, lo, hFile As Integer
-		  hi = MaximumSize.HighBits
-		  lo = MaximumSize.LowBits
 		  If File = Nil Then
-		    hFile = INVALID_HANDLE_VALUE ' a pagefile-backed mapping
-		  Else
-		    hFile = File.Handle
+		    File = New FileObject(INVALID_HANDLE_VALUE) ' a pagefile-backed mapping
 		  End If
-		  Dim hMap As Integer = Win32.Kernel32.CreateFileMapping(hFile, Nil, PageProtection, hi, lo, Name)
+		  Dim hMap As Integer = Win32.Kernel32.CreateFileMapping(File.Handle, Nil, PageProtection, MaximumSize.HighBits, MaximumSize.LowBits, Name)
 		  If hMap > 0 Then
 		    Return New Mapping(File, hMap)
 		  Else
@@ -60,10 +55,7 @@ Inherits FileObject
 
 	#tag Method, Flags = &h0
 		Function MapView(DesiredAccess As Integer, Offset As Int64, Length As Integer) As WinMB
-		  Dim hi, lo As Integer
-		  hi = Offset.HighBits
-		  lo = Offset.LowBits
-		  Dim p As Ptr = Win32.Kernel32.MapViewOfFile(MapHandle, DesiredAccess, hi, lo, Length)
+		  Dim p As Ptr = Win32.Kernel32.MapViewOfFile(MapHandle, DesiredAccess, Offset.HighBits, Offset.LowBits, Length)
 		  If p <> Nil Then
 		    Dim mb As WinMB = WinMB.Acquire(Integer(p), WinMB.TypeVirtual)
 		    MappedViews.Append(mb)
@@ -97,7 +89,7 @@ Inherits FileObject
 		    End If
 		  Next
 		  
-		  If Not Win32.Kernel32.UnmapViewOfFile(Ptr(Map.Handle)) Then
+		  If Not Win32.Kernel32.UnmapViewOfFile(Map) Then
 		    mLastError = Win32.Kernel32.GetLastError
 		  End If
 		End Sub
