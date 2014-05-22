@@ -1,7 +1,7 @@
 #tag Class
 Protected Class IOStream
 Inherits FileObject
-Implements Readable, Writeable
+Implements Readable,Writeable
 	#tag Method, Flags = &h0
 		Function EOF() As Boolean
 		  // Part of the Readable interface.
@@ -86,10 +86,14 @@ Implements Readable, Writeable
 			  #If TargetWin32 Then
 			    Dim value, oldvalue As Integer
 			    oldvalue = Me.Position
-			    value = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_END)
+			    Dim hi As Integer
+			    value = Win32.Kernel32.SetFilePointer(Me.Handle, 0, hi, FILE_END)
 			    Me.Position = oldvalue
 			    mLastError = Win32.Kernel32.GetLastError()
-			    Return value
+			    Dim ret As Int64
+			    ret.HighBits = hi
+			    ret.LowBits = value
+			    Return ret
 			  #endif
 			End Get
 		#tag EndGetter
@@ -111,28 +115,33 @@ Implements Readable, Writeable
 			  #endif
 			End Set
 		#tag EndSetter
-		Length As Integer
+		Length As Int64
 	#tag EndComputedProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
 			  #If TargetWin32 Then
-			    Dim value As Integer = Win32.Kernel32.SetFilePointer(Me.Handle, 0, Nil, FILE_CURRENT)
+			    Dim hi As Integer
+			    Dim value As Integer = Win32.Kernel32.SetFilePointer(Me.Handle, 0, hi, FILE_CURRENT)
 			    mLastError = Win32.Kernel32.GetLastError()
-			    Return value
+			    Dim ret As Int64
+			    ret.HighBits = hi
+			    ret.LowBits = value
+			    Return ret
 			  #endif
 			End Get
 		#tag EndGetter
 		#tag Setter
 			Set
 			  #If TargetWin32 Then
-			    Call Win32.Kernel32.SetFilePointer(Me.Handle, value, Nil, FILE_BEGIN)
+			    Dim hi As Integer = value.HighBits
+			    Call Win32.Kernel32.SetFilePointer(Me.Handle, value.LowBits, hi, FILE_BEGIN)
 			    mLastError = Win32.Kernel32.GetLastError()
 			  #endif
 			End Set
 		#tag EndSetter
-		Position As Integer
+		Position As Int64
 	#tag EndComputedProperty
 
 

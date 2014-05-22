@@ -330,6 +330,12 @@ Protected Module Win32
 	#tag Constant, Name = DSTINVERT, Type = Double, Dynamic = False, Default = \"&h00550009", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = DUPLICATE_CLOSE_SOURCE, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = DUPLICATE_SAME_ACCESS, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = ERROR_HANDLE_EOF, Type = Double, Dynamic = False, Default = \"&h26", Scope = Public
 	#tag EndConstant
 

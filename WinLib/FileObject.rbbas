@@ -11,6 +11,12 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Constructor(DuplicateFrom As BinaryStream)
+		  Me.Operator_Convert(New WinLib.FileObject(DuplicateFrom.Handle(BinaryStream.HandleTypeWin32Handle)))
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Constructor(Handle As Integer)
 		  // Part of the WinLib.Win32Object interface.
 		  mHandle = Handle
@@ -50,6 +56,20 @@ Implements WinLib.Win32Object
 		  // Part of the WinLib.Win32Object interface.
 		  Return mLastError
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Operator_Convert(File As WinLib.FileObject)
+		  Dim proc As Integer = Win32.Kernel32.GetCurrentProcess
+		  If Not Win32.Kernel32.DuplicateHandle(proc, File.Handle, proc, mHandle, 0, True, DUPLICATE_SAME_ACCESS) Then
+		    mLastError = Win32.Kernel32.GetLastError
+		    mHandle = INVALID_HANDLE_VALUE
+		    Dim err As New IOException
+		    err.ErrorNumber = Me.LastError
+		    err.Message = WinLib.FormatError(Me.LastError)
+		    Raise err
+		  End If
+		End Sub
 	#tag EndMethod
 
 

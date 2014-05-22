@@ -73,6 +73,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function DuplicateHandle Lib "Kernel32" (SourceProcess As Integer, SourceHandle As Integer, TargetProcess As Integer, ByRef TargetHandle As Integer, DesiredAccess As Integer, InheritHandle As Boolean, Options As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function ExpandEnvironmentStrings Lib "Kernel32" Alias "ExpandEnvironmentStringsW" (EnvString As WString, parsedString As Ptr, buffSize As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -453,7 +457,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetFilePointer Lib "Kernel32" (hFile As Integer, DistanceToMove As Integer, DistanceToMoveHigh As Ptr, MoveMethod As Integer) As Integer
+		Protected Declare Function SetFilePointer Lib "Kernel32" (hFile As Integer, DistanceToMove As Integer, ByRef DistanceToMoveHigh As Integer, MoveMethod As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
