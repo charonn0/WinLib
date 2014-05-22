@@ -20,6 +20,24 @@ Protected Module GUI
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function CaptureWindow(HWND As WinLib.WindowRef, IncludeBorder As Boolean = False) As Picture
+		  'Performs a capture on the specified window without capturing overlapping windows
+		  
+		  Dim screenCap As Picture
+		  If IncludeBorder Then Return CaptureRect(HWND.TrueLeft, HWND.TrueTop, HWND.TrueWidth, HWND.TrueHeight)
+		  
+		  #If TargetWin32 Then
+		    screenCap = New Picture(HWND.Width, HWND.Height, 24)
+		    Dim HDC As Integer = Win32.User32.GetDC(HWND.Handle)
+		    Call Win32.GDI32.BitBlt(screenCap.Graphics.Handle(1), 0, 0, HWND.Width, HWND.Height, HDC, 0, 0, SRCCOPY Or CAPTUREBLT)
+		    Call Win32.User32.ReleaseDC(HWND.Handle, HDC)
+		  #Endif
+		  
+		  Return screenCap
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function ExtractIcon(Resource as FolderItem, Index As Integer, pixSize As Integer = 32) As Picture
 		  //Extracts the specified Icon resource into a RB Picture. Returns Nil on error.
 		  //Icons are located in EXE, DLL, etc. type files, and are referenced by their index.
