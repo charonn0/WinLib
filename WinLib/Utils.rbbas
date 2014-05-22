@@ -70,6 +70,14 @@ Protected Module Utils
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Function GetSystemInfo() As SYSTEM_INFO
+		  Dim info As SYSTEM_INFO
+		  Win32.Kernel32.GetSystemInfo(info)
+		  Return info
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetSystemMetric(Index As Integer) As Integer
 		  #If TargetWin32 Then
 		    Return Win32.User32.GetSystemMetrics(Index)
@@ -112,9 +120,7 @@ Protected Module Utils
 		  //Returns the number of LOGICAL processor cores. e.g. a quad core processor with hyperthreading will have 8 logical cores.
 		  
 		  #If TargetWin32 Then
-		    Dim info As SYSTEM_INFO
-		    Win32.Kernel32.GetSystemInfo(info)
-		    Return info.numberOfProcessors
+		    Return GetSystemInfo.numberOfProcessors
 		  #endif
 		End Function
 	#tag EndMethod
