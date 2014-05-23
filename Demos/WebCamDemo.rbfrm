@@ -194,7 +194,7 @@ End
 		  If Me.Value Then
 		    Device.EmbedPreviewWithin(Canvas1)
 		    Device.ScalePreview = True
-		    Device.PreviewRate = 10
+		    Device.PreviewRate = 66
 		    If Not Device.StartPreview Then
 		      Call MsgBox( _
 		      "Unable to start preview." + EndOfLine + _

@@ -1,13 +1,6 @@
 #tag Class
 Class FolderWatcher
 Inherits WinLib.Waiter
-	#tag Event
-		Sub WaitSignalled(TimeoutElapsed As Boolean)
-		  'Dim changes As Integer = Win32.Kernel32.ReadDirectoryChangesW(
-		End Sub
-	#tag EndEvent
-
-
 	#tag Property, Flags = &h1
 		Protected ChangeHandle As Integer
 	#tag EndProperty
