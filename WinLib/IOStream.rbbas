@@ -3,6 +3,14 @@ Protected Class IOStream
 Inherits FileObject
 Implements Readable,Writeable
 	#tag Method, Flags = &h0
+		 Shared Function Create(File As FolderItem, Overwrite As Boolean = False) As WinLib.IOStream
+		  Dim disp As Integer
+		  If Overwrite Then disp = CREATE_ALWAYS Else disp = OPEN_ALWAYS
+		  Return New IOStream(CreateFile(File.AbsolutePath, GENERIC_ALL, FILE_SHARE_READ, disp, 0))
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function EOF() As Boolean
 		  // Part of the Readable interface.
 		  Return Me.Position >= Me.Length
@@ -20,6 +28,14 @@ Implements Readable,Writeable
 		    End If
 		  #endif
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function Open(File As FolderItem, ReadWrite As Boolean = True) As WinLib.IOStream
+		  Dim mode As Integer
+		  If ReadWrite Then mode = GENERIC_ALL Else mode = GENERIC_READ
+		  Return New IOStream(IOStream.CreateFile(File.AbsolutePath, mode, FILE_SHARE_READ, OPEN_EXISTING, 0))
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -161,20 +177,10 @@ Implements Readable,Writeable
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Length"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
 			InheritedFrom="Object"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Position"
-			Group="Behavior"
-			Type="Integer"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"
