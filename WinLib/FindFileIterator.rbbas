@@ -6,11 +6,12 @@ Implements WinLib.Win32Object
 		  // Part of the Win32.Win32Object interface.
 		  // This method closes the current FindFile operation and makes the class ready to begin another.
 		  #If TargetWin32 Then
-		    Call Win32.Kernel32.FindClose(FindHandle)
+		    If FindHandle <> INVALID_HANDLE_VALUE Then  Call Win32.Kernel32.FindClose(FindHandle)
 		  #endif
 		  FindHandle = INVALID_HANDLE_VALUE
 		  mLastError = 0
 		  mCurrentItem = Nil
+		  mCaseSensitive = False
 		End Sub
 	#tag EndMethod
 
@@ -86,7 +87,10 @@ Implements WinLib.Win32Object
 		    Dim namepattern As WString = "//?/" + ReplaceAll(RootDirectory.AbsolutePath, "/", "//") + SearchPattern + Chr(0)
 		    If FindHandle <= 0 Then
 		      If System.IsFunctionAvailable("FindFirstFileExW", "Kernel32") Then
-		        FindHandle = Win32.Kernel32.FindFirstFileEx(namepattern, 0, data, 0, Nil, FIND_FIRST_EX_LARGE_FETCH)
+		        Dim flags As Integer
+		        If WinLib.Utils.KernelVersion >= 6.1 Then flags = FIND_FIRST_EX_LARGE_FETCH
+		        If CaseSensitive Then flags = flags Or FIND_FIRST_EX_CASE_SENSITIVE
+		        FindHandle = Win32.Kernel32.FindFirstFileEx(namepattern, 0, data, 0, Nil, flags)
 		      Else
 		        FindHandle = Win32.Kernel32.FindFirstFile(NamePattern, data)
 		      End If
@@ -126,8 +130,31 @@ Implements WinLib.Win32Object
 	#tag EndNote
 
 
+	#tag ComputedProperty, Flags = &h0
+		#tag Note
+			Note that the user must have enabled case sensitivity in the registry for this feature to be available.
+			If the feature is unavailable then searches are not case sensitive.
+		#tag EndNote
+		#tag Getter
+			Get
+			  return mCaseSensitive
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  Me.Close
+			  mCaseSensitive = value
+			End Set
+		#tag EndSetter
+		CaseSensitive As Boolean
+	#tag EndComputedProperty
+
 	#tag Property, Flags = &h21
-		Private FindHandle As Integer
+		Private FindHandle As Integer = INVALID_HANDLE_VALUE
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mCaseSensitive As Boolean = False
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

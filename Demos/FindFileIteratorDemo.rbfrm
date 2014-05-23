@@ -235,6 +235,38 @@ Begin Window FindFileIteratorDemo
       Top             =   34
       Width           =   32
    End
+   Begin CheckBox CheckBox1
+      AutoDeactivate  =   True
+      Bold            =   ""
+      Caption         =   "Match case"
+      DataField       =   ""
+      DataSource      =   ""
+      Enabled         =   True
+      Height          =   20
+      HelpTag         =   ""
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   ""
+      Left            =   10
+      LockBottom      =   ""
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   ""
+      LockTop         =   True
+      Scope           =   0
+      State           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      TextFont        =   "System"
+      TextSize        =   0
+      TextUnit        =   0
+      Top             =   34
+      Underline       =   ""
+      Value           =   False
+      Visible         =   True
+      Width           =   82
+   End
 End
 #tag EndWindow
 
@@ -281,6 +313,7 @@ End
 	#tag Event
 		Sub Run()
 		  Dim fe As New FindFileIterator(RootFolder, TextField1.Text)
+		  fe.CaseSensitive = CheckBox1.Value
 		  Do Until Not fe.NextItem
 		    If fe.CurrentItem = Nil Then Continue
 		    Listed.Insert(0, fe.CurrentItem)
@@ -297,6 +330,17 @@ End
 		    Listbox1.AddRow(Listed.Pop.AbsolutePath)
 		    App.YieldToNextThread
 		  Wend
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events CheckBox1
+	#tag Event
+		Sub Open()
+		  Dim r As New RegistryItem("HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\kernel", False)
+		  Me.Visible = r.Value("obcaseinsensitive") = 0
+		  
+		Exception
+		  Me.Visible = False
 		End Sub
 	#tag EndEvent
 #tag EndEvents
