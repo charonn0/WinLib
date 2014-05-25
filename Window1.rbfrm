@@ -139,7 +139,6 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   3
       TabPanelIndex   =   0
-      TabStop         =   True
       Text            =   "Copyright (c) 2013-14 Andrew Lambert"
       TextAlign       =   2
       TextColor       =   &h000080FF
@@ -235,7 +234,7 @@ End
 		Private Sub WaitProcHandler(Sender As WinLib.Waiter, WaitFired As Boolean)
 		  #pragma Unused Sender
 		  System.DebugLog(CurrentMethodName)
-		  If WaitFired Then
+		  If Not WaitFired Then
 		    MsgBox("Change detected")
 		  Else
 		    MsgBox("Wait timed out")
