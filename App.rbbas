@@ -1,6 +1,18 @@
 #tag Class
 Protected Class App
 Inherits Application
+	#tag Event
+		Sub Open()
+		  'Dim g As FolderItem = GetSaveFolderItem("", "")
+		  'Dim f As New WinLib.IOStream(BinaryStream.Create(g))
+		  ''WinLib.IOStream.Open(g, False)'.AbsolutePath, GENERIC_WRITE, 0, OPEN_ALWAYS, 0)
+		  'f.Write("Hello, world!")
+		  'f.Close
+		  
+		End Sub
+	#tag EndEvent
+
+
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"
 		#Tag Instance, Platform = Linux, Language = Default, Definition  = \"&Delete"

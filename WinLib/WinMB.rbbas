@@ -265,6 +265,24 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 
+	#tag Note, Name = About this class
+		This class manages a block of memory that was not allocated by REALbasic.
+		
+		Use the shared methods to allocate a block of memory of the desired allocation type.
+		See http://msdn.microsoft.com/en-us/library/windows/desktop/aa366533%28v=vs.85%29.aspx for 
+		a discussion of the different allocation types.
+		
+		Once you have allocated the block, use the StringValue methods to COPY string data to and from
+		the block. For more direct access, convert the WinMB to a Ptr (e.g. Dim p As Ptr = MyWinMB) and 
+		operate on the Ptr. Do not attempt to free the converted Ptr.
+		
+		You may also use this class to manage blocks of memory allocated elsewhere by using the
+		Acquire shared method. An Acquired block will not be freed when the WinMB instance is destroyed
+		or when the Close method is called; you must free it yourself (if it is to be freed at all.)
+		
+	#tag EndNote
+
+
 	#tag Property, Flags = &h21
 		Private Freeable As Boolean
 	#tag EndProperty
