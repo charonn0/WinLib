@@ -32,7 +32,7 @@ Protected Module WinLib
 	#tag Method, Flags = &h1
 		Protected Function GetLastError() As Integer
 		  #If TargetWin32 Then
-		    Return Win32.Kernel32.GetLastError()
+		    Return Win32.LastError()
 		  #endif
 		End Function
 	#tag EndMethod

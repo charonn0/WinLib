@@ -24,7 +24,7 @@ Implements Readable,Writeable
 		    If Win32.Kernel32.FlushFileBuffers(Me.Handle) Then
 		      mLastError = 0
 		    Else
-		      mLastError = Win32.Kernel32.GetLastError()
+		      mLastError = Win32.LastError()
 		    End If
 		  #endif
 		End Sub
@@ -48,7 +48,7 @@ Implements Readable,Writeable
 		    If Win32.Kernel32.ReadFile(Me.Handle, mb, mb.Size, read, Nil) Then
 		      mLastError = 0
 		    Else
-		      mLastError = Win32.Kernel32.GetLastError
+		      mLastError = Win32.LastError
 		      Dim err As New IOException
 		      err.ErrorNumber = Me.LastError
 		      err.Message = WinLib.FormatError(Me.LastError)
@@ -78,7 +78,7 @@ Implements Readable,Writeable
 		    If Win32.Kernel32.WriteFile(Me.Handle, mb, mb.Size, written, Nil) Then
 		      mLastError = 0
 		    Else
-		      mLastError = Win32.Kernel32.GetLastError()
+		      mLastError = Win32.LastError()
 		      Dim err As New IOException
 		      err.ErrorNumber = Me.LastError
 		      err.Message = WinLib.FormatError(Me.LastError)
@@ -105,7 +105,7 @@ Implements Readable,Writeable
 			    Dim hi As Integer
 			    value = Win32.Kernel32.SetFilePointer(Me.Handle, 0, hi, FILE_END)
 			    Me.Position = oldvalue
-			    mLastError = Win32.Kernel32.GetLastError()
+			    mLastError = Win32.LastError()
 			    Dim ret As Int64
 			    ret.HighBits = hi
 			    ret.LowBits = value
@@ -123,7 +123,7 @@ Implements Readable,Writeable
 			    Dim oldvalue As Integer = Me.Position
 			    Me.Position = value
 			    If Not Win32.Kernel32.SetEndOfFile(Me.Handle) Then
-			      mLastError = Win32.Kernel32.GetLastError()
+			      mLastError = Win32.LastError()
 			    Else
 			      mLastError = 0
 			    End If
@@ -140,7 +140,7 @@ Implements Readable,Writeable
 			  #If TargetWin32 Then
 			    Dim hi As Integer
 			    Dim value As Integer = Win32.Kernel32.SetFilePointer(Me.Handle, 0, hi, FILE_CURRENT)
-			    mLastError = Win32.Kernel32.GetLastError()
+			    mLastError = Win32.LastError()
 			    Dim ret As Int64
 			    ret.HighBits = hi
 			    ret.LowBits = value
@@ -153,7 +153,7 @@ Implements Readable,Writeable
 			  #If TargetWin32 Then
 			    Dim hi As Integer = value.HighBits
 			    Call Win32.Kernel32.SetFilePointer(Me.Handle, value.LowBits, hi, FILE_BEGIN)
-			    mLastError = Win32.Kernel32.GetLastError()
+			    mLastError = Win32.LastError()
 			  #endif
 			End Set
 		#tag EndSetter

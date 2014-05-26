@@ -24,11 +24,11 @@ Implements WinLib.Win32Object
 		  If Freeable Then
 		    Select Case HeapHandle
 		    Case TypeGlobal ' GlobalAllocate
-		      If Not Win32.Kernel32.GlobalFree(Me.Handle) Then mLastError = Win32.Kernel32.GetLastError()
+		      If Not Win32.Kernel32.GlobalFree(Me.Handle) Then mLastError = Win32.LastError()
 		    Case TypeVirtual ' VirtualAllocate
-		      If Not Win32.Kernel32.VirtualFree(Me.Handle, 0, MEM_RELEASE) Then mLastError = Win32.Kernel32.GetLastError()
+		      If Not Win32.Kernel32.VirtualFree(Me.Handle, 0, MEM_RELEASE) Then mLastError = Win32.LastError()
 		    Case Is >0 ' HeapAllocate
-		      If Not Win32.Kernel32.HeapFree(HeapHandle, 0, Me.Handle) Then mLastError = Win32.Kernel32.GetLastError()
+		      If Not Win32.Kernel32.HeapFree(HeapHandle, 0, Me.Handle) Then mLastError = Win32.LastError()
 		    End Select
 		  Else
 		    ' Memory not allocated by us, so not freed by us.
@@ -62,7 +62,7 @@ Implements WinLib.Win32Object
 		      'mb.mSize = Size
 		      Return mb
 		    Else
-		      p = Win32.Kernel32.GetLastError
+		      p = Win32.LastError
 		      Dim err As New RuntimeException
 		      err.ErrorNumber = p
 		      err.Message = WinLib.FormatError(p)
@@ -93,7 +93,7 @@ Implements WinLib.Win32Object
 		      'mb.mSize = Size
 		      Return mb
 		    Else
-		      p = Win32.Kernel32.GetLastError
+		      p = Win32.LastError
 		      Dim err As New RuntimeException
 		      err.ErrorNumber = p
 		      err.Message = WinLib.FormatError(p)
@@ -123,7 +123,7 @@ Implements WinLib.Win32Object
 		  Else ' HeapAllocate
 		    ret = Win32.Kernel32.HeapLock(Me.Handle)
 		  End Select
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		  Return ret
 		End Function
 	#tag EndMethod
@@ -150,7 +150,7 @@ Implements WinLib.Win32Object
 		  Case TypeGlobal  ' GlobalAllocate
 		    If Not Me.Lock Then Return False
 		    Dim i As Integer = Win32.Kernel32.GlobalReAlloc(Me.Handle, NewSize, 0)
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		    If i <> 0 Then
 		      mHandle = i
 		      ret = True
@@ -160,7 +160,7 @@ Implements WinLib.Win32Object
 		    Return False 'Win32.Kernel32.VirtualUnlock(Me.Handle, mSize)
 		  Else             ' HeapAllocate
 		    Dim i As Integer = Win32.Kernel32.HeapReAlloc(HeapHandle, 0, Me.Handle, NewSize)
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		    If i <> 0 Then
 		      mHandle = i
 		      ret = True
@@ -178,7 +178,7 @@ Implements WinLib.Win32Object
 		    Case TypeGlobal ' GlobalAllocate
 		      If Not Me.Lock Then Return -1
 		      mSize = Win32.Kernel32.GlobalSize(Me.Handle)
-		      mLastError = Win32.Kernel32.GetLastError()
+		      mLastError = Win32.LastError()
 		      Call Me.Unlock
 		    Case TypeVirtual ' VirtualAllocate
 		      '#pragma Warning "FIXME" ' This doesn't return the size of the block
@@ -189,12 +189,12 @@ Implements WinLib.Win32Object
 		          Call Win32.Kernel32.VirtualQuery(Me.Handle + mSize, meta, meta.Size)
 		        Loop
 		      Else
-		        mLastError = Win32.Kernel32.GetLastError()
+		        mLastError = Win32.LastError()
 		        Return 0
 		      End If
 		    Else ' HeapAllocate
 		      mSize = Win32.Kernel32.HeapSize(HeapHandle, 0, Me.Handle)
-		      mLastError = Win32.Kernel32.GetLastError()
+		      mLastError = Win32.LastError()
 		    End Select
 		  End If
 		  Return mSize
@@ -239,7 +239,7 @@ Implements WinLib.Win32Object
 		  Else             ' HeapAllocate
 		    ret = Win32.Kernel32.HeapUnlock(Me.Handle)
 		  End Select
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		  MemLock.Release
 		  Return ret
 		End Function
@@ -254,7 +254,7 @@ Implements WinLib.Win32Object
 		    m.mSize = Size
 		    Return m
 		  Else
-		    p = Win32.Kernel32.GetLastError
+		    p = Win32.LastError
 		    Dim err As New RuntimeException
 		    err.ErrorNumber = p
 		    err.Message = WinLib.FormatError(p)
@@ -279,7 +279,6 @@ Implements WinLib.Win32Object
 		You may also use this class to manage blocks of memory allocated elsewhere by using the
 		Acquire shared method. An Acquired block will not be freed when the WinMB instance is destroyed
 		or when the Close method is called; you must free it yourself (if it is to be freed at all.)
-		
 	#tag EndNote
 
 

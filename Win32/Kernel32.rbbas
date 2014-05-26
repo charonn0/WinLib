@@ -465,6 +465,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Sub SetLastError Lib "Kernel32" (ErrorNumber As Integer)
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SetPriorityClass Lib "Kernel32" (ProcessHandle As Integer, NewPriority As Integer) As Boolean
 	#tag EndExternalMethod
 

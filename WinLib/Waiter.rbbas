@@ -5,7 +5,7 @@ Implements WinLib.Win32Object
 		Sub Close()
 		  // Part of the WinLib.Win32Object interface.
 		  If Not Win32.Kernel32.UnregisterWait(Me.Handle) Then
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		  Else
 		    mLastError = 0
 		  End If
@@ -79,7 +79,7 @@ Implements WinLib.Win32Object
 		  Loop Until Not Waiters.HasKey(token)
 		  Waiters.Value(token) = Me
 		  If Not Win32.Kernel32.RegisterWaitForSingleObject(mHandle, Waitable, AddressOf DefWaitProc, Ptr(token), Timeout, WT_EXECUTEONLYONCE) Then
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		  Else
 		    mLastError = 0
 		  End If

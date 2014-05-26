@@ -5,7 +5,7 @@ Implements WinLib.Win32Object
 		Sub Close()
 		  // Part of the WinLib.Win32Object interface.
 		  If Not Win32.Kernel32.CloseHandle(mHandle) Then
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		  End If
 		End Sub
 	#tag EndMethod
@@ -14,7 +14,7 @@ Implements WinLib.Win32Object
 		Sub Constructor(DuplicateFrom As BinaryStream)
 		  Dim proc As Integer = Win32.Kernel32.GetCurrentProcess
 		  If Not Win32.Kernel32.DuplicateHandle(proc, DuplicateFrom.Handle(BinaryStream.HandleTypeWin32Handle), proc, mHandle, 0, True, DUPLICATE_SAME_ACCESS) Then
-		    mLastError = Win32.Kernel32.GetLastError
+		    mLastError = Win32.LastError
 		    mHandle = INVALID_HANDLE_VALUE
 		    Dim err As New IOException
 		    err.ErrorNumber = Me.LastError
@@ -42,7 +42,7 @@ Implements WinLib.Win32Object
 		  Dim hFile As Integer
 		  hFile = Win32.Kernel32.CreateFile(Filename, DesiredAccess, Sharemode, SecurityAttributes, CreationDisposition, Flags, TemplateFile)
 		  If hFile = INVALID_HANDLE_VALUE Then
-		    hFile = Win32.Kernel32.GetLastError
+		    hFile = Win32.LastError
 		    Dim err As New IOException
 		    err.ErrorNumber = hFile
 		    err.Message = WinLib.FormatError(hFile)
@@ -57,7 +57,7 @@ Implements WinLib.Win32Object
 		  Dim proc As Integer = Win32.Kernel32.GetCurrentProcess
 		  Dim newref As Integer
 		  If Not Win32.Kernel32.DuplicateHandle(proc, Me.Handle, proc, newref, 0, True, DUPLICATE_SAME_ACCESS) Then
-		    mLastError = Win32.Kernel32.GetLastError
+		    mLastError = Win32.LastError
 		    mHandle = INVALID_HANDLE_VALUE
 		    Dim err As New IOException
 		    err.ErrorNumber = Me.LastError

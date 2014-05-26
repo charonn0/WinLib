@@ -154,10 +154,10 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Function Terminate(ExitCode As Integer = 0) As Boolean
 		  Dim prochandle As Integer = Win32.Kernel32.OpenProcess(PROCESS_TERMINATE, False, Me.ProcessID)
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		  If prochandle <> 0 Then
 		    Dim success As Boolean = Win32.Kernel32.TerminateProcess(prochandle, ExitCode)
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		    Call Win32.Kernel32.CloseHandle(prochandle)
 		    Return success
 		  End If
@@ -170,10 +170,10 @@ Implements WinLib.Win32Object
 			Get
 			  Dim prochandle, priority As Integer
 			  prochandle = Win32.Kernel32.OpenProcess(PROCESS_QUERY_INFORMATION, False, Me.ProcessID)
-			  mLastError = Win32.Kernel32.GetLastError()
+			  mLastError = Win32.LastError()
 			  If mLastError = 0 Then
 			    priority = Win32.Kernel32.GetPriorityClass(prochandle)
-			    mLastError = Win32.Kernel32.GetLastError()
+			    mLastError = Win32.LastError()
 			  End If
 			  Call Win32.Kernel32.CloseHandle(prochandle)
 			  Return priority
@@ -182,10 +182,10 @@ Implements WinLib.Win32Object
 		#tag Setter
 			Set
 			  Dim prochandle As Integer = Win32.Kernel32.OpenProcess(PROCESS_SET_INFORMATION, False, Me.ProcessID)
-			  mLastError = Win32.Kernel32.GetLastError()
+			  mLastError = Win32.LastError()
 			  If mLastError = 0 Then
 			    Call Win32.Kernel32.SetPriorityClass(prochandle, value)
-			    mLastError = Win32.Kernel32.GetLastError()
+			    mLastError = Win32.LastError()
 			  End If
 			  Call Win32.Kernel32.CloseHandle(prochandle)
 			End Set

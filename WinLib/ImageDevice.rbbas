@@ -7,8 +7,8 @@ Implements WinLib.Win32Object
 		  // Part of the WinLib.Win32Object interface.
 		  If CapWin <> 0 Then
 		    Call Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_DISCONNECT, mIndex, 0)
-		    mLastError = Win32.Kernel32.GetLastError()
-		    If Not Win32.User32.DestroyWindow(CapWin) Then mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
+		    If Not Win32.User32.DestroyWindow(CapWin) Then mLastError = Win32.LastError()
 		    CapWin = 0
 		  End If
 		End Sub
@@ -48,7 +48,7 @@ Implements WinLib.Win32Object
 		  Me.Close
 		  CapWin = Win32.Avicap32.capCreateCaptureWindow(Me.Name, WS_VISIBLE Or WS_CHILD, X, Y, W, H, Parent, 0)
 		  If CapWin <= 0 Then
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		    Return
 		  End If
 		  If Win32.User32.SendMessage(CapWin, WM_CAP_DRIVER_CONNECT, mIndex, 0) > 0 Then
@@ -60,7 +60,7 @@ Implements WinLib.Win32Object
 		    'Dim mb As MemoryBlock = parms.StringValue(TargetLittleEndian)
 		    'If Win32.User32.SendMessage(CapWin, WM_CAP_SET_SEQUENCE_SETUP, Ptr(mb.Size), mb) = 0 Then Break
 		  End If
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		  
 		  
 		End Sub
@@ -129,7 +129,7 @@ Implements WinLib.Win32Object
 		  If Win32.Avicap32.capGetDriverDescription(mIndex, nm, nm.Size, Nil, 0) Then
 		    Return nm.WString(0)
 		  Else
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		  End If
 		End Function
 	#tag EndMethod
@@ -137,7 +137,7 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub PreviewRate(Assigns Millisecs As Integer)
 		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEWRATE, Millisecs, 0)
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		End Sub
 	#tag EndMethod
 
@@ -148,14 +148,14 @@ Implements WinLib.Win32Object
 		  Else
 		    Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_SCALE, 0, 0)
 		  End If
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function StartPreview() As Boolean
 		  If Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 1, 0) = 0 Then
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		    Return False
 		  Else
 		    mLastError = 0
@@ -167,7 +167,7 @@ Implements WinLib.Win32Object
 	#tag Method, Flags = &h0
 		Sub StopPreview()
 		  Call Win32.User32.SendMessage(CapWin, WM_CAP_SET_PREVIEW, 0, 0)
-		  mLastError = Win32.Kernel32.GetLastError()
+		  mLastError = Win32.LastError()
 		End Sub
 	#tag EndMethod
 
@@ -177,7 +177,7 @@ Implements WinLib.Win32Object
 		  If Win32.Avicap32.capGetDriverDescription(mIndex, Nil, 0, ver, ver.Size) Then
 		    Return ver.WString(0)
 		  Else
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		  End If
 		End Function
 	#tag EndMethod

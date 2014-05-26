@@ -7,7 +7,7 @@ Inherits FileObject
 		    UnMapView(MappedViews(i))
 		  Next
 		  If Not Win32.Kernel32.CloseHandle(MapHandle) Then
-		    mLastError = Win32.Kernel32.GetLastError
+		    mLastError = Win32.LastError
 		  End If
 		  Super.Close
 		End Sub
@@ -38,7 +38,7 @@ Inherits FileObject
 		  If hMap > 0 Then
 		    Return New Mapping(File, hMap)
 		  Else
-		    hMap = Win32.Kernel32.GetLastError
+		    hMap = Win32.LastError
 		    Dim err As New IOException
 		    err.ErrorNumber = hMap
 		    err.Message = WinLib.FormatError(hMap)
@@ -61,7 +61,7 @@ Inherits FileObject
 		    MappedViews.Append(mb)
 		    Return mb
 		  Else
-		    mLastError = Win32.Kernel32.GetLastError()
+		    mLastError = Win32.LastError()
 		  End If
 		End Function
 	#tag EndMethod
@@ -72,7 +72,7 @@ Inherits FileObject
 		  If hMap > 0 Then
 		    Return New Mapping(hMap)
 		  Else
-		    hMap = Win32.Kernel32.GetLastError
+		    hMap = Win32.LastError
 		    Dim err As New IOException
 		    err.ErrorNumber = hMap
 		    err.Message = WinLib.FormatError(hMap)
@@ -90,7 +90,7 @@ Inherits FileObject
 		  Next
 		  
 		  If Not Win32.Kernel32.UnmapViewOfFile(Map) Then
-		    mLastError = Win32.Kernel32.GetLastError
+		    mLastError = Win32.LastError
 		  End If
 		End Sub
 	#tag EndMethod

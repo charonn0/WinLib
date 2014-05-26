@@ -89,7 +89,7 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function Executable() As FolderItem
-		  Dim mb As MemoryBlock = QueryConfig 
+		  Dim mb As MemoryBlock = QueryConfig
 		  If mb.WString(36).Trim <> "" Then
 		    Return GetFolderItem(mb.WString(36))'12))
 		  End If
@@ -194,7 +194,7 @@ Implements WinLib.Win32Object
 		  #If TargetWin32 Then
 		    Dim stat As SERVICE_STATUS
 		    If Not Win32.AdvApi32.QueryServiceStatus(Me.Handle, stat) Then
-		      mLastError = Win32.Kernel32.GetLastError()
+		      mLastError = Win32.LastError()
 		      Exit Function
 		    End If
 		    Return stat
