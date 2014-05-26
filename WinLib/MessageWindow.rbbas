@@ -2,6 +2,7 @@
 Class MessageWindow
 Inherits WinLib.MessageMonitor
 Implements WinLib.Win32Object
+	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub Close()
 		  Super.Close

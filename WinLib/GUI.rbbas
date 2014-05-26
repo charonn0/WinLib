@@ -46,7 +46,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function FindFirstWindow(WindowName As String, WindowClass As String = "") As WindowRef
 		  #If TargetWin32 Then
 		    Dim HWND, err as integer
@@ -60,7 +60,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function FindNextWindow(FindRef As WindowRef) As WindowRef
 		  #If TargetWin32 Then
 		    Dim HWND, err as integer
@@ -72,7 +72,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function GetDesktopWindow() As WindowRef
 		  #If TargetWin32 Then
 		    Dim HWND As Integer = Win32.User32.GetDesktopWindow
@@ -81,7 +81,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function ListWindows(PartialTitle As String = "") As WindowRef()
 		  #If TargetWin32 Then
 		    Dim wins() As WindowRef
@@ -102,7 +102,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function LoadFontFile(FontFile As FolderItem) As Boolean
 		  Dim flags As Integer = FR_PRIVATE
 		  #If TargetWin32 Then
@@ -111,7 +111,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function Pixel(X As Integer, Y As Integer) As Color
 		  // This method replaces System.Pixel which has been removed from RB as of RS2012R2
 		  
@@ -212,7 +212,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function UnloadFontFile(FontFile As FolderItem) As Boolean
 		  Dim flags As Integer = FR_PRIVATE
 		  #If TargetWin32 Then
@@ -221,7 +221,7 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function WindowFromXY(X As Integer, Y As Integer) As WindowRef
 		  #If TargetWin32 Then
 		    Dim p As Win32.POINT
@@ -239,7 +239,7 @@ Protected Module GUI
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h1
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		#tag Getter
 			Get
 			  ' Returns a Rectangle within which the mouse cursor is currently allowed move.
@@ -274,7 +274,7 @@ Protected Module GUI
 		Protected CursorConfinementArea As REALbasic.Rect
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h1
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		#tag Getter
 			Get
 			  ' Vista and newer. Returns true if desktop composition is enabled.

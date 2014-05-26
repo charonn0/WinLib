@@ -1,6 +1,7 @@
 #tag Class
 Class WindowRef
 Implements WinLib.Win32Object
+	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub BringToFront()
 		  ' This will raise the referenced window to the top of the Z-order if the

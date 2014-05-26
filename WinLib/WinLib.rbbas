@@ -1,12 +1,12 @@
 #tag Module
 Protected Module WinLib
-	#tag Method, Flags = &h0
+	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		Function CF_BITMAP() As WinLib.ClipboardFormat
 		  Return New WinLib.ClipboardFormat(Win32.CF_BITMAP)
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
+	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		Function CF_TEXT() As WinLib.ClipboardFormat
 		  Return New WinLib.ClipboardFormat(Win32.CF_TEXT)
 		End Function

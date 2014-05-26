@@ -154,7 +154,7 @@ Protected Module Utils
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function ShutdownAbort() As Boolean
 		  #If TargetWin32 Then
 		    Return Win32.AdvApi32.AbortSystemShutdown("")
@@ -162,9 +162,9 @@ Protected Module Utils
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function ShutdownBlock(Reason As String, OwnerWindow As Window = Nil) As Boolean
-		  #If TargetWin32 And TargetHasGUI Then
+		  #If TargetWin32 Then
 		    ' Blocks system shutdown for the specified reason. The user may override a block.
 		    ' Note that blocks only apply to shutdown operations started with InitiateShutdown,
 		    ' not those started by calling ExitWindows
@@ -177,9 +177,9 @@ Protected Module Utils
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function ShutdownBlockQuery(OwnerWindow As Window = Nil) As String
-		  #If TargetWin32 And TargetHasGUI Then
+		  #If TargetWin32 Then
 		    If Not System.IsFunctionAvailable("ShutdownBlockReasonQuery", "User32") Then Return "" ' Vista and newer only
 		    If OwnerWindow = Nil Then OwnerWindow = Window(0)
 		    Dim mb As New MemoryBlock(MAX_STR_BLOCKREASON)
@@ -191,7 +191,7 @@ Protected Module Utils
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function ShutdownInitiate(Message As String = "", Reboot As Boolean = False, Timeout As Integer = 0, ForceQuit As Boolean = False, Reason As Integer = - 1) As Boolean
 		  #If TargetWin32 Then
 		    If Reason = -1 Then
@@ -203,9 +203,9 @@ Protected Module Utils
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
+	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function ShutdownUnblock(OwnerWindow As Window = Nil) As Boolean
-		  #If TargetWin32 And TargetHasGUI Then
+		  #If TargetWin32 Then
 		    If Not System.IsFunctionAvailable("ShutdownBlockReasonDestroy", "User32") Then Return False ' Vista and newer only
 		    If OwnerWindow = Nil Then OwnerWindow = Window(0)
 		    Return Win32.User32.ShutdownBlockReasonDestroy(OwnerWindow.Handle)

@@ -1,6 +1,7 @@
 #tag Class
 Class HotKeyMonitor
 Inherits WinLib.MessageMonitor
+	#tag CompatibilityFlags = TargetHasGUI
 	#tag Event
 		Function WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #pragma Unused HWND

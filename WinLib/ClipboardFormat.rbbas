@@ -1,6 +1,7 @@
 #tag Class
 Protected Class ClipboardFormat
 Implements WinLib.Win32Object
+	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the WinLib.Win32Object interface.
