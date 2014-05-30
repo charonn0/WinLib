@@ -1,5 +1,6 @@
 #tag Class
-Class ConsoleBuffer
+Protected Class ScreenBuffer
+Inherits WinLib.FileObject
 Implements WinLib.Win32Object
 	#tag Method, Flags = &h1
 		Protected Function BufferInfo() As CONSOLE_SCREEN_BUFFER_INFO
@@ -31,33 +32,37 @@ Implements WinLib.Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Close()
-		  // Part of the WinLib.Win32Object interface.
-		  #If Not TargetHasGUI And TargetWin32 Then
-		    Call Win32.Kernel32.CloseHandle(mHandle)
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
+	#tag Method, Flags = &h1000
 		Sub Constructor()
-		  #If Not TargetHasGUI And TargetWin32 Then
-		    mHandle = Win32.Kernel32.CreateConsoleScreenBuffer(GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ, Nil, CONSOLE_TEXTMODE_BUFFER, Nil)
-		    mLastError = WinLib.GetLastError
-		  #endif
+		  Dim h As Integer = Win32.Kernel32.CreateConsoleScreenBuffer(GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ, Nil, CONSOLE_TEXTMODE_BUFFER, Nil)
+		  mLastError = WinLib.GetLastError
+		  If h > 0 Then
+		    // Calling the overridden superclass constructor.
+		    // Constructor(Handle As Integer) -- From FileObject
+		    Super.Constructor(h)
+		  Else
+		    Dim err As New IOException
+		    err.Message = WinLib.FormatError(mLastError)
+		    err.ErrorNumber = mLastError
+		    Raise err
+		  End If
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Handle As Integer)
-		  // Part of the WinLib.Win32Object interface.
-		  #If Not TargetHasGUI And TargetWin32 Then
-		    mHandle = Handle
-		  #else
-		    #pragma Unused Handle
-		  #endif
-		End Sub
+		 Shared Function CurrentBuffer() As WinLib.ScreenBuffer
+		  Dim hBuffer, err As Integer
+		  hBuffer = Win32.Kernel32.CreateFile("CONOUT$", GENERIC_READ Or GENERIC_WRITE, 0, Nil, OPEN_EXISTING, 0, 0)
+		  err = WinLib.GetLastError()
+		  If hBuffer <> INVALID_HANDLE_VALUE Then
+		    Return New WinLib.ScreenBuffer(hBuffer)
+		  Else
+		    Dim e As New IOException
+		    e.Message = CurrentMethodName + ": " + FormatError(err)
+		    e.ErrorNumber = err
+		    Raise e
+		  End If
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
@@ -82,29 +87,6 @@ Implements WinLib.Win32Object
 		  #Else
 		    #pragma Unused x
 		    #pragma Unused y
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Handle() As Integer
-		  // Part of the WinLib.Win32Object interface.
-		  Return mHandle
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function LastError() As Integer
-		  // Part of the WinLib.Win32Object interface.
-		  Return mLastError
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function MakeActive() As Boolean
-		  #If Not TargetHasGUI And TargetWin32 Then
-		    Return Win32.Kernel32.SetConsoleActiveScreenBuffer(mHandle)
 		  #endif
 		End Function
 	#tag EndMethod
@@ -145,14 +127,6 @@ Implements WinLib.Win32Object
 		    #pragma Unused Combine
 		  #endif
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function StdInput() As Readable
-		  #If TargetHasGUI And TargetWin32 Then
-		    Return New WinLib.IOStream(mHandle)
-		  #endif
-		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -291,14 +265,6 @@ Implements WinLib.Win32Object
 		#tag EndSetter
 		CursorRow As Integer
 	#tag EndComputedProperty
-
-	#tag Property, Flags = &h1
-		Protected mHandle As Integer
-	#tag EndProperty
-
-	#tag Property, Flags = &h1
-		Protected mLastError As Integer
-	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter

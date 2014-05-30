@@ -1,9 +1,9 @@
 #tag Module
 Protected Module Console
 	#tag Method, Flags = &h1
-		Protected Function GetCurrentBuffer() As WinLib.ConsoleBuffer
+		Protected Function GetCurrentBuffer() As WinLib.ScreenBuffer
 		  #If TargetWin32 Then
-		    Return New WinLib.ConsoleBuffer(StdOutHandle)
+		    Return New WinLib.ScreenBuffer(StdOutHandle)
 		  #endif
 		End Function
 	#tag EndMethod

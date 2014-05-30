@@ -26,6 +26,24 @@ Inherits ConsoleApplication
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h0
+		Function ActiveScreenBuffer() As WinLib.ScreenBuffer
+		  Return WinLib.ScreenBuffer.CurrentBuffer()
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ActiveScreenBuffer(Assigns Buffer As WinLib.ScreenBuffer)
+		  #If Not TargetHasGUI And TargetWin32 Then
+		    If Win32.Kernel32.SetConsoleActiveScreenBuffer(Buffer.Handle) Then 
+		      StdOut = Buffer.StdOutput
+		    Else
+		      mLastError = WinLib.GetLastError
+		    End If
+		  #endif
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function CancelClose(CloseType As Integer) As Boolean
 		  Return RaiseEvent CancelClose(CloseType)
@@ -40,7 +58,7 @@ Inherits ConsoleApplication
 		  Wend
 		  Dim ret As Boolean
 		  Try
-		    If mApp.Value <> Nil And mApp.Value Is App Then 
+		    If mApp.Value <> Nil And mApp.Value Is App Then
 		      ret = ConsoleApp(mApp.Value).CancelClose(ControlType)
 		    End If
 		  Finally
@@ -189,6 +207,12 @@ Inherits ConsoleApplication
 		  Else
 		    Return REALbasic.Input()
 		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LastError() As Integer
+		  Return mLastError
 		End Function
 	#tag EndMethod
 
@@ -480,6 +504,10 @@ Inherits ConsoleApplication
 
 	#tag Property, Flags = &h21
 		Private Shared mApp As WeakRef
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected mLastError As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
