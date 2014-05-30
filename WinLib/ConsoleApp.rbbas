@@ -3,12 +3,17 @@ Protected Class ConsoleApp
 Inherits ConsoleApplication
 	#tag Event
 		Function Run(args() as String) As Integer
+		  Interrrupt = New Semaphore
 		  mApp = New WeakRef(Me)
 		  Call Win32.Kernel32.SetConsoleCtrlHandler(AddressOf CancelQuit, True)
 		  RaiseEvent Startup(args)
 		  
 		  Do Until RaiseEvent EventLoop() <> 0
+		    While Not Interrrupt.TrySignal
+		      App.YieldToNextThread
+		    Wend
 		    DoEvents
+		    Interrrupt.Release
 		  Loop
 		End Function
 	#tag EndEvent
@@ -30,7 +35,18 @@ Inherits ConsoleApplication
 	#tag Method, Flags = &h21
 		Private Shared Function CancelQuit(ControlType As Integer) As Boolean
 		  #pragma X86CallingConvention StdCall
-		  If mApp.Value <> Nil And mApp.Value Is App Then Return ConsoleApp(mApp.Value).CancelClose(ControlType)
+		  While Not Interrrupt.TrySignal
+		    Continue
+		  Wend
+		  Dim ret As Boolean
+		  Try
+		    If mApp.Value <> Nil And mApp.Value Is App Then 
+		      ret = ConsoleApp(mApp.Value).CancelClose(ControlType)
+		    End If
+		  Finally
+		    Interrrupt.Release
+		  End Try
+		  Return ret
 		End Function
 	#tag EndMethod
 
@@ -148,6 +164,20 @@ Inherits ConsoleApplication
 		  // see http://realsoftware.com/feedback/viewreport.php?reportid=urvbevct
 		  
 		  Return result
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Clear() As Boolean
+		  //Clears the screen and moves the cursor to the top left corner (0,0)
+		  Return WinLib.Console.GetCurrentBuffer.Clear
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetChar(x As Integer, y As Integer) As String
+		  //Returns the character from the specified character cell in the screen buffer.
+		  Return WinLib.Console.GetCurrentBuffer.GetChar(x, y)
 		End Function
 	#tag EndMethod
 
@@ -284,6 +314,14 @@ Inherits ConsoleApplication
 	#tag Method, Flags = &h0
 		Sub PrintError(Line As String)
 		  StdErr.Write(Line + EndOfLine)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub SetChar(x As Integer, y As Integer, char As String)
+		  //Writes the character specified to the character cell specified in the screen buffer
+		  
+		  WinLib.Console.GetCurrentBuffer.SetChar(x, y, char)
 		End Sub
 	#tag EndMethod
 
@@ -434,6 +472,10 @@ Inherits ConsoleApplication
 
 	#tag Property, Flags = &h21
 		Private Instream As Readable
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared Interrrupt As Semaphore
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
