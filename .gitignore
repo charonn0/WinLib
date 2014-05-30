@@ -15,3 +15,6 @@ Debug*/Debug*.exe
 Debug*/Debug*\ Libs
 *.rbuistate
 *.obsolete
+
+Console/Win32/
+Console/WinLib/
