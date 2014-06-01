@@ -327,6 +327,12 @@ Protected Module Win32
 	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CTRL_BREAK_EVENT, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CTRL_C_EVENT, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = DELETE, Type = Double, Dynamic = False, Default = \"&h00010000", Scope = Public
 	#tag EndConstant
 
