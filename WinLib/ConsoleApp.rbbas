@@ -35,7 +35,7 @@ Inherits ConsoleApplication
 	#tag Method, Flags = &h0
 		Sub ActiveScreenBuffer(Assigns Buffer As WinLib.ScreenBuffer)
 		  #If Not TargetHasGUI And TargetWin32 Then
-		    If Win32.Kernel32.SetConsoleActiveScreenBuffer(Buffer.Handle) Then 
+		    If Win32.Kernel32.SetConsoleActiveScreenBuffer(Buffer.Handle) Then
 		      StdOut = Buffer.StdOutput
 		    Else
 		      mLastError = WinLib.GetLastError
@@ -368,6 +368,8 @@ Inherits ConsoleApplication
 		    BinaryStream(StdErr).Close
 		  Case IsA TextOutputStream
 		    TextOutputStream(StdErr).Close
+		  Case IsA WinLib.FileObject
+		    WinLib.FileObject(StdErr).Close
 		  Else
 		    Raise New TypeMismatchException
 		  End Select
@@ -394,6 +396,8 @@ Inherits ConsoleApplication
 		    BinaryStream(StdIn).Close
 		  Case IsA TextInputStream
 		    TextInputStream(StdIn).Close
+		  Case IsA WinLib.FileObject
+		    WinLib.FileObject(StdIn).Close
 		  Else
 		    Raise New TypeMismatchException
 		  End Select
@@ -420,6 +424,8 @@ Inherits ConsoleApplication
 		    BinaryStream(StdOut).Close
 		  Case IsA TextOutputStream
 		    TextOutputStream(StdOut).Close
+		  Case IsA WinLib.FileObject
+		    WinLib.FileObject(StdOut).Close
 		  Else
 		    Raise New TypeMismatchException
 		  End Select
