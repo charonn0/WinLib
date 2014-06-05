@@ -70,7 +70,7 @@ Protected Module Utils
 		Protected Function SetPrivilege(PrivilegeName As String, Enabled As Boolean) As Boolean
 		  //Modifies the calling process' security token
 		  //See the SE_* Constants for privilege names.
-		  //Returns 0 on success, or a Win32 error number on failure.
+		  //Returns True on success
 		  #If TargetWin32 Then
 		    Dim luid As New MemoryBlock(8)
 		    If Win32.AdvApi32.LookupPrivilegeValue(Nil, PrivilegeName, luid) Then
