@@ -1,6 +1,10 @@
 #tag Module
 Protected Module User32
 	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function AddClipboardFormatListener Lib "User32" (HWND As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function AdjustWindowRect Lib "User32" (ByRef WindowRect As RECT, Style As Integer, bMenu As Boolean) As Boolean
 	#tag EndExternalMethod
 
@@ -258,6 +262,10 @@ Protected Module User32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function ReleaseDC Lib "User32" (HWND As Integer, DC As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function RemoveClipboardFormatListener Lib "User32" (HWND As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

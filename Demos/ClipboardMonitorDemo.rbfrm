@@ -97,17 +97,13 @@ Begin Window ClipboardMonitorDemo
       Width           =   256
    End
    Begin ClipboardMonitor ClipboardMonitor1
-      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   563
       LockedInPosition=   False
       Scope           =   0
-      TabIndex        =   2
       TabPanelIndex   =   0
-      TabStop         =   True
       Top             =   0
-      Visible         =   True
       Width           =   32
    End
 End
@@ -136,28 +132,10 @@ End
 		  If cp.HasFormat(CF_BITMAP) Then
 		    Dim hMem As Ptr = cp.Data(CF_BITMAP)
 		    ClipPic = Win32.HBITMAP(Integer(hMem))
-		  ElseIf cp.HasFormat(CF_TEXT) Then
+		  End If
+		  If cp.HasFormat(CF_TEXT) Then
 		    TextArea1.Text = cp.Data(CF_TEXT)
 		  End If
-		  
-		  
-		  
-		  
-		  
-		  
-		  '
-		  'Dim cp As New Clipboard
-		  'If cp.PictureAvailable Then
-		  'ClipPic = cp.Picture
-		  'TextArea1.Text = ""
-		  'ElseIf cp.TextAvailable Then
-		  'TextArea1.Text = cp.Text
-		  'ClipPic = Nil
-		  'Else
-		  'TextArea1.Text = ""
-		  'ClipPic = Nil
-		  'End If
-		  
 		  Canvas1.Invalidate(True)
 		  
 		Exception
