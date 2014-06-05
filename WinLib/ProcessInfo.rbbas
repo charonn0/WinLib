@@ -34,7 +34,7 @@ Implements WinLib.Win32Object
 		  #If TargetWin32 Then
 		    Dim cleanup As Boolean = WinLib.Utils.SetPrivilege(SE_DEBUG_PRIVILEGE, True)
 		    
-		    If WinLib.Utils.KernelVersion >= 5.1 Then
+		    If Win32.KernelVersion >= 5.1 Then
 		      Dim Modules As New MemoryBlock(255)  // 255 = SIZE_MINIMUM * sizeof(HMODULE)
 		      Dim ModuleName As New MemoryBlock(255)
 		      Dim nSize As Integer

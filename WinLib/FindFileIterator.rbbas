@@ -88,7 +88,7 @@ Implements WinLib.Win32Object
 		    If FindHandle <= 0 Then
 		      If System.IsFunctionAvailable("FindFirstFileExW", "Kernel32") Then
 		        Dim flags As Integer
-		        If WinLib.Utils.KernelVersion >= 6.1 Then flags = FIND_FIRST_EX_LARGE_FETCH
+		        If Win32.KernelVersion >= 6.1 Then flags = FIND_FIRST_EX_LARGE_FETCH
 		        If CaseSensitive Then flags = flags Or FIND_FIRST_EX_CASE_SENSITIVE
 		        FindHandle = Win32.Kernel32.FindFirstFileEx(namepattern, 0, data, 0, Nil, flags)
 		      Else
@@ -205,6 +205,11 @@ Implements WinLib.Win32Object
 
 
 	#tag ViewBehavior
+		#tag ViewProperty
+			Name="CaseSensitive"
+			Group="Behavior"
+			Type="Boolean"
+		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"
 			Visible=true
