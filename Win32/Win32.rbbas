@@ -1771,6 +1771,24 @@ Protected Module Win32
 	#tag Constant, Name = WT_EXECUTEONLYONCE, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = _O_APPEND, Type = Double, Dynamic = False, Default = \"&h0008", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = _O_BINARY, Type = Double, Dynamic = False, Default = \"&h8000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = _O_RDONLY, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = _O_RDWR, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = _O_TEXT, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = _O_WRONLY, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
+	#tag EndConstant
+
 
 	#tag Structure, Name = AT_INFO, Flags = &h0
 		JobTime As Ptr

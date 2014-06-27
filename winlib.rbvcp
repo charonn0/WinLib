@@ -5,6 +5,7 @@ Class=App;App.rbbas;&h4B608FFF;&h0;false
 Window=Window1;Window1.rbfrm;&h483FD7FF;&h0;false
 BuildSteps=Build Automation;Build Automation.rbbas;&h534357FF;&h0;false
 Module=Win32;Win32/Win32.rbbas;&h561B87FF;&h0;false
+Module=msvcrt;Win32/msvcrt.rbbas;&h21C1A7FF;&h561B87FF;false
 Module=Dwmapi;Win32/Dwmapi.rbbas;&h1A11FFFF;&h561B87FF;false
 Module=ICMP;Win32/ICMP.rbbas;&h44C0D7FF;&h561B87FF;false
 Module=GDI32;Win32/GDI32.rbbas;&h10BAFFF;&h561B87FF;false
