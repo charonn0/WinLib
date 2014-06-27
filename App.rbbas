@@ -8,7 +8,9 @@ Inherits Application
 		  ''WinLib.IOStream.Open(g, False)'.AbsolutePath, GENERIC_WRITE, 0, OPEN_ALWAYS, 0)
 		  'f.Write("Hello, world!")
 		  'f.Close
-		  
+		  Dim io As WinLib.FileObject = WinLib.IOStream.Create(SpecialFolder.Desktop.Child("fd_test"), True)
+		  Dim i As Integer = io.Descriptor
+		  Break
 		End Sub
 	#tag EndEvent
 
