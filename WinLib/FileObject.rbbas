@@ -53,6 +53,12 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Descriptor(Flags As Integer = _O_RDWR) As Integer
+		  Return Win32.msvcrt._open_osfhandle(Me.Handle, Flags)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Duplicate() As WinLib.FileObject
 		  Dim proc As Integer = Win32.Kernel32.GetCurrentProcess
 		  Dim newref As Integer
