@@ -70,7 +70,7 @@ Inherits WinLib.IOStream
 		  Dim err As Integer
 		  Dim hFile As Integer = Win32.Kernel32.CreateNamedPipe("\\.\pipe\" + PipeName, OpenMode Or FILE_FLAG_OVERLAPPED, PipeMode, _
 		  MaxInstances, OutBufferSize, InBufferSize, DefaultTimeout, Nil)
-		  err = GetLastError()
+		  err = Win32.LastError()
 		  If err = 0 Then
 		    Dim over As OVERLAPPED
 		    over.Internal = 0
@@ -80,7 +80,7 @@ Inherits WinLib.IOStream
 		    If Win32.Kernel32.ConnectNamedPipe(hFile, over) Then
 		      Me.mHandle = hFile
 		    Else
-		      err = GetLastError
+		      err = Win32.LastError
 		      Dim error As New IOException
 		      error.ErrorNumber = err
 		      error.Message = FormatError(err)
@@ -262,12 +262,6 @@ Inherits WinLib.IOStream
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Length"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="WinLib.IOStream"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Name"
 			Visible=true
 			Group="ID"
@@ -279,12 +273,6 @@ Inherits WinLib.IOStream
 			Group="Behavior"
 			Type="String"
 			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Position"
-			Group="Behavior"
-			Type="Integer"
-			InheritedFrom="WinLib.IOStream"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Super"

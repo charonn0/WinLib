@@ -5,7 +5,7 @@ Protected Module Crypto
 		  Dim prov As Integer
 		  If Not Win32.AdvApi32.CryptAcquireContext(prov, 0, Provider, PROV_RSA_FULL, 0) Then
 		    If Not Win32.AdvApi32.CryptAcquireContext(prov, 0, Provider, PROV_RSA_FULL, CRYPT_NEWKEYSET) Then
-		      Raise Win32Exception(GetLastError)
+		      Raise Win32Exception(Win32.LastError)
 		    End If
 		  End If
 		  
@@ -22,7 +22,7 @@ Protected Module Crypto
 		  While Not bs.EOF
 		    Dim chunk As MemoryBlock = bs.Read(512)
 		    If Not HashDataProcess(chunk, hashhandle) Then
-		      Raise Win32Exception(GetLastError)
+		      Raise Win32Exception(Win32.LastError)
 		    End If
 		  Wend
 		  bs.Close
@@ -46,7 +46,7 @@ Protected Module Crypto
 		  Dim mb As New MemoryBlock(1024)
 		  Dim sz As Integer = mb.Size
 		  If Not Win32.AdvApi32.CryptGetHashParam(hashhandle, HP_HASHVAL, mb, sz, 0) Then
-		    Raise Win32Exception(GetLastError)
+		    Raise Win32Exception(Win32.LastError)
 		  End If
 		  Dim hash As String = mb.StringValue(0, sz)
 		  Win32.AdvApi32.CryptDestroyHash(hashhandle)
@@ -75,7 +75,7 @@ Protected Module Crypto
 		  End Select
 		  
 		  If Not Win32.AdvApi32.CryptCreateHash(Provider, Algorithm, key, 0, hashhandle) Then
-		    Raise Win32Exception(GetLastError)
+		    Raise Win32Exception(Win32.LastError)
 		  End If
 		  
 		  Return hashhandle

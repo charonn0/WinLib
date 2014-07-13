@@ -33,11 +33,11 @@ Implements WinLib.Win32Object
 		      HWND = Win32.User32.CreateWindowEx(0, mbClass.WString(0), "", 0, 0, 0, 0, 0, HWND_MESSAGE, 0, 0, Nil)
 		    End If
 		  #endif
-		  mLastError = GetLastError
+		  mLastError = Win32.LastError
 		  If HWND <> 0 Then
 		    Super.Constructor(HWND)
 		  Else
-		    Raise Win32Exception(GetLastError)
+		    Raise Win32Exception(Win32.LastError)
 		  End If
 		End Sub
 	#tag EndMethod

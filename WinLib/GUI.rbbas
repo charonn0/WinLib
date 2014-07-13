@@ -54,7 +54,7 @@ Protected Module GUI
 		    mbclass = WindowClass
 		    mbname = WindowName
 		    HWND = Win32.User32.FindWindow(mbname, mbclass)
-		    err = GetLastError
+		    err = Win32.LastError
 		    If err = 0 Then Return New WindowRef(HWND)
 		  #endif
 		End Function
@@ -65,7 +65,7 @@ Protected Module GUI
 		  #If TargetWin32 Then
 		    Dim HWND, err as integer
 		    HWND = Win32.User32.GetWindow(FindRef.Handle, GW_HWNDNEXT)
-		    err = GetLastError
+		    err = Win32.LastError
 		    If err = 0 Then Return New WindowRef(HWND)
 		  #endif
 		  
@@ -239,7 +239,7 @@ Protected Module GUI
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =  TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =   TargetHasGUI
 		#tag Getter
 			Get
 			  ' Returns a Rectangle within which the mouse cursor is currently allowed move.
@@ -257,7 +257,7 @@ Protected Module GUI
 			  ' Passing NIL will remove any restrictions imposed by previous calls.
 			  ' Only works as long as your app is frontmost
 			  ' See: http://msdn.microsoft.com/en-us/library/ms648383.aspx
-			  ' Call WinLib.GetLastError to determine whether this method succeeded (GetLastError=0).
+			  ' Call Win32.LastError to determine whether this method succeeded (LastError=0).
 			  
 			  #If TargetWin32 Then
 			    Dim r As Win32.RECT
@@ -274,7 +274,7 @@ Protected Module GUI
 		Protected CursorConfinementArea As REALbasic.Rect
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =  TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =   TargetHasGUI
 		#tag Getter
 			Get
 			  ' Vista and newer. Returns true if desktop composition is enabled.

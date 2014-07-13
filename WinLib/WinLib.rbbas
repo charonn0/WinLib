@@ -30,14 +30,6 @@ Protected Module WinLib
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetLastError() As Integer
-		  #If TargetWin32 Then
-		    Return Win32.LastError()
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
 		Protected Function Win32Exception(ErrorNumber As Integer) As RuntimeException
 		  Dim err As New RuntimeException
 		  err.ErrorNumber = ErrorNumber
@@ -66,7 +58,7 @@ Protected Module WinLib
 			  #If TargetWin32 Then
 			    Dim path As String = value.AbsolutePath
 			    If Not Win32.Kernel32.SetCurrentDirectory(path) Then
-			      Dim e As Integer = GetLastError
+			      Dim e As Integer = Win32.LastError
 			      Dim err As New IOException
 			      err.Message = CurrentMethodName + ": " + FormatError(e)
 			      err.ErrorNumber = e

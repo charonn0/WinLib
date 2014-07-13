@@ -26,7 +26,7 @@ Protected Module Win32
 		    If WinLib.Utils.SetPrivilege(SE_SHUTDOWN_NAME, True) Then
 		      Call Win32.User32.ExitWindowsEx(mode, reason)
 		    End If
-		    Return Win32.Kernel32.GetLastError()
+		    Return Win32.LastError
 		  #endif
 		End Function
 	#tag EndMethod
@@ -114,7 +114,7 @@ Protected Module Win32
 
 	#tag Method, Flags = &h1
 		Protected Function LastError() As Integer
-		  Return Win32.Kernel32.GetLastError()
+		  Return Win32.LastError
 		End Function
 	#tag EndMethod
 

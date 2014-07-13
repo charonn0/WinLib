@@ -41,7 +41,7 @@ Inherits WinLib.MessageMonitor
 		  Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD, WM_CLIPBOARDUPDATE)
 		  If Win32.KernelVersion >= 6.0 Then ' Vista and newer
 		    If Not Win32.User32.AddClipboardFormatListener(Me.Handle) Then
-		      mLastError = WinLib.GetLastError()
+		      mLastError = WinLib.Win32.LastError()
 		      Raise Win32Exception(mLastError)
 		    End If
 		    
