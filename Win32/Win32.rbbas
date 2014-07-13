@@ -114,7 +114,7 @@ Protected Module Win32
 
 	#tag Method, Flags = &h1
 		Protected Function LastError() As Integer
-		  Return Win32.LastError
+		  Return Win32.Kernel32.GetLastError
 		End Function
 	#tag EndMethod
 
