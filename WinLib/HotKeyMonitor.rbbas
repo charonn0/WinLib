@@ -69,9 +69,9 @@ Inherits WinLib.MessageMonitor
 		  #If TargetWin32 Then
 		    Dim id As Integer
 		    id = Win32.Kernel32.GlobalAddAtom("Win32Atom" + Str(NextNum))
-		    KeyIDs.Append(id)
 		    
 		    If Win32.User32.RegisterHotKey(Me.Handle, id, modifiers, virtualKey) Then
+		      KeyIDs.Append(id)
 		      Return id
 		    Else
 		      Return -1
