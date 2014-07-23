@@ -8,29 +8,6 @@ Protected Module Win32
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function ExitWindows(Mode As Integer, Reason As Integer, ForceIfHung As Boolean) As Integer
-		  //Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
-		  // The reason code may be any code(s) documented here: http://msdn.microsoft.com/en-us/library/aa376885%28v=vs.85%29.aspx
-		  // If ForceIfHung=True then Windows forces processes to terminate if they do not respond to end-of-session messages within a timeout interval.
-		  // Mode can be one of the following:
-		  // EWX_LOGOFF  (all Windows versions)
-		  // EWX_REBOOT  (all Windows versions)
-		  // EWX_SHUTDOWN  (all Windows versions)
-		  // EWX_HYBRID_SHUTDOWN
-		  // EWX_POWEROFF
-		  // EWX_RESTARTAPPS
-		  
-		  If ForceIfHung Then Mode = Mode Or EWX_FORCEIFHUNG
-		  #If TargetWin32 Then
-		    If WinLib.Utils.SetPrivilege(SE_SHUTDOWN_NAME, True) Then
-		      Call Win32.User32.ExitWindowsEx(mode, reason)
-		    End If
-		    Return Win32.LastError
-		  #endif
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Function FILE_ALL_ACCESS() As Integer
 		  Return STANDARD_RIGHTS_REQUIRED Or SYNCHRONIZE Or &h1FF
