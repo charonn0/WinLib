@@ -221,7 +221,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function MessageBox Lib "User32" Alias "MessageBox" (HWND As Integer, text As WString, caption As WString, type As Integer) As Integer
+		Protected Declare Function MessageBox Lib "User32" Alias "MessageBoxW" (HWND As Integer, text As WString, caption As WString, type As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
