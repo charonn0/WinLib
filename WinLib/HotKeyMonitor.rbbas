@@ -65,12 +65,10 @@ Inherits WinLib.MessageMonitor
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function RegisterKey(modifiers as Integer, virtualKey as Integer) As Integer
+		Protected Function RegisterKey(modifiers as Integer, virtualKey as Integer, Optional ID As Integer) As Integer
 		  #If TargetWin32 Then
-		    Dim id As Integer
-		    id = Win32.Kernel32.GlobalAddAtom("Win32Atom" + Str(NextNum))
-		    
-		    If Win32.User32.RegisterHotKey(Me.Handle, id, modifiers, virtualKey) Then
+		    If ID = 0 Then ID = NextNum
+		    If Win32.User32.RegisterHotKey(Me.Handle, ID, modifiers, virtualKey) Then
 		      KeyIDs.Append(id)
 		      Return id
 		    Else
