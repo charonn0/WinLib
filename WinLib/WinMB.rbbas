@@ -144,12 +144,12 @@ Implements WinLib.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ReAlloc(NewSize As Integer) As Boolean
+		Function ReAlloc(NewSize As Integer, Optional Flags As Integer) As Boolean
 		  Dim ret As Boolean
 		  Select Case HeapHandle
 		  Case TypeGlobal  ' GlobalAllocate
 		    If Not Me.Lock Then Return False
-		    Dim i As Integer = Win32.Kernel32.GlobalReAlloc(Me.Handle, NewSize, 0)
+		    Dim i As Integer = Win32.Kernel32.GlobalReAlloc(Me.Handle, NewSize, Flags)
 		    mLastError = Win32.LastError()
 		    If i <> 0 Then
 		      mHandle = i
@@ -159,7 +159,7 @@ Implements WinLib.Win32Object
 		  Case TypeVirtual ' VirtualAllocate
 		    Return False 'Win32.Kernel32.VirtualUnlock(Me.Handle, mSize)
 		  Else             ' HeapAllocate
-		    Dim i As Integer = Win32.Kernel32.HeapReAlloc(HeapHandle, 0, Me.Handle, NewSize)
+		    Dim i As Integer = Win32.Kernel32.HeapReAlloc(HeapHandle, Flags, Me.Handle, NewSize)
 		    mLastError = Win32.LastError()
 		    If i <> 0 Then
 		      mHandle = i
