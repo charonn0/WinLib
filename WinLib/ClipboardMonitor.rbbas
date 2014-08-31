@@ -38,18 +38,17 @@ Inherits WinLib.MessageMonitor
 		Sub Constructor(ParentHandle As Integer = 0)
 		  // Calling the overridden superclass constructor.
 		  Super.Constructor(ParentHandle)
-		  Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD, WM_CLIPBOARDUPDATE)
-		  If Win32.KernelVersion >= 6.0 Then ' Vista and newer
-		    If Not Win32.User32.AddClipboardFormatListener(Me.Handle) Then
-		      mLastError = WinLib.Win32.LastError()
-		      Raise Win32Exception(mLastError)
-		    End If
-		    
-		  Else
-		    #If TargetWin32 Then
+		  #If TargetWin32 Then
+		    Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD, WM_CLIPBOARDUPDATE)
+		    If Win32.KernelVersion >= 6.0 Then ' Vista and newer
+		      If Not Win32.User32.AddClipboardFormatListener(Me.Handle) Then
+		        mLastError = WinLib.Win32.LastError()
+		        Raise Win32Exception(mLastError)
+		      End If
+		    Else
 		      NextViewerWindow = Win32.User32.SetClipboardViewer(Me.Handle)
-		    #endif
-		  End If
+		    End If
+		  #endif
 		End Sub
 	#tag EndMethod
 
