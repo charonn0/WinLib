@@ -45,7 +45,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function CloseDesktop Lib "User32" (hDesktop As Integer) As Integer
+		Protected Declare Function CloseDesktop Lib "User32" (hDesktop As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -233,6 +233,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function OpenDesktop Lib "User32" Alias "OpenDesktopW" (Desktop As WString, Flags As Integer, InheritHandle As Boolean, AccessMask As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function OpenInputDesktop Lib "User32" (flags As Integer, inherit As Boolean, access As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -337,7 +341,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SwitchDesktop Lib "User32" (hDesktop As Integer) As Integer
+		Protected Declare Function SwitchDesktop Lib "User32" (hDesktop As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
