@@ -61,6 +61,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CreateThread Lib "Kernel32" (ThreadAttribs As Ptr, Stacksize As Integer, ThreadProcedure As Ptr, Parameter As Ptr, Flags As Integer, ByRef ThreadID As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CreateToolhelp32Snapshot Lib "Kernel32" (Flags As Integer, ProcessID As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -74,6 +78,10 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function DuplicateHandle Lib "Kernel32" (SourceProcess As Integer, SourceHandle As Integer, TargetProcess As Integer, ByRef TargetHandle As Integer, DesiredAccess As Integer, InheritHandle As Boolean, Options As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Sub ExitThread Lib "Kernel32" (ExitCode As Integer)
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -405,6 +413,10 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function ResumeThread Lib "Kernel32" (ThreadHandle As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SetConsoleActiveScreenBuffer Lib "Kernel32" (BufferHandle As Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -481,7 +493,35 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Sub SleepCurrentThread Lib "Kernel32" Alias "Sleep" (Milliseconds As Integer)
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function SuspendThread Lib "Kernel32" (ThreadHandle As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function TerminateProcess Lib "Kernel32" (ProcessHandle As Integer, ExitCode As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function TerminateThread Lib "Kernel32" (ThreadHandle As Integer, ExitCode As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function TlsAlloc Lib "Kernel32" () As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function TlsFree Lib "Kernel32" (TlsIndex As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function TlsGetValue Lib "Kernel32" (TlsIndex As Integer) As Ptr
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function TlsSetValue Lib "Kernel32" (TlsIndex As Integer, TlsValue As Ptr) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

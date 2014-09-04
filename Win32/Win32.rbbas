@@ -388,6 +388,9 @@ Protected Module Win32
 	#tag Constant, Name = CREATE_NO_WINDOW, Type = Double, Dynamic = False, Default = \"&h08000000", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CREATE_SUSPENDED, Type = Double, Dynamic = False, Default = \"&h00000004", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
 	#tag EndConstant
 
@@ -1610,6 +1613,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = TH32CS_SNAPPROCESS, Type = Double, Dynamic = False, Default = \"&h2", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = TLS_OUT_OF_INDEXES, Type = Double, Dynamic = False, Default = \"&hFFFFFFFF", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = TOKEN_ADJUST_PRIVILEGES, Type = Double, Dynamic = False, Default = \"&h00000020", Scope = Public

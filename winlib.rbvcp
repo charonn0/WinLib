@@ -56,6 +56,7 @@ Class=FolderWatcher;WinLib/FolderWatcher.rbbas;&h679C07FF;&h7CFB5FFF;false
 Module=Avicap32;Win32/Avicap32.rbbas;&h6302D7FF;&h561B87FF;false
 Module=Utils;WinLib/Utils.rbbas;&h7C30FFF;&h7CFB5FFF;false
 Module=GUI;WinLib/GUI.rbbas;&h593EC7FF;&h7CFB5FFF;false
+Class=Win32Thread;WinLib/Win32Thread.rbbas;&h76D17FFF;&h7CFB5FFF;false
 DefaultWindow=Window1
 MajorVersion=1
 MinorVersion=0
