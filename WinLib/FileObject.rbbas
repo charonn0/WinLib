@@ -62,7 +62,7 @@ Implements WinLib.Win32Object
 
 	#tag Method, Flags = &h0
 		Function Duplicate() As WinLib.FileObject
-		  Dim proc As Integer = Win32.Kernel32.GetCurrentProcess
+		  Dim proc As Integer = Win32.CurrentProcessID
 		  Dim newref As Integer
 		  If Not Win32.Kernel32.DuplicateHandle(proc, Me.Handle, proc, newref, 0, True, DUPLICATE_SAME_ACCESS) Then
 		    mLastError = Win32.LastError
