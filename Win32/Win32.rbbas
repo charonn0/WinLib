@@ -123,6 +123,16 @@ Protected Module Win32
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function MS_ENH_RSA_AES_PROV() As String
+		  If KernelVersion < 6.0 Then ' XP used a different name
+		    Return "Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
+		  Else
+		    Return "Microsoft Enhanced RSA and AES Cryptographic Provider"
+		  End If
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function OSVersion() As OSVERSIONINFOEX
 		  Dim info As OSVERSIONINFOEX
@@ -778,7 +788,13 @@ Protected Module Win32
 	#tag Constant, Name = HEAP_ZERO_MEMORY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = HP_HASHVAL, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Public
+	#tag Constant, Name = HP_ALGID, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = HP_HASHSIZE, Type = Double, Dynamic = False, Default = \"4", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = HP_HASHVAL, Type = Double, Dynamic = False, Default = \"2", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = HWND_BROADCAST, Type = Double, Dynamic = False, Default = \"&hffff", Scope = Public
@@ -1021,9 +1037,6 @@ Protected Module Win32
 	#tag Constant, Name = MS_ENH_DSS_DH_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced DSS and Diffie-Hellman Cryptographic Provider", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = MS_ENH_RSA_AES_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced RSA and AES Cryptographic Provider", Scope = Public
-	#tag EndConstant
-
 	#tag Constant, Name = MS_SCARD_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Smart Card Crypto Provider", Scope = Public
 	#tag EndConstant
 
@@ -1238,6 +1251,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = PROCESS_VM_READ, Type = Double, Dynamic = False, Default = \"&h10", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_RSA_AES, Type = Double, Dynamic = False, Default = \"24", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
