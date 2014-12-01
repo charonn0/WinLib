@@ -16,19 +16,23 @@ Inherits WinLib.Crypto.Context
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Algorithm As Integer, Key As Integer = 0)
+		Sub Constructor(Algorithm As Integer, Key As WinLib.Crypto.KeyContainer = Nil)
 		  Dim CryptoProvider As WinLib.Crypto.Context
 		  Select Case Algorithm
 		  Case CALG_MD2, CALG_MD4, CALG_MD5, CALG_SHA1
-		    CryptoProvider = BaseProvider
+		    CryptoProvider = EnhancedProvider
 		  Case CALG_SHA256, CALG_SHA384, CALG_SHA512
 		    CryptoProvider = AESProvider
 		  Else
 		    Raise New UnsupportedFormatException
 		  End Select
+		  // Calling the overridden superclass constructor.
+		  // Constructor(DuplicateContext As WinLib.Crypto.Context) -- From Context
 		  Super.Constructor(CryptoProvider)
 		  
-		  If Not Win32.AdvApi32.CryptCreateHash(Me.Provider, Algorithm, Key, 0, mHandle) Then
+		  Dim kh As Integer
+		  If Key <> Nil Then kh = Key.Handle
+		  If Not Win32.AdvApi32.CryptCreateHash(Me.Provider, Algorithm, kh, 0, mHandle) Then
 		    mLastError = Win32.LastError
 		    Dim err As New IOException
 		    err.ErrorNumber = mLastError

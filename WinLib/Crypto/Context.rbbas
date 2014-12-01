@@ -3,6 +3,7 @@ Protected Class Context
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h1
 		Protected Shared Function AcquireProvider(ProviderID As String, ProviderType As Integer) As Integer
+		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386983%28v=vs.85%29.aspx
 		  Dim lasterr, cprovider As Integer
 		  If Not Win32.AdvApi32.CryptAcquireContext(cprovider, 0, ProviderID, ProviderType, 0) Then
 		    lasterr = Win32.LastError
@@ -30,20 +31,32 @@ Protected Class Context
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function AESProvider() As WinLib.Crypto.Context
+		 Shared Function AESProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
+		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386979%28v=vs.85%29.aspx
+		  Static mAESProvider As WinLib.Crypto.Context
 		  If mAESProvider = Nil Then
 		    mAESProvider = New WinLib.Crypto.Context(AcquireProvider(MS_ENH_RSA_AES_PROV, PROV_RSA_AES))
 		  End If
-		  Return New WinLib.Crypto.Context(mAESProvider)
+		  If FreeProvider Then
+		    mAESProvider = Nil
+		  Else
+		    Return New WinLib.Crypto.Context(mAESProvider)
+		  End If
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function BaseProvider() As WinLib.Crypto.Context
+		 Shared Function BaseProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
+		  'See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386980%28v=vs.85%29.aspx
+		  Static mBaseProvider As WinLib.Crypto.Context
 		  If mBaseProvider = Nil Then
 		    mBaseProvider = New WinLib.Crypto.Context(AcquireProvider(MS_DEF_PROV, PROV_RSA_FULL))
 		  End If
-		  Return New WinLib.Crypto.Context(mBaseProvider)
+		  If FreeProvider Then
+		    mBaseProvider = Nil
+		  Else
+		    Return New WinLib.Crypto.Context(mBaseProvider)
+		  End If
 		End Function
 	#tag EndMethod
 
@@ -75,13 +88,52 @@ Protected Class Context
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		 Shared Function DHProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
+		  ' For diffie-hellman key exchanges
+		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/bb394802%28v=vs.85%29.aspx
+		  Static mDHProvider As WinLib.Crypto.Context
+		  If mDHProvider = Nil Then
+		    mDHProvider = New WinLib.Crypto.Context(AcquireProvider(MS_ENH_DSS_DH_PROV, PROV_DSS_DH))
+		  End If
+		  If FreeProvider Then
+		    mDHProvider = Nil
+		  Else
+		    Return New WinLib.Crypto.Context(mDHProvider)
+		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function EnhancedProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
+		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386986%28v=vs.85%29.aspx
+		  Static mEnhancedProvider As WinLib.Crypto.Context
+		  If mEnhancedProvider = Nil Then
+		    mEnhancedProvider = New WinLib.Crypto.Context(AcquireProvider(MS_ENHANCED_PROV, PROV_RSA_FULL))
+		  End If
+		  If FreeProvider Then
+		    mEnhancedProvider = Nil
+		  Else
+		    Return New WinLib.Crypto.Context(mEnhancedProvider)
+		  End If
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
-		Protected Function GetProviderParam(Type As Integer, Buffer As MemoryBlock, Flags As Integer) As Boolean
-		  Dim buffersz As Integer = buffer.Size
-		  If Not Win32.AdvApi32.CryptGetProvParam(mProvider, Type, buffer, buffersz, Flags) Then
+		Protected Function GetProviderParam(Type As Integer, ByRef Buffer As MemoryBlock, Flags As Integer) As Boolean
+		  ' If Buffer is Nil and no error occurs, on return Buffer will be instantiated with the correct size of the data.
+		  ' Call this method again with the same parameters to fill the Buffer.
+		  Dim buffersz As Integer
+		  Dim p As Ptr
+		  If Buffer <> Nil Then
+		    p = Buffer
+		    buffersz = buffer.Size
+		  End If
+		  If Not Win32.AdvApi32.CryptGetProvParam(mProvider, Type, p, buffersz, Flags) Then
 		    mLastError = Win32.LastError
 		    Return False
 		  Else
+		    If Buffer = Nil Then Buffer = New MemoryBlock(buffersz)
 		    Return True
 		  End If
 		End Function
@@ -95,8 +147,41 @@ Protected Class Context
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Operator_Compare(OtherContext As WinLib.Crypto.Context) As Integer
+		  Select Case True
+		  Case OtherContext Is Nil
+		    Return 1
+		  Case OtherContext.Provider > mProvider
+		    Return -1
+		  Case OtherContext.Provider < mProvider
+		    Return 1
+		  Case OtherContext.Provider = mProvider
+		    Return 0
+		  End Select
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Provider() As Integer
 		  Return mProvider
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ProviderName() As String
+		  Dim mb As MemoryBlock
+		  ' first call allocates a buffer big enough for the second call
+		  If Me.GetProviderParam(PP_NAME, mb, 0) Then ' on in mb is Nil
+		    If Me.GetProviderParam(PP_NAME, mb, 0) Then ' on in mb is a MemoryBlock of correct size
+		      Return mb.CString(0)
+		    Else
+		      mLastError = Win32.LastError
+		    End If
+		  Else
+		    mLastError = Win32.LastError
+		  End If
 		End Function
 	#tag EndMethod
 
@@ -111,14 +196,21 @@ Protected Class Context
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		 Shared Function StrongProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
+		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386989%28v=vs.85%29.aspx
+		  Static mStrongProvider As WinLib.Crypto.Context
+		  If mStrongProvider = Nil Then
+		    mStrongProvider = New WinLib.Crypto.Context(AcquireProvider(MS_STRONG_PROV, PROV_RSA_FULL))
+		  End If
+		  If FreeProvider Then
+		    mStrongProvider = Nil
+		  Else
+		    Return New WinLib.Crypto.Context(mStrongProvider)
+		  End If
+		End Function
+	#tag EndMethod
 
-	#tag Property, Flags = &h21
-		Private Shared mAESProvider As WinLib.Crypto.Context
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private Shared mBaseProvider As WinLib.Crypto.Context
-	#tag EndProperty
 
 	#tag Property, Flags = &h1
 		Protected mLastError As Integer

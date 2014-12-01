@@ -60,6 +60,7 @@ Module=GUI;WinLib/GUI.rbbas;&h593EC7FF;&h7CFB5FFF;false
 Class=Win32Thread;WinLib/Win32Thread.rbbas;&h76D17FFF;&h7CFB5FFF;false
 Class=Context;WinLib/Crypto/Context.rbbas;&h28FDFFFF;&h5F7AB7FF;false
 Class=Random;WinLib/Crypto/Random.rbbas;&h51BA27FF;&h5F7AB7FF;false
+Class=KeyContainer;WinLib/Crypto/KeyContainer.rbbas;&h2D4C9FFF;&h5F7AB7FF;false
 DefaultWindow=Window1
 MajorVersion=1
 MinorVersion=0

@@ -305,10 +305,10 @@ Protected Module Win32
 	#tag Constant, Name = CALG_MD5, Type = Double, Dynamic = False, Default = \"&h00008003", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CALG_RC4, Type = Double, Dynamic = False, Default = \"&h00006801", Scope = Public
+	#tag Constant, Name = CALG_RC2, Type = Double, Dynamic = False, Default = \"&h000065FF", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = CALG_RC5, Type = Double, Dynamic = False, Default = \"&h0000660d", Scope = Public
+	#tag Constant, Name = CALG_RC4, Type = Double, Dynamic = False, Default = \"&h00006801", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CALG_SHA1, Type = Double, Dynamic = False, Default = \"&h00008004", Scope = Public
@@ -432,6 +432,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = ERROR_HANDLE_EOF, Type = Double, Dynamic = False, Default = \"&h26", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = ERROR_MORE_DATA, Type = Double, Dynamic = False, Default = \"234", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = ERROR_NO_MORE_FILES, Type = Double, Dynamic = False, Default = \"18", Scope = Public
@@ -851,6 +854,12 @@ Protected Module Win32
 	#tag Constant, Name = IOCTL_STORAGE_BASE, Type = Double, Dynamic = False, Default = \"&h0000002d", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = KP_KEYLEN, Type = Double, Dynamic = False, Default = \"&h00000009", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = KP_PERMISSIONS, Type = Double, Dynamic = False, Default = \"&h00000006", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = LR_LOADFROMFILE, Type = Double, Dynamic = False, Default = \"&h00000010", Scope = Public
 	#tag EndConstant
 
@@ -1214,6 +1223,9 @@ Protected Module Win32
 	#tag Constant, Name = PMSF_NORMAL, Type = Double, Dynamic = False, Default = \"0", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = PP_NAME, Type = Double, Dynamic = False, Default = \"4", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = PRF_CLIENT, Type = Double, Dynamic = False, Default = \"&h00000004", Scope = Public
 	#tag EndConstant
 
@@ -1257,6 +1269,12 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = PROCESS_VM_READ, Type = Double, Dynamic = False, Default = \"&h10", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_DSS, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_DSS_DH, Type = Double, Dynamic = False, Default = \"13", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = PROV_RSA_AES, Type = Double, Dynamic = False, Default = \"24", Scope = Public
