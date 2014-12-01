@@ -21,6 +21,10 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CryptContextAddRef Lib "AdvApi32" (Provider As Integer, Reserved As Ptr, Flags As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CryptCreateHash Lib "AdvApi32" (Provider as Integer, Algorithm as Integer, Key as Integer, flags as Integer, ByRef hashHandle as Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -29,11 +33,27 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CryptGenRandom Lib "AdvApi32" (Provider As Integer, BufferLen As Integer, Buffer As Ptr) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CryptGetHashParam Lib "AdvApi32" (hashHandle as Integer, type as Integer, value as Ptr, ByRef length as Integer, flags as Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CryptGetProvParam Lib "AdvApi32" (Provider As Integer, Param As Integer, Buffer As Ptr, ByRef BufferSize As Integer, Flags As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CryptHashData Lib "AdvApi32" (hashHandle as Integer, data as Ptr, length as Integer, flags as Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CryptReleaseContext Lib "AdvApi32" (Provider As Integer, Reserved As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CryptSetProvParam Lib "AdvApi32" (Provider As Integer, Param As Integer, Buffer As Ptr, Flags As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

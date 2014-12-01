@@ -1064,6 +1064,12 @@ Protected Module Win32
 	#tag Constant, Name = NOTSRCERASE, Type = Double, Dynamic = False, Default = \"&h001100A6", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = NTE_BAD_KEYSET, Type = Double, Dynamic = False, Default = \"&h80090016", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = NTE_BAD_UID, Type = Double, Dynamic = False, Default = \"&h80090001", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = OPEN_ALWAYS, Type = Double, Dynamic = False, Default = \"4", Scope = Public
 	#tag EndConstant
 
