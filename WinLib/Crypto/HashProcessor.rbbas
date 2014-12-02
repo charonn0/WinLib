@@ -57,12 +57,11 @@ Inherits WinLib.Crypto.Context
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Destructor()
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
 		  If Not Win32.AdvApi32.CryptDestroyHash(mHandle) Then
 		    mLastError = Win32.LastError
 		  End If
-		  Super.Destructor
 		End Sub
 	#tag EndMethod
 
@@ -75,6 +74,12 @@ Inherits WinLib.Crypto.Context
 		  Else
 		    Return True
 		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Handle() As Integer
+		  Return mHandle
 		End Function
 	#tag EndMethod
 

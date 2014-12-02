@@ -29,6 +29,10 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CryptDeriveKey Lib "AdvApi32" (Provider As Integer, Algorithm As Integer, BaseData As Integer, Flags As Integer, ByRef hKey As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CryptDestroyHash Lib "AdvApi32" (HashHandle As Integer) As Boolean
 	#tag EndExternalMethod
 

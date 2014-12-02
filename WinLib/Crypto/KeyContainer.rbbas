@@ -21,17 +21,8 @@ Inherits WinLib.Crypto.Context
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
 		  // Constructor(DuplicateContext As WinLib.Crypto.Context) -- From Context
-		  Super.Constructor(Super.EnhancedProvider)
+		  Super.Constructor(EnhancedProvider)
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Generate(Algorithm As Integer, Flags As Integer) As Boolean
-		  If Win32.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then
-		    Return True
-		  End If
-		  mLastError = Win32.LastError
-		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
