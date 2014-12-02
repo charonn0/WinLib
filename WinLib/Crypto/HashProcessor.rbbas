@@ -42,6 +42,30 @@ Inherits WinLib.Crypto.Context
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1000
+		Sub Constructor(DuplicateHash As WinLib.Crypto.HashProcessor)
+		  // Calling the overridden superclass constructor.
+		  // Constructor(DuplicateContext As WinLib.Crypto.Context) -- From Context
+		  Super.Constructor(DuplicateHash.Provider)
+		  If Not Win32.AdvApi32.CryptDuplicateHash(DuplicateHash.mHandle, 0, 0, mHandle) Then
+		    mLastError = Win32.LastError
+		    Dim err As New IOException
+		    err.ErrorNumber = mLastError
+		    err.Message = WinLib.FormatError(mLastError)
+		    Raise err
+		  End If
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Destructor()
+		  If Not Win32.AdvApi32.CryptDestroyHash(mHandle) Then
+		    mLastError = Win32.LastError
+		  End If
+		  Super.Destructor
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function GetHashParam(Type As Integer, Buffer As MemoryBlock) As Boolean
 		  Dim buffersz As Integer = buffer.Size

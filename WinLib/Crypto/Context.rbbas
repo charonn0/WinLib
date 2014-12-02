@@ -33,7 +33,6 @@ Protected Class Context
 	#tag Method, Flags = &h0
 		 Shared Function AESProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386979%28v=vs.85%29.aspx
-		  Static mAESProvider As WinLib.Crypto.Context
 		  If mAESProvider = Nil Then
 		    mAESProvider = New WinLib.Crypto.Context(AcquireProvider(MS_ENH_RSA_AES_PROV, PROV_RSA_AES))
 		  End If
@@ -48,7 +47,6 @@ Protected Class Context
 	#tag Method, Flags = &h0
 		 Shared Function BaseProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
 		  'See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386980%28v=vs.85%29.aspx
-		  Static mBaseProvider As WinLib.Crypto.Context
 		  If mBaseProvider = Nil Then
 		    mBaseProvider = New WinLib.Crypto.Context(AcquireProvider(MS_DEF_PROV, PROV_RSA_FULL))
 		  End If
@@ -92,7 +90,6 @@ Protected Class Context
 		 Shared Function DHProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
 		  ' For diffie-hellman key exchanges
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/bb394802%28v=vs.85%29.aspx
-		  Static mDHProvider As WinLib.Crypto.Context
 		  If mDHProvider = Nil Then
 		    mDHProvider = New WinLib.Crypto.Context(AcquireProvider(MS_ENH_DSS_DH_PROV, PROV_DSS_DH))
 		  End If
@@ -107,7 +104,6 @@ Protected Class Context
 	#tag Method, Flags = &h0
 		 Shared Function EnhancedProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386986%28v=vs.85%29.aspx
-		  Static mEnhancedProvider As WinLib.Crypto.Context
 		  If mEnhancedProvider = Nil Then
 		    mEnhancedProvider = New WinLib.Crypto.Context(AcquireProvider(MS_ENHANCED_PROV, PROV_RSA_FULL))
 		  End If
@@ -199,7 +195,6 @@ Protected Class Context
 	#tag Method, Flags = &h0
 		 Shared Function StrongProvider(FreeProvider As Boolean = False) As WinLib.Crypto.Context
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386989%28v=vs.85%29.aspx
-		  Static mStrongProvider As WinLib.Crypto.Context
 		  If mStrongProvider = Nil Then
 		    mStrongProvider = New WinLib.Crypto.Context(AcquireProvider(MS_STRONG_PROV, PROV_RSA_FULL))
 		  End If
@@ -212,12 +207,32 @@ Protected Class Context
 	#tag EndMethod
 
 
+	#tag Property, Flags = &h21
+		Private Shared mAESProvider As WinLib.Crypto.Context
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared mBaseProvider As WinLib.Crypto.Context
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared mDHProvider As WinLib.Crypto.Context
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared mEnhancedProvider As WinLib.Crypto.Context
+	#tag EndProperty
+
 	#tag Property, Flags = &h1
 		Protected mLastError As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
 		Protected mProvider As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private Shared mStrongProvider As WinLib.Crypto.Context
 	#tag EndProperty
 
 
