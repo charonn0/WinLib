@@ -52,8 +52,8 @@ Inherits WinLib.MessageMonitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Destructor()
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
 		  #If TargetWin32 Then
 		    If Win32.KernelVersion >= 6.0 Then ' Vista and newer
 		      Call Win32.User32.RemoveClipboardFormatListener(Me.Handle)
@@ -63,7 +63,6 @@ Inherits WinLib.MessageMonitor
 		      Call Win32.User32.ChangeClipboardChain(Me.Handle, Me.NextViewerWindow)
 		    End If
 		  #endif
-		  Super.Destructor()
 		End Sub
 	#tag EndMethod
 

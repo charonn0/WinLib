@@ -47,8 +47,8 @@ Inherits FileObject
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Destructor()
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
 		  Me.Close
 		End Sub
 	#tag EndMethod

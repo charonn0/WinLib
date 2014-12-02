@@ -38,8 +38,8 @@ Implements WinLib.Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Destructor()
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
 		  Me.Close
 		End Sub
 	#tag EndMethod

@@ -43,8 +43,8 @@ Inherits WinLib.IOStream
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Destructor()
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
 		  Me.Close
 		End Sub
 	#tag EndMethod

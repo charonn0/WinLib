@@ -55,12 +55,11 @@ Inherits WinLib.MessageMonitor
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Destructor()
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
 		  For i As Integer = UBound(KeyIDs) DownTo 0
 		    Me.UnregisterKey(KeyIDs(i))
 		  Next
-		  Super.Destructor
 		End Sub
 	#tag EndMethod
 
