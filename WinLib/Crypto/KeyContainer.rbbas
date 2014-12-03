@@ -25,6 +25,43 @@ Inherits WinLib.Crypto.Context
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function Export(EncryptWith As WinLib.Crypto.KeyContainer = Nil) As MemoryBlock
+		  Dim sz, exp, blobtype As Integer
+		  If EncryptWith <> Nil Then 
+		    exp = EncryptWith.Handle
+		    blobtype = PRIVATEKEYBLOB
+		  Else
+		    blobtype = PLAINTEXTKEYBLOB
+		  End If
+		  
+		  
+		  If Not Win32.AdvApi32.CryptExportKey(Me.Handle, exp, blobtype, 0, Nil, sz) Then
+		    mLastError = Win32.LastError
+		    Return Nil
+		  End If
+		  
+		  Dim mb As New MemoryBlock(sz)
+		  sz = mb.Size
+		  
+		  If Not Win32.AdvApi32.CryptExportKey(Me.Handle, exp, blobtype, 0, mb, sz) Then
+		    mLastError = Win32.LastError
+		    Return Nil
+		  End If
+		  Return mb
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Generate(Algorithm As Integer, KeySize As Integer) As Boolean
+		  Dim Flags As Integer '= BitOr(ShiftLeft(KeySize, 16), (CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE))
+		  If Win32.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then
+		    Return True
+		  End If
+		  mLastError = Win32.LastError
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h1
 		Protected Function GetKeyParam(Type As Integer, ByRef Buffer As MemoryBlock, Flags As Integer) As Boolean
 		  ' If Buffer is Nil and no error occurs, on return Buffer will be instantiated with the correct size of the data.

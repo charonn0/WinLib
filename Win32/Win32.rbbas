@@ -401,7 +401,22 @@ Protected Module Win32
 	#tag Constant, Name = CREATE_SUSPENDED, Type = Double, Dynamic = False, Default = \"&h00000004", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CRYPT_CREATE_SALT, Type = Double, Dynamic = False, Default = \"4", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_EXPORTABLE, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_NO_SALT, Type = Double, Dynamic = False, Default = \"&h10", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_SERVER, Type = Double, Dynamic = False, Default = \"1024", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_UPDATE_KEY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = CTRL_BREAK_EVENT, Type = Double, Dynamic = False, Default = \"1", Scope = Public
@@ -1079,6 +1094,9 @@ Protected Module Win32
 	#tag Constant, Name = NTE_BAD_UID, Type = Double, Dynamic = False, Default = \"&h80090001", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = OPAQUEKEYBLOB, Type = Double, Dynamic = False, Default = \"&h9", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = OPEN_ALWAYS, Type = Double, Dynamic = False, Default = \"4", Scope = Public
 	#tag EndConstant
 
@@ -1214,6 +1232,9 @@ Protected Module Win32
 	#tag Constant, Name = PIPE_UNLIMITED_INSTANCES, Type = Double, Dynamic = False, Default = \"&hFF", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = PLAINTEXTKEYBLOB, Type = Double, Dynamic = False, Default = \"&h8", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = PMSF_DONT_STRIP_SPACES, Type = Double, Dynamic = False, Default = \"&h00010000", Scope = Public
 	#tag EndConstant
 
@@ -1245,6 +1266,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = PRF_VERIFYEXISTS, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PRIVATEKEYBLOB, Type = Double, Dynamic = False, Default = \"&h7", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = PROCESSOR_ARCHITECTURE_AMD64, Type = Double, Dynamic = False, Default = \"9", Scope = Public
@@ -1281,6 +1305,12 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PUBLICKEYBLOB, Type = Double, Dynamic = False, Default = \"&h6", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = PUBLICKEYBLOBEX, Type = Double, Dynamic = False, Default = \"&hA", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = READ_CONTROL, Type = Double, Dynamic = False, Default = \"&h00020000", Scope = Public
@@ -1452,6 +1482,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = SHGFI_USEFILEATTRIBUTES, Type = Double, Dynamic = False, Default = \"&h000000010", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SIMPLEBLOB, Type = Double, Dynamic = False, Default = \"&h1", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = SM_CLEANBOOT, Type = Double, Dynamic = False, Default = \"67", Scope = Public
@@ -1629,6 +1662,9 @@ Protected Module Win32
 	#tag EndConstant
 
 	#tag Constant, Name = SW_SHOWNORMAL, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = SYMMETRICWRAPKEYBLOB, Type = Double, Dynamic = False, Default = \"&hB", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = SYNCHRONIZE, Type = Double, Dynamic = False, Default = \"&h00100000", Scope = Public
