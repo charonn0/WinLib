@@ -26,9 +26,25 @@ Inherits WinLib.Crypto.Context
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Decrypt(InputData As MemoryBlock, FinalBlock As Boolean = True, Hashcontainer As WinLib.Crypto.HashProcessor = Nil) As MemoryBlock
+		  Dim sz As Integer = InputData.Size
+		  Dim h As Integer
+		  If Hashcontainer <> Nil Then h = Hashcontainer.Handle
+		  If Not Win32.AdvApi32.CryptDecrypt(Me.Handle, h, FinalBlock, 0, InputData, sz) Then
+		    mLastError = Win32.LastError
+		    Dim err As New IOException
+		    err.ErrorNumber = mLastError
+		    err.Message = WinLib.FormatError(mLastError)
+		    Raise err
+		  End If
+		  Return InputData
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Export(EncryptWith As WinLib.Crypto.KeyContainer = Nil) As MemoryBlock
 		  Dim sz, exp, blobtype As Integer
-		  If EncryptWith <> Nil Then 
+		  If EncryptWith <> Nil Then
 		    exp = EncryptWith.Handle
 		    blobtype = PRIVATEKEYBLOB
 		  Else
@@ -54,7 +70,7 @@ Inherits WinLib.Crypto.Context
 
 	#tag Method, Flags = &h0
 		Function Generate(Algorithm As Integer, KeySize As Integer) As Boolean
-		  Dim Flags As Integer '= BitOr(ShiftLeft(KeySize, 16), (CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE))
+		  Dim Flags As Integer = (CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE)')
 		  If Win32.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then
 		    Return True
 		  End If
