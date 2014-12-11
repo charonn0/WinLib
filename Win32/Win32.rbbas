@@ -416,6 +416,39 @@ Protected Module Win32
 	#tag Constant, Name = CRYPT_SERVER, Type = Double, Dynamic = False, Default = \"1024", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = CRYPT_STRING_BASE64, Type = Double, Dynamic = False, Default = \"1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_BASE64HEADER, Type = Double, Dynamic = False, Default = \"0", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_BASE64REQUESTHEADER, Type = Double, Dynamic = False, Default = \"3", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_BASE64X509CRLHEADER, Type = Double, Dynamic = False, Default = \"9", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_BINARY, Type = Double, Dynamic = False, Default = \"2", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_HEX, Type = Double, Dynamic = False, Default = \"4", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_HEXADDR, Type = Double, Dynamic = False, Default = \"&h0a", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_HEXASCII, Type = Double, Dynamic = False, Default = \"5", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_HEXASCIIADDR, Type = Double, Dynamic = False, Default = \"&h0B", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_HEXRAW, Type = Double, Dynamic = False, Default = \"&h0C", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = CRYPT_STRING_STRICT, Type = Double, Dynamic = False, Default = \"&h20000000", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = CRYPT_UPDATE_KEY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Public
 	#tag EndConstant
 

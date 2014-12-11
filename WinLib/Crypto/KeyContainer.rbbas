@@ -42,6 +42,22 @@ Inherits WinLib.Crypto.Context
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function Encrypt(InputData As MemoryBlock, FinalBlock As Boolean = True, Hashcontainer As WinLib.Crypto.HashProcessor = Nil) As MemoryBlock
+		  Dim sz As Integer = InputData.Size
+		  Dim h As Integer
+		  If Hashcontainer <> Nil Then h = Hashcontainer.Handle
+		  If Not Win32.AdvApi32.CryptEncrypt(Me.Handle, h, FinalBlock, 0, InputData, sz, InputData.Size) Then
+		    mLastError = Win32.LastError
+		    Dim err As New IOException
+		    err.ErrorNumber = mLastError
+		    err.Message = WinLib.FormatError(mLastError)
+		    Raise err
+		  End If
+		  Return InputData
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function Export(EncryptWith As WinLib.Crypto.KeyContainer = Nil) As MemoryBlock
 		  Dim sz, exp, blobtype As Integer
 		  If EncryptWith <> Nil Then
@@ -101,6 +117,23 @@ Inherits WinLib.Crypto.Context
 	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  Return mHandle
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function Import(KeyData As MemoryBlock, Provider As WinLib.Crypto.Context) As WinLib.Crypto.KeyContainer
+		  Dim hKey As Integer
+		  If Win32.AdvApi32.CryptImportKey(Provider.Provider, KeyData, KeyData.Size, 0, 0, hKey) Then
+		    Dim key As New WinLib.Crypto.KeyContainer(Provider)
+		    key.mHandle = hkey
+		    Return key
+		  Else
+		    hKey = Win32.LastError
+		    Dim err As New IOException
+		    err.ErrorNumber = hKey
+		    err.Message = WinLib.FormatError(hKey)
+		    Raise err
+		  End If
 		End Function
 	#tag EndMethod
 
