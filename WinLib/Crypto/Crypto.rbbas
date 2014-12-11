@@ -1,7 +1,37 @@
 #tag Module
 Protected Module Crypto
 	#tag Method, Flags = &h1
+		Protected Function BinaryToString(Data As MemoryBlock, Flags As Integer) As String
+		  Dim sz As Integer
+		  Call Win32.Crypt32.CryptBinaryToString(Data, Data.Size, Flags, Nil, sz)
+		  Dim output As New MemoryBlock(sz * 2)
+		  If Not Win32.Crypt32.CryptBinaryToString(Data, Data.Size, Flags, output, sz) Then
+		    sz = Win32.LastError
+		    Dim err As New IOException
+		    err.ErrorNumber = sz
+		    err.Message = WinLib.FormatError(sz)
+		    Raise err
+		  End If
+		  Return output.WString(0)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EncodeBase64(Data As MemoryBlock) As String
+		  Return BinaryToString(Data, CRYPT_STRING_BASE64)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function EncodeHex(Data As MemoryBlock) As String
+		  Return BinaryToString(Data, CRYPT_STRING_HEX)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetRandomData(ByteCount As Integer) As MemoryBlock
+		  ' The data produced by this funtion is cryptographically random.
+		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa379942%28v=vs.85%29.aspx
 		  Dim r As New WinLib.Crypto.Random
 		  Return r.Generate(ByteCount)
 		End Function
