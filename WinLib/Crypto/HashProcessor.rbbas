@@ -95,6 +95,17 @@ Inherits WinLib.Crypto.Context
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function SetHashParam(Type As Integer, Buffer As MemoryBlock, Flags As Integer) As Boolean
+		  If Not Win32.AdvApi32.CryptSetHashParam(mHandle, Type, buffer, Flags) Then
+		    mLastError = Win32.LastError
+		    Return False
+		  Else
+		    Return True
+		  End If
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function Value() As String
 		  Dim buffer As New MemoryBlock(4)
