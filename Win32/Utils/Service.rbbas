@@ -286,6 +286,49 @@ Implements Win32.Win32Object
 	#tag EndProperty
 
 
+	#tag Constant, Name = SC_MANAGER_ALL_ACCESS, Type = Double, Dynamic = False, Default = \"&hF003F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_CONNECT, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_CREATE_SERVICE, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_ENUMERATE_SERVICE, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_LOCK, Type = Double, Dynamic = False, Default = \"&h0008", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_MODIFY_BOOT_CONFIG, Type = Double, Dynamic = False, Default = \"&h0020", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SC_MANAGER_QUERY_LOCK_STATUS, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICES_ACTIVE_DATABASE, Type = String, Dynamic = False, Default = \"ServicesActive", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_CONTROL_CONTINUE, Type = Double, Dynamic = False, Default = \"&h00000003", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_CONTROL_PAUSE, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_CONTROL_STOP, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_PAUSE_CONTINUE, Type = Double, Dynamic = False, Default = \"&h0040", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_START, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = SERVICE_STOP, Type = Double, Dynamic = False, Default = \"&h0020", Scope = Private
+	#tag EndConstant
+
+
 	#tag Enum, Name = States, Type = Integer, Flags = &h0
 		Stopped=1
 		  StartPending

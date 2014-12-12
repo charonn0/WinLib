@@ -132,6 +132,16 @@ Inherits Win32.Crypto.Context
 	#tag EndProperty
 
 
+	#tag Constant, Name = HP_ALGID, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HP_HASHSIZE, Type = Double, Dynamic = False, Default = \"4", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = HP_HASHVAL, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

@@ -244,8 +244,14 @@ Protected Module GUI
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Function WS_EX_PALETTEWINDOW() As Integer
+		  Return WS_EX_WINDOWEDGE Or WS_EX_TOOLWINDOW Or WS_EX_TOPMOST
+		End Function
+	#tag EndMethod
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =     TargetHasGUI
+
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =        TargetHasGUI
 		#tag Getter
 			Get
 			  ' Returns a Rectangle within which the mouse cursor is currently allowed move.
@@ -280,7 +286,7 @@ Protected Module GUI
 		Protected CursorConfinementArea As REALbasic.Rect
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =     TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =        TargetHasGUI
 		#tag Getter
 			Get
 			  ' Vista and newer. Returns true if desktop composition is enabled.
@@ -311,6 +317,142 @@ Protected Module GUI
 		#tag EndSetter
 		Protected DesktopComposition As Boolean
 	#tag EndComputedProperty
+
+
+	#tag Constant, Name = CAPTUREBLT, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = FR_PRIVATE, Type = Double, Dynamic = False, Default = \"&h10", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = GWL_EXSTYLE, Type = Double, Dynamic = False, Default = \"-20", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = GWL_STYLE, Type = Double, Dynamic = False, Default = \"-16", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = GWL_WNDPROC, Type = Double, Dynamic = False, Default = \"-4", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = GW_HWNDNEXT, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = GW_HWNDPREV, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = GW_OWNER, Type = Double, Dynamic = False, Default = \"4", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_ASYNCWINDOWPOS, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_FRAMECHANGED, Type = Double, Dynamic = False, Default = \"&h20", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_NOACTIVATE, Type = Double, Dynamic = False, Default = \"&h0010", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_NOMOVE, Type = Double, Dynamic = False, Default = \"&h2", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_NOSIZE, Type = Double, Dynamic = False, Default = \"&h1", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SWP_NOZORDER, Type = Double, Dynamic = False, Default = \"&h0004", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_FORCEMINIMIZE, Type = Double, Dynamic = False, Default = \"11", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_HIDE, Type = Double, Dynamic = False, Default = \"0", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_MAXIMIZE, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_MINIMIZE, Type = Double, Dynamic = False, Default = \"6", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_RESTORE, Type = Double, Dynamic = False, Default = \"9", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_SHOW, Type = Double, Dynamic = False, Default = \"5", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_SHOWDEFAULT, Type = Double, Dynamic = False, Default = \"10", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_SHOWMAXIMIZED, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_SHOWMINIMIZED, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = SW_SHOWNORMAL, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CHANGECBCHAIN, Type = Double, Dynamic = False, Default = \"&h030D", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CLIPBOARDUPDATE, Type = Double, Dynamic = False, Default = \"&h031D", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CLOSE, Type = Double, Dynamic = False, Default = \"&h10", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CREATE, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_DRAWCLIPBOARD, Type = Double, Dynamic = False, Default = \"&h0308", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_GETMINMAXINFO, Type = Double, Dynamic = False, Default = \"&h0024", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_GETTEXT, Type = Double, Dynamic = False, Default = \"&h000D", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_MOUSEWHEEL, Type = Double, Dynamic = False, Default = \"&h020A", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_NCCALCSIZE, Type = Double, Dynamic = False, Default = \"&h0083", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_NCCREATE, Type = Double, Dynamic = False, Default = \"&h0081", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_PRINT, Type = Double, Dynamic = False, Default = \"&h0317", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_SETICON, Type = Double, Dynamic = False, Default = \"&h0080", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_SETTEXT, Type = Double, Dynamic = False, Default = \"&h000C", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WM_USER, Type = Double, Dynamic = False, Default = \"&h0400", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_CHILD, Type = Double, Dynamic = False, Default = \"&h40000000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_EX_LAYERED, Type = Double, Dynamic = False, Default = \"&h80000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_EX_NOREDIRECTIONBITMAP, Type = Double, Dynamic = False, Default = \"&h00200000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_EX_TOOLWINDOW, Type = Double, Dynamic = False, Default = \"&h00000080", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_EX_TOPMOST, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_EX_WINDOWEDGE, Type = Double, Dynamic = False, Default = \"&h00000100", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = WS_VISIBLE, Type = Double, Dynamic = False, Default = \"&h10000000", Scope = Protected
+	#tag EndConstant
 
 
 	#tag ViewBehavior

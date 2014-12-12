@@ -46,7 +46,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h1
 		Protected Sub EmbedPreviewWithin(Parent As Integer, X As Integer, Y As Integer, W As Integer, H As Integer)
 		  Me.Close
-		  CapWin = Win32.Libs.AviCap32.capCreateCaptureWindow(Me.Name, WS_VISIBLE Or WS_CHILD, X, Y, W, H, Parent, 0)
+		  CapWin = Win32.Libs.AviCap32.capCreateCaptureWindow(Me.Name, Win32.GUI.WS_VISIBLE Or Win32.GUI.WS_CHILD, X, Y, W, H, Parent, 0)
 		  If CapWin <= 0 Then
 		    mLastError = Win32.LastError()
 		    Return
@@ -182,6 +182,48 @@ Implements Win32.Win32Object
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_DRIVER_GET_CAPS() As Integer
+		  Return Win32.GUI.WM_USER + 14
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_EDIT_COPY() As Integer
+		  Return Win32.GUI.WM_USER + 30
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_GET_SEQUENCE_SETUP() As Integer
+		  Return Win32.GUI.WM_USER + 65
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_SET_CALLBACK_ERROR() As Integer
+		  Return Win32.GUI.WM_USER + 102
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_SET_SCROLL() As Integer
+		  Return Win32.GUI.WM_USER + 55
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_SET_SEQUENCE_SETUP() As Integer
+		  Return Win32.GUI.WM_USER + 64
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function WM_CAP_SET_VIDEOFORMAT() As Integer
+		  Return Win32.GUI.WM_USER + 45
+		End Function
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h1
 		Protected CapWin As Integer
@@ -194,6 +236,34 @@ Implements Win32.Win32Object
 	#tag Property, Flags = &h1
 		Protected mLastError As Integer
 	#tag EndProperty
+
+
+	#tag Constant, Name = WM_CAP_DLG_VIDEOFORMAT, Type = Double, Dynamic = False, Default = \"1065", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_DLG_VIDEOSOURCE, Type = Double, Dynamic = False, Default = \"1066", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_DRIVER_CONNECT, Type = Double, Dynamic = False, Default = \"1034", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_DRIVER_DISCONNECT, Type = Double, Dynamic = False, Default = \"1035", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_EDIT_COPY1, Type = Double, Dynamic = False, Default = \"1054", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_GRAB_FRAME, Type = Double, Dynamic = False, Default = \"1084", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_SET_PREVIEW, Type = Double, Dynamic = False, Default = \"1074", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_SET_PREVIEWRATE, Type = Double, Dynamic = False, Default = \"1076", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_CAP_SET_SCALE, Type = Double, Dynamic = False, Default = \"1077", Scope = Private
+	#tag EndConstant
 
 
 	#tag ViewBehavior

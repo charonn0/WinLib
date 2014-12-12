@@ -124,6 +124,9 @@ Implements Win32.Win32Object
 	#tag Constant, Name = INFINITE, Type = Double, Dynamic = False, Default = \"&hFFFFFFFF", Scope = Protected
 	#tag EndConstant
 
+	#tag Constant, Name = WT_EXECUTEONLYONCE, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Private
+	#tag EndConstant
+
 
 	#tag ViewBehavior
 		#tag ViewProperty

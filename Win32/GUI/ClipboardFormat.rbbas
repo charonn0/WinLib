@@ -4,13 +4,13 @@ Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		 Shared Function CF_BITMAP() As Win32.GUI.ClipboardFormat
-		  Return New Win32.GUI.ClipboardFormat(Win32.CF_BITMAP)
+		  Return New Win32.GUI.ClipboardFormat(CF_BITMAP)
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0, CompatibilityFlags = TargetHasGUI
 		 Shared Function CF_TEXT() As Win32.GUI.ClipboardFormat
-		  Return New Win32.GUI.ClipboardFormat(Win32.CF_TEXT)
+		  Return New Win32.GUI.ClipboardFormat(CF_TEXT)
 		End Function
 	#tag EndMethod
 
@@ -130,7 +130,7 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag DelegateDeclaration, Flags = &h21
-		Private Delegate Function RenderHandler(Sender As Win32.GUI.ClipboardFormat, RawClipboard As Ptr) As Boolean
+		Private Delegate Function RenderHandler(Sender As Win32 . GUI . ClipboardFormat, RawClipboard As Ptr) As Boolean
 	#tag EndDelegateDeclaration
 
 
@@ -146,6 +146,58 @@ Implements Win32.Win32Object
 	#tag Property, Flags = &h1
 		Protected mLastError As Integer
 	#tag EndProperty
+
+
+	#tag Constant, Name = CF_BITMAP, Type = Double, Dynamic = False, Default = \"2", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_DIB, Type = Double, Dynamic = False, Default = \"8", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_DIBV5, Type = Double, Dynamic = False, Default = \"17", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_DIF, Type = Double, Dynamic = False, Default = \"5", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_ENHMETAFILE, Type = Double, Dynamic = False, Default = \"14", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_HDROP, Type = Double, Dynamic = False, Default = \"15", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_LOCALE, Type = Double, Dynamic = False, Default = \"16", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_METAFILEPICT, Type = Double, Dynamic = False, Default = \"3", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_OEMTEXT, Type = Double, Dynamic = False, Default = \"7", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_PALETTE, Type = Double, Dynamic = False, Default = \"9", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_PENDATA, Type = Double, Dynamic = False, Default = \"10", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_RIFF, Type = Double, Dynamic = False, Default = \"11", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_SYLK, Type = Double, Dynamic = False, Default = \"4", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_TEXT, Type = Double, Dynamic = False, Default = \"1", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_TIFF, Type = Double, Dynamic = False, Default = \"6", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_UNICODETEXT, Type = Double, Dynamic = False, Default = \"13", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = CF_WAVE, Type = Double, Dynamic = False, Default = \"12", Scope = Private
+	#tag EndConstant
 
 
 	#tag ViewBehavior

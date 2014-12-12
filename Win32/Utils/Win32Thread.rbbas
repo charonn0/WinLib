@@ -177,6 +177,13 @@ Protected Class Win32Thread
 	#tag EndProperty
 
 
+	#tag Constant, Name = CREATE_SUSPENDED, Type = Double, Dynamic = False, Default = \"&h00000004", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = TLS_OUT_OF_INDEXES, Type = Double, Dynamic = False, Default = \"&hFFFFFFFF", Scope = Private
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

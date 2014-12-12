@@ -236,6 +236,55 @@ Protected Class Context
 	#tag EndProperty
 
 
+	#tag Constant, Name = MS_DEF_DH_SCHANNEL_PROV, Type = String, Dynamic = False, Default = \"Microsoft DH Schannel Cryptographic Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_DSS_DH_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base DSS and Diffie-Hellman Cryptographic Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_DSS_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base DSS Cryptographic Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Cryptographic Provider v1.0", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_DEF_RSA_SCHANNEL_PROV, Type = String, Dynamic = False, Default = \"Microsoft RSA Schannel Cryptographic Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_ENHANCED_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced Cryptographic Provider v1.0", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_ENH_DSS_DH_PROV, Type = String, Dynamic = False, Default = \"Microsoft Enhanced DSS and Diffie-Hellman Cryptographic Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_SCARD_PROV, Type = String, Dynamic = False, Default = \"Microsoft Base Smart Card Crypto Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = MS_STRONG_PROV, Type = String, Dynamic = False, Default = \"Microsoft Strong Cryptographic Provider", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = NTE_BAD_KEYSET, Type = Double, Dynamic = False, Default = \"&h80090016", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = NTE_BAD_UID, Type = Double, Dynamic = False, Default = \"&h80090001", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PP_NAME, Type = Double, Dynamic = False, Default = \"4", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_DSS, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_DSS_DH, Type = Double, Dynamic = False, Default = \"13", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_RSA_AES, Type = Double, Dynamic = False, Default = \"24", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = PROV_RSA_FULL, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

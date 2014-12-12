@@ -106,6 +106,25 @@ Implements Win32.Win32Object
 	#tag EndProperty
 
 
+	#tag Constant, Name = _O_APPEND, Type = Double, Dynamic = False, Default = \"&h0008", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = _O_BINARY, Type = Double, Dynamic = False, Default = \"&h8000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = _O_RDONLY, Type = Double, Dynamic = False, Default = \"0", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = _O_RDWR, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = _O_TEXT, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = _O_WRONLY, Type = Double, Dynamic = False, Default = \"&h0001", Scope = Private
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

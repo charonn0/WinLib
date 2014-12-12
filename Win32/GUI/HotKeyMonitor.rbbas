@@ -149,6 +149,22 @@ Inherits Win32.GUI.MessageMonitor
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = MOD_ALT, Type = Double, Dynamic = False, Default = \"&h1", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MOD_CONTROL, Type = Double, Dynamic = False, Default = \"&h2", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MOD_SHIFT, Type = Double, Dynamic = False, Default = \"&h4", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = MOD_WIN, Type = Double, Dynamic = False, Default = \"&h8", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = WM_HOTKEY, Type = Double, Dynamic = False, Default = \"&h0312", Scope = Public
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

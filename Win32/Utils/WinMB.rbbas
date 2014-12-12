@@ -307,6 +307,42 @@ Implements Win32.Win32Object
 	#tag EndProperty
 
 
+	#tag Constant, Name = GMEM_ZEROINIT, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = HEAP_ZERO_MEMORY, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_COMMIT, Type = Double, Dynamic = False, Default = \"&h00001000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_DECOMMIT, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_LARGE_PAGES, Type = Double, Dynamic = False, Default = \"&h20000000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_PHYSICAL, Type = Double, Dynamic = False, Default = \"&h00400000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_RELEASE, Type = Double, Dynamic = False, Default = \"&h8000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_RESERVE, Type = Double, Dynamic = False, Default = \"&h00002000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_TOP_DOWN, Type = Double, Dynamic = False, Default = \"&h00100000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = MEM_WRITE_WATCH, Type = Double, Dynamic = False, Default = \"&h00200000", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PAGE_EXECUTE_READWRITE, Type = Double, Dynamic = False, Default = \"&h40", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PAGE_READONLY, Type = Double, Dynamic = False, Default = \"&h02", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = TypeGlobal, Type = Double, Dynamic = False, Default = \"-1", Scope = Public
 	#tag EndConstant
 

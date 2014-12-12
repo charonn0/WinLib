@@ -204,6 +204,13 @@ Implements Win32.Win32Object
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = FIND_FIRST_EX_CASE_SENSITIVE, Type = Double, Dynamic = False, Default = \"1", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = FIND_FIRST_EX_LARGE_FETCH, Type = Double, Dynamic = False, Default = \"2", Scope = Private
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="CaseSensitive"

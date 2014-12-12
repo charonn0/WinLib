@@ -76,6 +76,10 @@ Implements Win32.Win32Object
 	#tag EndNote
 
 
+	#tag Constant, Name = HWND_MESSAGE, Type = Double, Dynamic = False, Default = \"-3", Scope = Private
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

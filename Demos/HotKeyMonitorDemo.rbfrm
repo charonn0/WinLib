@@ -46,6 +46,7 @@ Begin Window HotKeyMonitorDemo
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Press Ctrl+Alt+A\r\nWorks even if this window is minimized/invisible."
       TextAlign       =   0
       TextColor       =   "&c00000000"
@@ -59,13 +60,17 @@ Begin Window HotKeyMonitorDemo
       Width           =   175
    End
    Begin Win32.GUI.HotKeyMonitor HotKeyMonitor1
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   78
       LockedInPosition=   False
       Scope           =   0
+      TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   26
+      Visible         =   True
       Width           =   32
    End
 End
@@ -81,7 +86,7 @@ End
 
 	#tag Event
 		Sub Open()
-		  kHandle = HotKeyMonitor1.RegisterKey("a", MOD_CONTROL, MOD_ALT)
+		  kHandle = HotKeyMonitor1.RegisterKey("a", HotKeyMonitor1.MOD_CONTROL, HotKeyMonitor1.MOD_ALT)
 		End Sub
 	#tag EndEvent
 

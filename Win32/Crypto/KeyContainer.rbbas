@@ -183,6 +183,25 @@ Inherits Win32.Crypto.Context
 	#tag EndProperty
 
 
+	#tag Constant, Name = KP_KEYLEN, Type = Double, Dynamic = False, Default = \"&h00000009", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = KP_PERMISSIONS, Type = Double, Dynamic = False, Default = \"&h00000006", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PLAINTEXTKEYBLOB, Type = Double, Dynamic = False, Default = \"&h8", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PRIVATEKEYBLOB, Type = Double, Dynamic = False, Default = \"&h7", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PUBLICKEYBLOB, Type = Double, Dynamic = False, Default = \"&h6", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = PUBLICKEYBLOBEX, Type = Double, Dynamic = False, Default = \"&hA", Scope = Private
+	#tag EndConstant
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

@@ -1,5 +1,5 @@
 #tag Class
-Protected Class Clip_Board
+Protected Class ClipBoard
 Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
@@ -47,7 +47,7 @@ Implements Win32.Win32Object
 		Sub Data(Format As Win32.GUI.ClipboardFormat, Assigns NewData As MemoryBlock)
 		  'System.DebugLog(CurrentMethodName)
 		  If Not Me.Open Or Not Me.Empty Then Raise New RuntimeException
-		  Dim hGlobal As Win32.Utils.WinMB = Win32.Utils.WinMB.HeapAllocate(NewData.Size, True, -1, GMEM_MOVEABLE)
+		  Dim hGlobal As Win32.Utils.WinMB = Win32.Utils.WinMB.HeapAllocate(NewData.Size, True, -1, Win32.Utils.GMEM_MOVEABLE)
 		  If hGlobal <> Nil Then
 		    Win32.Utils.WinMB.Acquire(hGlobal) ' mark as not freeable.
 		    hGlobal.StringValue(0, NewData.Size) = NewData.StringValue(0, NewData.Size)
