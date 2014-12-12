@@ -57,17 +57,16 @@ Begin Window HotKeyMonitorDemo
       Underline       =   False
       Visible         =   True
       Width           =   175
-      Begin HotKeyMonitor HotKeyMonitor1
-         Height          =   32
-         Index           =   -2147483648
-         InitialParent   =   "Label1"
-         Left            =   7.8e+1
-         LockedInPosition=   False
-         Scope           =   0
-         TabPanelIndex   =   0
-         Top             =   2.6e+1
-         Width           =   32
-      End
+   End
+   Begin Win32.GUI.HotKeyMonitor HotKeyMonitor1
+      Height          =   32
+      Index           =   -2147483648
+      Left            =   78
+      LockedInPosition=   False
+      Scope           =   0
+      TabPanelIndex   =   0
+      Top             =   26
+      Width           =   32
    End
 End
 #tag EndWindow

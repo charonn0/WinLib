@@ -165,22 +165,22 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  If WinLib.ImageDevice.DeviceCount > 0 Then
-		    Device = WinLib.ImageDevice.GetDeviceByIndex(0)
+		  If Win32.Utils.ImageDevice.DeviceCount > 0 Then
+		    Device = Win32.Utils.ImageDevice.GetDeviceByIndex(0)
 		  End If
 		End Sub
 	#tag EndEvent
 
 	#tag Event
 		Sub Resizing()
-		  Call Win32.User32.MoveWindow(Device.Handle, Canvas1.Left, Canvas1.Top, Canvas1.Width, Canvas1.Height, False)
+		  Call Win32.GUI.MoveWindow(Device.Handle, Canvas1.Left, Canvas1.Top, Canvas1.Width, Canvas1.Height)
 		  
 		End Sub
 	#tag EndEvent
 
 
 	#tag Property, Flags = &h1
-		Protected Device As WinLib.ImageDevice
+		Protected Device As Win32.Utils.ImageDevice
 	#tag EndProperty
 
 
@@ -199,7 +199,7 @@ End
 		      Call MsgBox( _
 		      "Unable to start preview." + EndOfLine + _
 		      "Error number: " + Str(Device.LastError) + EndOfLine + _
-		      "Message: " + WinLib.FormatError(Device.LastError), _
+		      "Message: " + Win32.FormatError(Device.LastError), _
 		      16, "Image device error")
 		      Me.Value = False
 		      Device.StopPreview
@@ -215,7 +215,7 @@ End
 #tag Events Canvas1
 	#tag Event
 		Sub Paint(g As Graphics)
-		  Dim d As WinLib.ImageDevice = ComboBox1.RowTag(ComboBox1.ListIndex)
+		  Dim d As Win32.Utils.ImageDevice = ComboBox1.RowTag(ComboBox1.ListIndex)
 		  Dim s As String
 		  If Device = Nil Then
 		    s = "No imaging devices detected."
@@ -255,10 +255,10 @@ End
 		Sub Open()
 		  Me.AddRow("Select image capture device")
 		  Me.ListIndex = 0
-		  Dim c As Integer = WinLib.ImageDevice.DeviceCount
+		  Dim c As Integer = Win32.Utils.ImageDevice.DeviceCount
 		  If c <= 0 Then Return
 		  For i As Integer = 0 To c -1
-		    Dim d As WinLib.ImageDevice = WinLib.ImageDevice.GetDeviceByIndex(i)
+		    Dim d As Win32.Utils.ImageDevice = Win32.Utils.ImageDevice.GetDeviceByIndex(i)
 		    Me.AddRow(d.Name)
 		    Me.RowTag(i + 1) = d
 		  Next
@@ -267,7 +267,7 @@ End
 	#tag EndEvent
 	#tag Event
 		Sub Change()
-		  PushButton3.Enabled = Me.RowTag(Me.ListIndex) <> Nil And Me.RowTag(Me.ListIndex) IsA WinLib.ImageDevice
+		  PushButton3.Enabled = Me.RowTag(Me.ListIndex) <> Nil And Me.RowTag(Me.ListIndex) IsA Win32.Utils.ImageDevice
 		  Canvas1.Invalidate(False)
 		End Sub
 	#tag EndEvent

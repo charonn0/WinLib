@@ -88,6 +88,7 @@ Begin Window FindFileIteratorDemo
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Search"
       TextAlign       =   2
       TextColor       =   &h000000
@@ -212,6 +213,7 @@ Begin Window FindFileIteratorDemo
       _ScrollWidth    =   -1
    End
    Begin Thread Thread1
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   322
@@ -219,11 +221,15 @@ Begin Window FindFileIteratorDemo
       Priority        =   5
       Scope           =   0
       StackSize       =   0
+      TabIndex        =   5
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   34
+      Visible         =   True
       Width           =   32
    End
    Begin Timer Timer1
+      Enabled         =   True
       Height          =   32
       Index           =   -2147483648
       Left            =   360
@@ -231,8 +237,11 @@ Begin Window FindFileIteratorDemo
       Mode            =   2
       Period          =   10
       Scope           =   0
+      TabIndex        =   6
       TabPanelIndex   =   0
+      TabStop         =   True
       Top             =   34
+      Visible         =   True
       Width           =   32
    End
    Begin CheckBox CheckBox1
@@ -312,7 +321,7 @@ End
 #tag Events Thread1
 	#tag Event
 		Sub Run()
-		  Dim fe As New FindFileIterator(RootFolder, TextField1.Text)
+		  Dim fe As New Win32.IO.FindFileIterator(RootFolder, TextField1.Text)
 		  fe.CaseSensitive = CheckBox1.Value
 		  Do Until Not fe.NextItem
 		    If fe.CurrentItem = Nil Then Continue

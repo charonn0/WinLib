@@ -96,7 +96,7 @@ Begin Window ClipboardMonitorDemo
       Visible         =   True
       Width           =   256
    End
-   Begin ClipboardMonitor ClipboardMonitor1
+   Begin Win32.GUI.ClipboardMonitor ClipboardMonitor1
       Height          =   32
       Index           =   -2147483648
       Left            =   563
@@ -128,13 +128,14 @@ End
 		Private Sub CheckClipboard()
 		  ClipPic = Nil
 		  TextArea1.Text = ""
-		  Dim cp As New WinLib.Clip_Board(Self.Handle)
-		  If cp.HasFormat(CF_BITMAP) Then
-		    Dim hMem As Ptr = cp.Data(CF_BITMAP)
+		  Dim cp As New Win32.GUI.Clip_Board(Self.Handle)
+		  Dim cf As Win32.GUI.ClipboardFormat
+		  If cp.HasFormat(cf.CF_BITMAP) Then
+		    Dim hMem As Ptr = cp.Data(cf.CF_BITMAP)
 		    ClipPic = Win32.HBITMAP(Integer(hMem))
 		  End If
-		  If cp.HasFormat(CF_TEXT) Then
-		    TextArea1.Text = cp.Data(CF_TEXT)
+		  If cp.HasFormat(cf.CF_TEXT) Then
+		    TextArea1.Text = cp.Data(cf.CF_TEXT)
 		  End If
 		  Canvas1.Invalidate(True)
 		  

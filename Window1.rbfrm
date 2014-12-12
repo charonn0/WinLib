@@ -219,8 +219,8 @@ End
 #tag WindowCode
 	#tag Event
 		Sub Open()
-		  'Dim p As WinLib.Service = WinLib.Service.OpenService("spooler")
-		  'If p.State = WinLib.Service.States.Stopped Then
+		  'Dim p As Win32.Service = Win32.Service.OpenService("spooler")
+		  'If p.State = Win32.Service.States.Stopped Then
 		  'Call p.Start()
 		  'Else
 		  'Call p.Stop()
@@ -231,7 +231,7 @@ End
 
 
 	#tag Method, Flags = &h21
-		Private Sub WaitProcHandler(Sender As WinLib.Waiter, WaitFired As Boolean)
+		Private Sub WaitProcHandler(Sender As Win32.Utils.Waiter, WaitFired As Boolean)
 		  #pragma Unused Sender
 		  System.DebugLog(CurrentMethodName)
 		  If Not WaitFired Then
@@ -243,12 +243,8 @@ End
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h0
-		MonHandle As Integer
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		Waiter As WinLib.Waiter
+	#tag Property, Flags = &h21
+		Private Waiter As Win32.IO.FolderWatcher
 	#tag EndProperty
 
 
@@ -305,7 +301,7 @@ End
 	#tag Event
 		Sub MouseUp(X As Integer, Y As Integer)
 		  If X >= 0 And Y >= 0 Then
-		    ShowURL("http://www.boredomsoft.org/winlib.bs")
+		    ShowURL("http://www.boredomsoft.org/Win32.bs")
 		  End If
 		End Sub
 	#tag EndEvent
@@ -315,11 +311,12 @@ End
 		Sub Action()
 		  Dim f As FolderItem = SelectFolder()
 		  If f <> Nil Then
-		    Dim filters As Integer = FILE_NOTIFY_CHANGE_FILE_NAME Or FILE_NOTIFY_CHANGE_DIR_NAME
-		    Waiter = New WinLib.Waiter
-		    AddHandler Waiter.WaitSignalled, WeakAddressOf WaitProcHandler
-		    MonHandle = Win32.Kernel32.FindFirstChangeNotification(SpecialFolder.Desktop.AbsolutePath, False, filters)
-		    Call Waiter.WaitOnce(MonHandle)
+		    Waiter = New Win32.IO.FolderWatcher
+		    If f <> Nil And f.Exists Then
+		      Waiter.TargetFolder = f
+		      AddHandler Waiter.WaitSignalled, WeakAddressOf WaitProcHandler
+		      Call Waiter.Wait()
+		    End If
 		  End If
 		End Sub
 	#tag EndEvent
