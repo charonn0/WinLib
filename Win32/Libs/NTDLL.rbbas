@@ -1,7 +1,7 @@
 #tag Module
 Protected Module NTDLL
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Sub NtQueryInformationFile Lib "NTDLL" (fHandle As Integer, ByRef status As IO_STATUS_BLOCK, FileInformation As Ptr, FILength As UInt32, InfoClass As Int32)
+		Protected Soft Declare Sub NtQueryInformationFile Lib "NTDLL" (fHandle As Integer, ByRef status As Win32 . IO . IO_STATUS_BLOCK, FileInformation As Ptr, FILength As UInt32, InfoClass As Int32)
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

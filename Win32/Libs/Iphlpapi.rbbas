@@ -5,7 +5,7 @@ Protected Module Iphlpapi
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function GetIpStatistics Lib "Iphlpapi" (ByRef Info As MIB_IPSTATS) As Integer
+		Protected Declare Function GetIpStatistics Lib "Iphlpapi" (ByRef Info As Win32 . Utils . MIB_IPSTATS) As Integer
 	#tag EndExternalMethod
 
 

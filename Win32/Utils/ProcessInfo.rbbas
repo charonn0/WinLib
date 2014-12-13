@@ -14,7 +14,7 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(ProcInfo As PROCESSENTRY32)
+		Sub Constructor(ProcInfo As Win32.Utils.PROCESSENTRY32)
 		  Me.ProcessID = ProcInfo.ProcessID
 		  Me.ParentID = ProcInfo.ParentProcessID
 		  If Executable <> Nil Then
@@ -104,7 +104,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		 Shared Function GetProcessList() As Win32.Utils.ProcessInfo()
 		  Dim snaphandle As Integer = Win32.Libs.Kernel32.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0)
-		  Dim info As PROCESSENTRY32
+		  Dim info As Win32.Utils.PROCESSENTRY32
 		  Dim list() As Win32.Utils.ProcessInfo
 		  info.Ssize = Info.Size
 		  If Win32.Libs.Kernel32.Process32First(snaphandle, info) Then
@@ -255,6 +255,16 @@ Implements Win32.Win32Object
 
 	#tag Constant, Name = TH32CS_SNAPPROCESS, Type = Double, Dynamic = False, Default = \"&h2", Scope = Private
 	#tag EndConstant
+
+
+	#tag Structure, Name = SYSTEM_HANDLE_TABLE_ENTRY_INFO, Flags = &h1
+		ProcessID As Integer
+		  ObjectType As Byte
+		  Flags As Byte
+		  Value As Int16
+		  Address As Ptr
+		GrantedAccess As Integer
+	#tag EndStructure
 
 
 	#tag ViewBehavior

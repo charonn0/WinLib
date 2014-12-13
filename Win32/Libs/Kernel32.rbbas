@@ -13,7 +13,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function ConnectNamedPipe Lib "Kernel32" (hPipe As Integer, Overlapped As Win32 . OVERLAPPED) As Boolean
+		Protected Declare Function ConnectNamedPipe Lib "Kernel32" (hPipe As Integer, Overlapped As Win32 . IO . OVERLAPPED) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -53,7 +53,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function CreateProcess Lib "Kernel32" Alias "CreateProcessW" (AppName As WString, commandline As Ptr, ProcessAttribs As SECURITY_ATTRIBUTES, ThreadAttribs As SECURITY_ATTRIBUTES, inheritHandles As Boolean, flags As Integer, environ As Ptr, currentDir As Ptr, startInfo As STARTUPINFO, ByRef info As PROCESS_INFORMATION) As Boolean
+		Protected Declare Function CreateProcess Lib "Kernel32" Alias "CreateProcessW" (AppName As WString, commandline As Ptr, ProcessAttribs As SECURITY_ATTRIBUTES, ThreadAttribs As SECURITY_ATTRIBUTES, inheritHandles As Boolean, flags As Integer, environ As Ptr, currentDir As Ptr, startInfo As Win32 . Utils . STARTUPINFO, ByRef info As Win32 . Utils . PROCESS_INFORMATION) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -97,14 +97,6 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function FillConsoleOutputAttribute Lib "Kernel32" (cHandle As Integer, attrib As UInt16, len As Integer, startCoord As COORD, ByRef charsWritten As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function FillConsoleOutputCharacter Lib "Kernel32" Alias "FillConsoleOutputCharacterW" (cHandle As Integer, character As Integer, length As Integer, startCoord As COORD, ByRef charsWritten As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function FindClose Lib "Kernel32" (FindHandle As Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -117,11 +109,11 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function FindFirstFile Lib "Kernel32" Alias "FindFirstFileW" (FileName As WString, ByRef FindData As WIN32_FIND_DATA) As Integer
+		Protected Declare Function FindFirstFile Lib "Kernel32" Alias "FindFirstFileW" (FileName As WString, ByRef FindData As Win32 . IO . WIN32_FIND_DATA) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function FindFirstFileEx Lib "Kernel32" Alias "FindFirstFileExW" (FileName As WString, InfoLevel As Integer, ByRef FindData As WIN32_FIND_DATA, SearchOptions As Integer, Reserved As Ptr, AdditionalFlags As Integer) As Integer
+		Protected Soft Declare Function FindFirstFileEx Lib "Kernel32" Alias "FindFirstFileExW" (FileName As WString, InfoLevel As Integer, ByRef FindData As Win32 . IO . WIN32_FIND_DATA, SearchOptions As Integer, Reserved As Ptr, AdditionalFlags As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -129,11 +121,11 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function FindFirstStream Lib "Kernel32" Alias "FindFirstStreamW" (filename As WString, InfoLevel As Integer, ByRef buffer As WIN32_FIND_STREAM_DATA, Reserved As Integer) As Integer
+		Protected Soft Declare Function FindFirstStream Lib "Kernel32" Alias "FindFirstStreamW" (filename As WString, InfoLevel As Integer, ByRef buffer As Win32 . IO . WIN32_FIND_STREAM_DATA, Reserved As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function FindNextFile Lib "Kernel32" Alias "FindNextFileW" (FindHandle As Integer, ByRef FindData As WIN32_FIND_DATA) As Boolean
+		Protected Declare Function FindNextFile Lib "Kernel32" Alias "FindNextFileW" (FindHandle As Integer, ByRef FindData As Win32 . IO . WIN32_FIND_DATA) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -141,7 +133,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function FindNextStream Lib "Kernel32" Alias "FindNextStreamW" (FindHandle As Integer, ByRef buffer As WIN32_FIND_STREAM_DATA) As Boolean
+		Protected Soft Declare Function FindNextStream Lib "Kernel32" Alias "FindNextStreamW" (FindHandle As Integer, ByRef buffer As Win32 . IO . WIN32_FIND_STREAM_DATA) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -162,30 +154,6 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function GetComputerName Lib "Kernel32" Alias "GetComputerNameW" (name As Ptr, ByRef size As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function GetConsoleCursorInfo Lib "Kernel32" (cHandle As Integer, ByRef CurseInfo As CONSOLE_CURSOR_INFO) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function GetConsoleDisplayMode Lib "Kernel32" (ByRef flags As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetConsoleOriginalTitle Lib "Kernel32" Alias "GetConsoleOriginalTitleW" (Contitle As Ptr, mbsize As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetConsoleScreenBufferInfo Lib "Kernel32" (hConsole As Integer, ByRef buffinfo As CONSOLE_SCREEN_BUFFER_INFO) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetConsoleTitle Lib "Kernel32" Alias "GetConsoleTitleW" (Contitle As Ptr, mbsize As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetConsoleWindow Lib "Kernel32" () As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -214,10 +182,6 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function GetFinalPathNameByHandle Lib "Kernel32" Alias "GetFinalPathNameByHandleW" (FileHandle As Integer, FilePath As Ptr, FilePathSize As Integer, Flags As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function GetLargestConsoleWindowSize Lib "Kernel32" (cHandle As Integer) As COORD
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -269,7 +233,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As TIME_ZONE_INFORMATION) As Integer
+		Protected Soft Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As Win32 . Utils . TIME_ZONE_INFORMATION) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -301,7 +265,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GlobalMemoryStatusEx Lib "Kernel32" (ByRef MemStatus As MEMORYSTATUSEX) As Boolean
+		Protected Soft Declare Function GlobalMemoryStatusEx Lib "Kernel32" (ByRef MemStatus As Win32 . Utils . MEMORYSTATUSEX) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -381,19 +345,15 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function Process32First Lib "Kernel32" Alias "Process32FirstW" (Handle As Integer, ByRef Entry As PROCESSENTRY32) As Boolean
+		Protected Declare Function Process32First Lib "Kernel32" Alias "Process32FirstW" (Handle As Integer, ByRef Entry As Win32 . Utils . PROCESSENTRY32) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function Process32Next Lib "Kernel32" Alias "Process32NextW" (Handle As Integer, ByRef Entry As PROCESSENTRY32) As Boolean
+		Protected Declare Function Process32Next Lib "Kernel32" Alias "Process32NextW" (Handle As Integer, ByRef Entry As Win32 . Utils . PROCESSENTRY32) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function QueryDosDevice Lib "Kernel32" Alias "QueryDosDeviceW" (devicePath As WString, drivePath As Ptr, drivePathSize As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function ReadConsoleOutputCharacter Lib "Kernel32" Alias "ReadConsoleOutputCharacterW" (cHandle As Integer, chars As Ptr, Length As Integer, buffCords As COORD, charsRead As Ptr) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -414,46 +374,6 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function ResumeThread Lib "Kernel32" (ThreadHandle As Integer) As Integer
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleActiveScreenBuffer Lib "Kernel32" (BufferHandle As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleCtrlHandler Lib "Kernel32" (handlerRoutine As Ptr, add As Boolean) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleCursorInfo Lib "Kernel32" (cHandle As Integer, ByRef CurseInfo As CONSOLE_CURSOR_INFO) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleCursorPosition Lib "Kernel32" (cHandle As Integer, NewCoords As COORD) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleDisplayMode Lib "Kernel32" (cHandle As Integer, Flags As Integer, ByRef NewDimensions As COORD) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleScreenBufferInfoEx Lib "Kernel32" (cHandle As Integer, info As CONSOLE_SCREEN_BUFFER_INFOEX) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function SetConsoleScreenBufferSize Lib "Kernel32" (Handle As Integer, NewSize As COORD) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleTextAttribute Lib "Kernel32" (hConsole As Integer, attribs As UInt16) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleTitle Lib "Kernel32" Alias "SetConsoleTitleW" (NewTitle As WString) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetConsoleWindowInfo Lib "Kernel32" (cHandle As Integer, Absolute As Boolean, ByRef coords As SMALL_RECT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -489,7 +409,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetSystemTime Lib "Kernel32" (ByRef NewTime As SYSTEMTIME) As Boolean
+		Protected Declare Function SetSystemTime Lib "Kernel32" (ByRef NewTime As Win32 . Utils . SYSTEMTIME) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -553,7 +473,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Integer, ByRef InfoBuffer As MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
+		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Integer, ByRef InfoBuffer As Win32 . Utils . MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -566,14 +486,6 @@ Protected Module Kernel32
 
 	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function WinBeep Lib "Kernel32" Alias "Beep" (freq As Integer, duration As Integer) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function WriteConsole Lib "Kernel32" Alias "WriteConsoleW" (cHandle As Integer, chars As Ptr, Length As Integer, ByRef LengthWritten As Integer, Reserved As Ptr) As Boolean
-	#tag EndExternalMethod
-
-	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function WriteConsoleOutputCharacter Lib "Kernel32" Alias "WriteConsoleOutputCharacterW" (cHandle As Integer, chars As Ptr, Length As Integer, buffCoords As COORD, charWritten As Ptr) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

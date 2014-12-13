@@ -136,7 +136,7 @@ End
 		  Dim cf As Win32.GUI.ClipboardFormat
 		  If cp.HasFormat(cf.CF_BITMAP) Then
 		    Dim hMem As Ptr = cp.Data(cf.CF_BITMAP)
-		    ClipPic = Win32.HBITMAP(Integer(hMem))
+		    ClipPic = Win32.GUI.HBITMAP(Integer(hMem))
 		  End If
 		  If cp.HasFormat(cf.CF_TEXT) Then
 		    TextArea1.Text = cp.Data(cf.CF_TEXT)

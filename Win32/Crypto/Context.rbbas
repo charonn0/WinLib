@@ -143,6 +143,16 @@ Protected Class Context
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1
+		Protected Shared Function MS_ENH_RSA_AES_PROV() As String
+		  If KernelVersion < 6.0 Then ' XP used a different name
+		    Return "Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
+		  Else
+		    Return "Microsoft Enhanced RSA and AES Cryptographic Provider"
+		  End If
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherContext As Win32.Crypto.Context) As Integer
 		  Select Case True

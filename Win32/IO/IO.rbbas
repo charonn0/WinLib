@@ -1,5 +1,37 @@
 #tag Module
 Protected Module IO
+	#tag ComputedProperty, Flags = &h1
+		#tag Getter
+			Get
+			  #If TargetWin32 Then
+			    Dim mb As New MemoryBlock(1024)
+			    Dim i As Integer
+			    Do
+			      i = Win32.Libs.Kernel32.GetCurrentDirectory(mb.Size, mb)
+			    Loop Until i <= mb.Size And i > 0
+			    
+			    Return GetFolderItem(mb.WString(0), FolderItem.PathTypeAbsolute)
+			  #endif
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  #If TargetWin32 Then
+			    Dim path As String = value.AbsolutePath
+			    If Not Win32.Libs.Kernel32.SetCurrentDirectory(path) Then
+			      Dim e As Integer = Win32.LastError
+			      Dim err As New IOException
+			      err.Message = CurrentMethodName + ": " + FormatError(e)
+			      err.ErrorNumber = e
+			      Raise err
+			    End If
+			  #endif
+			End Set
+		#tag EndSetter
+		Protected CurrentDirectory As FolderItem
+	#tag EndComputedProperty
+
+
 	#tag Constant, Name = CREATE_ALWAYS, Type = Double, Dynamic = False, Default = \"2", Scope = Protected
 	#tag EndConstant
 
@@ -110,6 +142,42 @@ Protected Module IO
 
 	#tag Constant, Name = OPEN_EXISTING, Type = Double, Dynamic = False, Default = \"3", Scope = Protected
 	#tag EndConstant
+
+
+	#tag Structure, Name = FILETIME, Flags = &h1
+		HighDateTime As Integer
+		LowDateTime As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = IO_STATUS_BLOCK, Flags = &h1
+		Status As Int32
+		Info As Int32
+	#tag EndStructure
+
+	#tag Structure, Name = OVERLAPPED, Flags = &h1
+		Internal As Integer
+		  InternalHigh As Integer
+		  Offset As UInt64
+		hEvent As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = WIN32_FIND_DATA, Flags = &h1
+		Attribs As Integer
+		  CreationTime As FILETIME
+		  LastAccess As FILETIME
+		  LastWrite As FILETIME
+		  sizeHigh As Integer
+		  sizeLow As Integer
+		  Reserved1 As Integer
+		  Reserved2 As Integer
+		  FileName As WString*260
+		AlternateName As String*14
+	#tag EndStructure
+
+	#tag Structure, Name = WIN32_FIND_STREAM_DATA, Flags = &h1
+		StreamSize As Int64
+		StreamName As String*1024
+	#tag EndStructure
 
 
 	#tag ViewBehavior

@@ -5,7 +5,7 @@ Protected Module Dwmapi
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function DwmExtendFrameIntoClientArea Lib "Dwmapi" (HWND As Integer, ByRef Margin As MARGINS) As Integer
+		Protected Soft Declare Function DwmExtendFrameIntoClientArea Lib "Dwmapi" (HWND As Integer, ByRef Margin As Win32 . GUI . MARGINS) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -21,7 +21,7 @@ Protected Module Dwmapi
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function DwmUpdateThumbnailProperties Lib "Dwmapi" (ThumbID As Integer, ByRef Properties As DWM_THUMBNAIL_PROPERTIES) As Integer
+		Protected Soft Declare Function DwmUpdateThumbnailProperties Lib "Dwmapi" (ThumbID As Integer, ByRef Properties As Win32 . GUI . DWM_THUMBNAIL_PROPERTIES) As Integer
 	#tag EndExternalMethod
 
 
