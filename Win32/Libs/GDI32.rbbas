@@ -17,6 +17,10 @@ Protected Module GDI32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function CreateBitmap Lib "GDI32" (Width As Integer, Height As Integer, Planes As UInt32, BitsPerPel As UInt32, Buffer As Ptr) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function CreateCompatibleBitmap Lib "GDI32" (hDC As Integer, Width As Integer, Height As Integer) As Integer
 	#tag EndExternalMethod
 
