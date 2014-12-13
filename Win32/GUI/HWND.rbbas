@@ -17,6 +17,14 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Shared Function CreateWindow(ClassName As String, WindowName As String, Style As Integer, X As Integer, Y As Integer, Width As Integer, Height As Integer, Parent As Win32.GUI.HWND = Nil) As Integer
+		  Dim HWND As Integer
+		  If Parent <> Nil Then HWND = Parent.Handle
+		  Return Win32.Libs.User32.CreateWindowEx(0, ClassName, WindowName, Style, X, Y, Width, Height, HWND, 0, 0, Nil)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function GetAncestor(Flags As Integer) As Win32.GUI.HWND
 		  Dim h As Integer = Win32.Libs.User32.GetAncestor(Me.Handle, GA_ROOTOWNER)
 		  mLastError = Win32.LastError
@@ -106,6 +114,44 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
+		Protected Shared Function RegisterClass(ClassName As String, DefWndProc As WndProc) As Integer
+		  #If TargetWin32 Then
+		    Dim atom As Integer
+		    Dim info As WNDCLASSEX
+		    Dim mbClass As New MemoryBlock(512)
+		    mbClass.WString(0) = ClassName
+		    info.ClassName = mbClass
+		    info.cbSize = info.Size
+		    info.Instance = Win32.Libs.Kernel32.GetModuleHandle("")
+		    info.WndProc = DefWndProc
+		    
+		    atom = Win32.Libs.User32.RegisterClassEx(info)
+		    If atom > 0 Then
+		      Return atom
+		    Else
+		      Raise Win32Exception(Win32.LastError)
+		    End If
+		  #endif
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function SetLong(Index As Integer, NewLong As Integer) As Integer
+		  Dim i As Integer = Win32.Libs.User32.SetWindowLong(mHandle, Index, NewLong)
+		  If i <> 0 Then mLastError = Win32.LastError
+		  Return i
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function SetLong(Index As Integer, NewLong As Ptr) As Integer
+		  Return Me.SetLong(Index, Integer(NewLong))
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function SetPosition(Left As Integer, Top As Integer, Width As Integer, Height As Integer, Flags As Integer, InsertAfter As Win32.GUI.HWND = Nil) As Boolean
 		  Dim hInsertAfter As Integer
 		  If InsertAfter <> Nil Then hInsertAfter = InsertAfter.Handle
@@ -117,13 +163,17 @@ Implements Win32.Win32Object
 		End Function
 	#tag EndMethod
 
+	#tag DelegateDeclaration, Flags = &h1
+		Protected Delegate Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
+	#tag EndDelegateDeclaration
 
-	#tag Property, Flags = &h21
-		Private mHandle As Integer
+
+	#tag Property, Flags = &h1
+		Protected mHandle As Integer
 	#tag EndProperty
 
-	#tag Property, Flags = &h21
-		Private mLastError As Integer
+	#tag Property, Flags = &h1
+		Protected mLastError As Integer
 	#tag EndProperty
 
 
@@ -145,26 +195,6 @@ Implements Win32.Win32Object
 
 	#tag ViewBehavior
 		#tag ViewProperty
-			Name="Alpha"
-			Group="Behavior"
-			Type="Single"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BorderSizeX"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="BorderSizeY"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Height"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Index"
 			Visible=true
 			Group="ID"
@@ -173,18 +203,10 @@ Implements Win32.Win32Object
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Left"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Maximized"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Minimized"
-			Group="Behavior"
-			Type="Boolean"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Name"
@@ -199,50 +221,11 @@ Implements Win32.Win32Object
 			InheritedFrom="Object"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Text"
-			Group="Behavior"
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="Top"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TrueHeight"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TrueLeft"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TrueRight"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TrueTop"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="TrueWidth"
-			Group="Behavior"
-			Type="Integer"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Visible"
-			Group="Behavior"
-			Type="Boolean"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Width"
-			Group="Behavior"
-			Type="Integer"
+			Visible=true
+			Group="Position"
+			InitialValue="0"
+			InheritedFrom="Object"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

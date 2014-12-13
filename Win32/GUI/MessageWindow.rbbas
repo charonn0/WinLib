@@ -20,19 +20,8 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Constructor(ClassName As String)
-		  Dim HWND As Integer
-		  #If TargetWin32 Then
-		    Dim info As WNDCLASSEX
-		    Dim mbClass As New MemoryBlock(512)
-		    mbClass.WString(0) = ClassName
-		    info.ClassName = mbClass
-		    info.cbSize = info.Size
-		    info.Instance = Win32.Libs.Kernel32.GetModuleHandle("")
-		    info.WndProc = AddressOf Me.DefWindowProc
-		    If Win32.Libs.User32.RegisterClassEx(info) > 0 Then
-		      HWND = Win32.Libs.User32.CreateWindowEx(0, mbClass.WString(0), "", 0, 0, 0, 0, 0, HWND_MESSAGE, 0, 0, Nil)
-		    End If
-		  #endif
+		  mAtom = Super.RegisterClass(ClassName, AddressOf DefWindowProc)
+		  Dim HWND As Integer = Super.CreateWindow(ClassName, "", 0, 0, 0, 0, 0, New Win32.GUI.HWND(HWND_MESSAGE))
 		  mLastError = Win32.LastError
 		  If HWND <> 0 Then
 		    Super.Constructor(HWND)
@@ -53,7 +42,8 @@ Implements Win32.Win32Object
 		      Return 1
 		    Else
 		      ' Let the subclass handle all other messages
-		      Return Super.DefWindowProc(HWND, msg, wParam, lParam)
+		      Break
+		      'Return Super.DefWindowProc(HWND, msg, wParam, lParam)
 		    End Select
 		  #endif
 		End Function
@@ -74,6 +64,11 @@ Implements Win32.Win32Object
 	#tag Note, Name = About this class
 		This class provides an invisible message-reception window.
 	#tag EndNote
+
+
+	#tag Property, Flags = &h1
+		Protected mAtom As Integer
+	#tag EndProperty
 
 
 	#tag Constant, Name = HWND_MESSAGE, Type = Double, Dynamic = False, Default = \"-3", Scope = Private

@@ -1,5 +1,6 @@
 #tag Class
 Protected Class MessageMonitor
+Inherits Win32.GUI.HWND
 Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
@@ -13,13 +14,19 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the Win32Object interface.
-		  UnSubclass(Me.ParentWindow)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Constructor()
-		  Me.Constructor(0)
+		  #If TargetWin32 Then
+		    If Not WndProcs.HasKey(mHandle) Then Return
+		    Dim oldWndProc As Ptr = WndProcs.Value(mHandle)
+		    Call Win32.Libs.User32.SetWindowLong(mHandle, GWL_WNDPROC, oldWndProc)
+		    WndProcs.Remove(mHandle)
+		    Dim wndclass As Dictionary
+		    For i As Integer = UBound(Subclasses) DownTo 0
+		      wndclass = Subclasses(i)
+		      If wndclass.HasKey(mHandle) Then
+		        Subclasses.Remove(i)
+		      End
+		    Next
+		  #endif
 		End Sub
 	#tag EndMethod
 
@@ -27,8 +34,22 @@ Implements Win32.Win32Object
 		Sub Constructor(HWND As Integer)
 		  #If TargetHasGUI Then
 		    If HWND = 0 Then HWND = Window(0).Handle
-		    Me.ParentWindow = New WindowRef(HWND)
-		    Subclass(ParentWindow, Me)
+		    Super.Constructor(HWND)
+		    If WndProcs = Nil Then WndProcs = New Dictionary
+		    
+		    If WndProcs.HasKey(mHandle) Then
+		      Dim d As New Dictionary
+		      d.Value(mHandle) = Me
+		      Subclasses.Append(d)
+		    Else
+		      Dim windproc As Ptr = AddressOf DefWindowProc
+		      Dim oldWndProc As Integer = Me.SetLong(GWL_WNDPROC, windproc)
+		      WndProcs.Value(mHandle) = oldWndProc
+		      Dim d As New Dictionary
+		      d.Value(mHandle) = New WeakRef(Me)
+		      Subclasses.Append(d)
+		    End If
+		    MessageFilter = New Dictionary
 		  #Else
 		    ' Console and Web apps are not supported
 		    #pragma Unused HWND
@@ -38,13 +59,14 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
+	#tag Method, Flags = &h21
+		Private Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
 		  #pragma X86CallingConvention StdCall
 		  #If TargetWin32 Then
 		    For Each wndclass As Dictionary In Subclasses
 		      If wndclass.HasKey(HWND) Then
-		        Dim subclass As MessageMonitor = wndclass.Value(HWND)
+		        Dim w As WeakRef = wndclass.Value(HWND)
+		        Dim subclass As MessageMonitor = MessageMonitor(w.Value)
 		        If subclass <> Nil And subclass.WndProc(HWND, msg, wParam, lParam) Then
 		          Return 1
 		        End If
@@ -76,20 +98,6 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Handle() As Integer
-		  // Part of the Win32Object interface.
-		  Return Me.ParentWindow.Handle
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function LastError() As Integer
-		  // Part of the Win32Object interface.
-		  Return mLastError
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub RemoveMessageFilter(ParamArray MsgIDs() As Integer)
 		  For Each MsgID As Integer In MsgIDs
 		    If Me.MessageFilter.HasKey(MsgID) Then Me.MessageFilter.Remove(MsgID)
@@ -97,52 +105,8 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Sub Reparent(NewParentWindow As WindowRef)
-		  Me.Close
-		  Me.Constructor(NewParentWindow.Handle)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Shared Sub Subclass(SuperWin As WindowRef, SubWin As MessageMonitor)
-		  #If TargetWin32 Then
-		    If WndProcs.HasKey(SuperWin.Handle) Then
-		      Dim d As New Dictionary
-		      d.Value(SuperWin.Handle) = SubWin
-		      Subclasses.Append(d)
-		      Return
-		    End
-		    Dim windproc As Ptr = AddressOf DefWindowProc
-		    Dim oldWndProc As Integer = Win32.Libs.User32.SetWindowLong(SuperWin.Handle, GWL_WNDPROC, windproc)
-		    WndProcs.Value(SuperWin.Handle) = oldWndProc
-		    Dim d As New Dictionary
-		    d.Value(SuperWin.Handle) = SubWin
-		    Subclasses.Append(d)
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Shared Sub UnSubclass(SuperWin As WindowRef)
-		  #If TargetWin32 Then
-		    If Not WndProcs.HasKey(SuperWin.Handle) Then Return
-		    Dim oldWndProc As Ptr = WndProcs.Value(SuperWin.Handle)
-		    Call Win32.Libs.User32.SetWindowLong(SuperWin.Handle, GWL_WNDPROC, oldWndProc)
-		    WndProcs.Remove(SuperWin.Handle)
-		    Dim wndclass As Dictionary
-		    For i As Integer = UBound(Subclasses) DownTo 0
-		      wndclass = Subclasses(i)
-		      If wndclass.HasKey(SuperWin.Handle) Then
-		        Subclasses.Remove(i)
-		      End
-		    Next
-		  #endif
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
+	#tag Method, Flags = &h21
+		Private Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
 		  If Me.MessageFilter.HasKey(msg) Then
 		    Return WindowMessage(New WindowRef(HWND), msg, wParam, lParam)
 		  End If
@@ -180,55 +144,17 @@ Implements Win32.Win32Object
 	#tag EndNote
 
 
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  If mMessageFilter = Nil Then mMessageFilter = New Dictionary
-			  return mMessageFilter
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  mMessageFilter = value
-			End Set
-		#tag EndSetter
-		Protected MessageFilter As Dictionary
-	#tag EndComputedProperty
-
-	#tag Property, Flags = &h1
-		Protected mLastError As Integer
-	#tag EndProperty
-
 	#tag Property, Flags = &h21
-		Private mMessageFilter As Dictionary
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private Shared mWndProcs As Dictionary
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private ParentWindow As WindowRef
+		Private MessageFilter As Dictionary
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private Shared Subclasses() As Dictionary
 	#tag EndProperty
 
-	#tag ComputedProperty, Flags = &h1
-		#tag Getter
-			Get
-			  If mWndProcs = Nil Then mWndProcs = New Dictionary
-			  return mWndProcs
-			End Get
-		#tag EndGetter
-		#tag Setter
-			Set
-			  mWndProcs = value
-			End Set
-		#tag EndSetter
-		Protected Shared WndProcs As Dictionary
-	#tag EndComputedProperty
+	#tag Property, Flags = &h21
+		Private Shared WndProcs As Dictionary
+	#tag EndProperty
 
 
 	#tag ViewBehavior
