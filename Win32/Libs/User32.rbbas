@@ -305,6 +305,10 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function SetParent Lib "User32" (Child As Integer, NewParent As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SetThreadDesktop Lib "User32" (hDesktop As Integer) As Boolean
 	#tag EndExternalMethod
 
