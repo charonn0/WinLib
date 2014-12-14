@@ -6,9 +6,8 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  Super.Close
-		  #If TargetWin32 Then
-		    Call Win32.Libs.User32.DestroyWindow(Me.Handle)
-		  #endif
+		  If Not Win32.Libs.User32.DestroyWindow(Me.Handle) Then mLastError = Win32.LastError
+		  
 		End Sub
 	#tag EndMethod
 

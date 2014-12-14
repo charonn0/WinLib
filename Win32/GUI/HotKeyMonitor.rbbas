@@ -48,7 +48,7 @@ Inherits Win32.GUI.MessageMonitor
 	#tag Method, Flags = &h1000
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
-		  // Constructor() -- From MessageMonitor
+		  // Constructor(HWND As Integer) -- From MessageMonitor
 		  Super.Constructor(0)
 		  Me.AddMessageFilter(WM_HOTKEY)
 		  

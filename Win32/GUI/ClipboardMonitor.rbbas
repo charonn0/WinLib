@@ -34,9 +34,17 @@ Inherits Win32.GUI.MessageMonitor
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h1001
+		Protected Sub Constructor()
+		  ' Empty constructor so the class can be dropped on a window.
+		  Me.Constructor(0)
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h1000
-		Sub Constructor(ParentHandle As Integer = 0)
+		Sub Constructor(ParentHandle As Integer)
 		  // Calling the overridden superclass constructor.
+		  // Constructor(HWND As Integer) -- From MessageMonitor
 		  Super.Constructor(ParentHandle)
 		  #If TargetWin32 Then
 		    Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD, WM_CLIPBOARDUPDATE)

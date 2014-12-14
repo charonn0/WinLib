@@ -30,10 +30,12 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Constructor(HWND As Integer)
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(HWND As Integer)
 		  #If TargetHasGUI Then
 		    If HWND = 0 Then HWND = Window(0).Handle
+		    // Calling the overridden superclass constructor.
+		    // Constructor(HWND As Integer) -- From HWND
 		    Super.Constructor(HWND)
 		    If WndProcs = Nil Then WndProcs = New Dictionary
 		    
@@ -62,32 +64,25 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h21
 		Private Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
 		  #pragma X86CallingConvention StdCall
-		  #If TargetWin32 Then
-		    For Each wndclass As Dictionary In Subclasses
-		      If wndclass.HasKey(HWND) Then
-		        Dim w As WeakRef = wndclass.Value(HWND)
-		        Dim subclass As MessageMonitor = MessageMonitor(w.Value)
-		        If subclass <> Nil And subclass.WndProc(HWND, msg, wParam, lParam) Then
-		          Return 1
-		        End If
-		      End
-		    Next
-		    Dim nextWndProc As Integer
-		    nextWndProc = WndProcs.Lookup(HWND, INVALID_HANDLE_VALUE)
-		    If nextWndProc <> INVALID_HANDLE_VALUE Then
-		      Return Win32.Libs.User32.CallWindowProc(nextWndProc, HWND, msg, wParam, lParam)
+		  For Each wndclass As Dictionary In Subclasses
+		    ' Find the instance of MessageMonitor that belongs to HWND
+		    If wndclass.HasKey(HWND) Then
+		      Dim w As WeakRef = wndclass.Value(HWND)
+		      Dim subclass As MessageMonitor = MessageMonitor(w.Value)
+		      If subclass <> Nil And subclass.WndProc(HWND, msg, wParam, lParam) Then
+		        ' subclass handled the message
+		        Return 1
+		      End If
 		    End If
-		    Select Case msg
-		    Case WM_CREATE, WM_NCCREATE
-		      ' Windows sends these messages when the window is first created, but before this class is fully initialized.
-		      ' We must return success else Windows will consider the creation to have failed.
-		      Return 1
-		    Else
-		      #If DebugBuild Then
-		        Break ' !!!
-		      #endif
-		    End Select
-		  #endif
+		  Next
+		  
+		  ' No one handled this message, pass it to the next WndProc
+		  Dim nextWndProc As Integer
+		  nextWndProc = WndProcs.Lookup(HWND, INVALID_HANDLE_VALUE)
+		  If nextWndProc <> INVALID_HANDLE_VALUE Then
+		    Return Win32.Libs.User32.CallWindowProc(nextWndProc, HWND, msg, wParam, lParam)
+		  End If
+		  
 		End Function
 	#tag EndMethod
 
@@ -103,6 +98,18 @@ Implements Win32.Win32Object
 		    If Me.MessageFilter.HasKey(MsgID) Then Me.MessageFilter.Remove(MsgID)
 		  Next
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function Subclass(Target As RectControl) As Win32.GUI.MessageMonitor
+		  Return New Win32.GUI.MessageMonitor(Target.Handle)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		 Shared Function Subclass(Target As Window) As Win32.GUI.MessageMonitor
+		  Return New Win32.GUI.MessageMonitor(Target.Handle)
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h21
