@@ -291,7 +291,7 @@ Protected Module GUI
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =         TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =          TargetHasGUI
 		#tag Getter
 			Get
 			  ' Returns a Rectangle within which the mouse cursor is currently allowed move.
@@ -326,7 +326,7 @@ Protected Module GUI
 		Protected CursorConfinementArea As REALbasic.Rect
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =         TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =          TargetHasGUI
 		#tag Getter
 			Get
 			  ' Vista and newer. Returns true if desktop composition is enabled.
@@ -381,6 +381,9 @@ Protected Module GUI
 	#tag EndConstant
 
 	#tag Constant, Name = GW_OWNER, Type = Double, Dynamic = False, Default = \"4", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = RB_FOREMOST_WINDOW_HWND, Type = Double, Dynamic = False, Default = \"0", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = SWP_ASYNCWINDOWPOS, Type = Double, Dynamic = False, Default = \"&h4000", Scope = Protected

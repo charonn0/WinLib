@@ -3,8 +3,7 @@ Protected Class ClipboardMonitor
 Inherits Win32.GUI.MessageMonitor
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Event
-		Function WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
-		  #pragma Unused HWND
+		Function WindowMessage(Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  #If TargetWin32 Then
 		    Select Case Message
 		    Case WM_CHANGECBCHAIN ' XP and older
@@ -37,7 +36,7 @@ Inherits Win32.GUI.MessageMonitor
 	#tag Method, Flags = &h1001
 		Protected Sub Constructor()
 		  ' Empty constructor so the class can be dropped on a window.
-		  Me.Constructor(0)
+		  Me.Constructor(RB_FOREMOST_WINDOW_HWND)
 		End Sub
 	#tag EndMethod
 
@@ -47,7 +46,6 @@ Inherits Win32.GUI.MessageMonitor
 		  // Constructor(HWND As Integer) -- From MessageMonitor
 		  Super.Constructor(ParentHandle)
 		  #If TargetWin32 Then
-		    Me.AddMessageFilter(WM_CHANGECBCHAIN, WM_DRAWCLIPBOARD, WM_CLIPBOARDUPDATE)
 		    If Win32.KernelVersion >= 6.0 Then ' Vista and newer
 		      If Not Win32.Libs.User32.AddClipboardFormatListener(Me.Handle) Then
 		        mLastError = Win32.Win32.LastError()

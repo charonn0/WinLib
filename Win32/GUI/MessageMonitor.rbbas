@@ -4,14 +4,6 @@ Inherits Win32.GUI.HWND
 Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
-		Sub AddMessageFilter(ParamArray MsgIDs() As Integer)
-		  For Each MsgID As Integer In MsgIDs
-		    Me.MessageFilter.Value(MsgID) = "&h" + Hex(MsgID)
-		  Next
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the Win32Object interface.
 		  #If TargetWin32 Then
@@ -51,7 +43,6 @@ Implements Win32.Win32Object
 		      d.Value(mHandle) = New WeakRef(Me)
 		      Subclasses.Append(d)
 		    End If
-		    MessageFilter = New Dictionary
 		  #Else
 		    ' Console and Web apps are not supported
 		    #pragma Unused HWND
@@ -61,8 +52,8 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h21
-		Private Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
+	#tag Method, Flags = &h1
+		Protected Shared Function DefWindowProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Integer
 		  #pragma X86CallingConvention StdCall
 		  For Each wndclass As Dictionary In Subclasses
 		    ' Find the instance of MessageMonitor that belongs to HWND
@@ -93,14 +84,6 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub RemoveMessageFilter(ParamArray MsgIDs() As Integer)
-		  For Each MsgID As Integer In MsgIDs
-		    If Me.MessageFilter.HasKey(MsgID) Then Me.MessageFilter.Remove(MsgID)
-		  Next
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		 Shared Function Subclass(Target As RectControl) As Win32.GUI.MessageMonitor
 		  Return New Win32.GUI.MessageMonitor(Target.Handle)
 		End Function
@@ -114,15 +97,14 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h21
 		Private Function WndProc(HWND as Integer, msg as Integer, wParam as Ptr, lParam as Ptr) As Boolean
-		  If Me.MessageFilter.HasKey(msg) Then
-		    Return WindowMessage(New WindowRef(HWND), msg, wParam, lParam)
-		  End If
+		  #pragma Unused HWND
+		  Return WindowMessage(msg, wParam, lParam)
 		End Function
 	#tag EndMethod
 
 
 	#tag Hook, Flags = &h0
-		Event WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		Event WindowMessage(Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 	#tag EndHook
 
 
@@ -150,10 +132,6 @@ Implements Win32.Win32Object
 		the application is "Not Responding."
 	#tag EndNote
 
-
-	#tag Property, Flags = &h21
-		Private MessageFilter As Dictionary
-	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private Shared Subclasses() As Dictionary

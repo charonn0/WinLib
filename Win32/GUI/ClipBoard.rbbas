@@ -5,22 +5,27 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  // Part of the Win32Object interface.
-		  'System.DebugLog(CurrentMethodName)
+		  
 		  If Not Win32.Libs.User32.CloseClipboard() Then mLastError = Win32.LastError()
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(Handle As Integer)
+		Sub Constructor()
+		  Me.Constructor(RB_FOREMOST_WINDOW_HWND)
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Handle As Integer)
 		  // Part of the Win32Object interface.
-		  'System.DebugLog(CurrentMethodName)
 		  mHandle = Handle
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Function Data(Format As Win32.GUI.ClipboardFormat) As MemoryBlock
-		  'System.DebugLog(CurrentMethodName)
+		  
 		  If Not Me.Open Then Raise New RuntimeException
 		  Dim hMem As Integer = Win32.Libs.User32.GetClipboardData(Format.Handle)
 		  mLastError = Win32.LastError()
@@ -45,8 +50,10 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Data(Format As Win32.GUI.ClipboardFormat, Assigns NewData As MemoryBlock)
-		  'System.DebugLog(CurrentMethodName)
-		  If Not Me.Open Or Not Me.Empty Then Raise New RuntimeException
+		  ' Sets the content of the ClipBoard. The ClipBoard may contain data in multiple formats,
+		  ' you must specify the format of the data being set.
+		  
+		  If Not Me.Open Or Not Me.Empty Then Raise Win32Exception(mLastError)
 		  Dim hGlobal As Win32.Utils.WinMB = Win32.Utils.WinMB.HeapAllocate(NewData.Size, True, -1, Win32.Utils.GMEM_MOVEABLE)
 		  If hGlobal <> Nil Then
 		    Win32.Utils.WinMB.Acquire(hGlobal) ' mark as not freeable.
@@ -68,7 +75,7 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Function FormatCount() As Integer
-		  'System.DebugLog(CurrentMethodName)
+		  
 		  If Not Me.Open Then Raise New RuntimeException
 		  Dim hClip, c As Integer
 		  Do
@@ -85,7 +92,7 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Function GetFormat(Index As Integer) As Win32.GUI.ClipboardFormat
-		  'System.DebugLog(CurrentMethodName)
+		  
 		  If Not Me.Open Then Raise New RuntimeException
 		  Dim hClip As Integer
 		  For i As Integer = 0 To Index
@@ -133,7 +140,6 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Function Open() As Boolean
-		  'System.DebugLog(CurrentMethodName)
 		  If Win32.Libs.User32.OpenClipboard(mHandle) Then Return True
 		  mLastError = Win32.LastError
 		End Function

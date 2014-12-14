@@ -40,9 +40,9 @@ Implements Win32.Win32Object
 		      ' We must return success else Windows will consider the creation to have failed.
 		      Return 1
 		    Else
-		      ' Let the subclass handle all other messages
+		      ' Let the superclass handle all other messages
 		      Break
-		      'Return Super.DefWindowProc(HWND, msg, wParam, lParam)
+		      Return Super.DefWindowProc(HWND, msg, wParam, lParam)
 		    End Select
 		  #endif
 		End Function

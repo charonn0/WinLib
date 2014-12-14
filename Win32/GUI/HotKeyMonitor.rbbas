@@ -3,8 +3,7 @@ Protected Class HotKeyMonitor
 Inherits Win32.GUI.MessageMonitor
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Event
-		Function WindowMessage(HWND As WindowRef, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
-		  #pragma Unused HWND
+		Function WindowMessage(Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 		  If Message = WM_HOTKEY Then
 		    Dim keystring As String = ConstructKeyString(Integer(LParam))
 		    Return HotKeyPressed(Integer(WParam), keystring)
@@ -49,9 +48,7 @@ Inherits Win32.GUI.MessageMonitor
 		Sub Constructor()
 		  // Calling the overridden superclass constructor.
 		  // Constructor(HWND As Integer) -- From MessageMonitor
-		  Super.Constructor(0)
-		  Me.AddMessageFilter(WM_HOTKEY)
-		  
+		  Super.Constructor(RB_FOREMOST_WINDOW_HWND)
 		End Sub
 	#tag EndMethod
 
