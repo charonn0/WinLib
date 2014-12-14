@@ -61,22 +61,6 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function Duplicate() As Win32.IO.FileObject
-		  Dim proc As Integer = Win32.CurrentProcessID
-		  Dim newref As Integer
-		  If Not Win32.Libs.Kernel32.DuplicateHandle(proc, Me.Handle, proc, newref, 0, True, DUPLICATE_SAME_ACCESS) Then
-		    mLastError = Win32.LastError
-		    mHandle = INVALID_HANDLE_VALUE
-		    Dim err As New IOException
-		    err.ErrorNumber = Me.LastError
-		    err.Message = Win32.FormatError(Me.LastError)
-		    Raise err
-		  End If
-		  Return New Win32.IO.FileObject(newref)
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  // Part of the Win32Object interface.
 		  Return mHandle
