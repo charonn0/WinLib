@@ -3,10 +3,10 @@ Protected Class Stream
 Inherits FileObject
 Implements Readable,Writeable
 	#tag Method, Flags = &h0
-		 Shared Function Create(File As FolderItem, Overwrite As Boolean = False) As Win32.IO.Stream
+		 Shared Function Create(File As FolderItem, Overwrite As Boolean = False, ShareMode As Integer = FILE_SHARE_READ) As Win32.IO.Stream
 		  Dim disp As Integer
 		  If Overwrite Then disp = CREATE_ALWAYS Else disp = OPEN_ALWAYS
-		  Return New Win32.IO.Stream(CreateFile(File.AbsolutePath, GENERIC_ALL, FILE_SHARE_READ, disp, 0))
+		  Return New Win32.IO.Stream(CreateFile(File.AbsolutePath, GENERIC_ALL, ShareMode, disp, 0))
 		End Function
 	#tag EndMethod
 
@@ -31,10 +31,10 @@ Implements Readable,Writeable
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function Open(File As FolderItem, ReadWrite As Boolean = True) As Win32.IO.Stream
+		 Shared Function Open(File As FolderItem, ReadWrite As Boolean = True, ShareMode As Integer = FILE_SHARE_READ) As Win32.IO.Stream
 		  Dim mode As Integer
 		  If ReadWrite Then mode = GENERIC_ALL Else mode = GENERIC_READ
-		  Return New Win32.IO.Stream(Win32.IO.Stream.CreateFile(File.AbsolutePath, mode, FILE_SHARE_READ, OPEN_EXISTING, 0))
+		  Return New Win32.IO.Stream(Win32.IO.Stream.CreateFile(File.AbsolutePath, mode, ShareMode, OPEN_EXISTING, 0))
 		End Function
 	#tag EndMethod
 
