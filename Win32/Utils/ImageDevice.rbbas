@@ -67,7 +67,7 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub EmbedPreviewWithin(Parent As Win32.GUI.RECTControl, X As Integer = 0, Y As Integer = 0, W As Integer = - 1, H As Integer = - 1)
+		Sub EmbedPreviewWithin(Parent As RectControl, X As Integer = 0, Y As Integer = 0, W As Integer = - 1, H As Integer = - 1)
 		  If X = -1 Then X = 0
 		  If Y = -1 Then Y = 0
 		  If W = -1 Then W = Parent.Width
