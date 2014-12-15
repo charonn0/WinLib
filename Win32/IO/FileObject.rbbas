@@ -74,9 +74,9 @@ Implements Win32.Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Operator_Convert(File As Win32.IO.FileObject)
-		  mHandle = File.Handle
+	#tag Method, Flags = &h1
+		Protected Sub Operator_Convert(File As Win32.IO.FileObject)
+		  Me.Constructor(File.Handle)
 		End Sub
 	#tag EndMethod
 
