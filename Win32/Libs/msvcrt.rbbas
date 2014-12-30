@@ -7,7 +7,19 @@ Protected Module msvcrt
 	#tag EndMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function _fdopen Lib "msvcrt" (FileDescriptor As Integer, Mode As CString) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function _get_errno Lib "msvcrt" (ByRef errno As Integer) As Boolean
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function _open_osfhandle Lib "msvcrt" (osfhandle As Integer, Flags As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function _set_errno Lib "msvcrt" (NewErrorNumber As Integer) As Boolean
 	#tag EndExternalMethod
 
 

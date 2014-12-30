@@ -52,10 +52,35 @@ Implements Win32.Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function Descriptor(Flags As Integer = _O_RDWR) As Integer
+	#tag Method, Flags = &h1
+		Protected Function Descriptor(Flags As Integer = _O_RDWR) As Integer
+		  ' unreliable
 		  If Win32.Libs.msvcrt.IsAvailable Then
 		    Return Win32.Libs.msvcrt._open_osfhandle(Me.Handle, Flags)
+		    Dim fd As Integer = Win32.Libs.msvcrt._open_osfhandle(Me.Handle, Flags)
+		    If fd <> 0 Then
+		      Dim mode As String
+		      Select Case Flags
+		      Case _O_APPEND
+		        mode = "b"
+		      Case _O_TEXT
+		        mode = "t"
+		      Case _O_RDONLY
+		        mode = "r"
+		      Case _O_RDWR
+		        mode = "r+"
+		      Case _O_WRONLY
+		        mode = "w"
+		      Case _O_BINARY
+		        mode = "b"
+		      Else
+		        mode = "r+"
+		      End Select
+		      Return Win32.Libs.msvcrt._fdopen(fd, mode)
+		    Else
+		      Call Win32.Libs.msvcrt._get_errno(mLastError)
+		      Return INVALID_HANDLE_VALUE
+		    End If
 		  End If
 		End Function
 	#tag EndMethod
