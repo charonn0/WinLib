@@ -48,7 +48,7 @@ Inherits Win32.GUI.MessageMonitor
 		  #If TargetWin32 Then
 		    If Win32.KernelVersion >= 6.0 Then ' Vista and newer
 		      If Not Win32.Libs.User32.AddClipboardFormatListener(Me.Handle) Then
-		        mLastError = Win32.Win32.LastError()
+		        mLastError = Win32.LastError
 		        Raise Win32Exception(mLastError)
 		      End If
 		    Else

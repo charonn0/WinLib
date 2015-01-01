@@ -63,7 +63,7 @@ Implements Win32.Win32Object
 		      Return mb
 		    Else
 		      p = Win32.LastError
-		      Dim err As New RuntimeException
+		      Dim err As New Win32Exception
 		      err.ErrorNumber = p
 		      err.Message = Win32.FormatError(p)
 		      Raise err
@@ -94,7 +94,7 @@ Implements Win32.Win32Object
 		      Return mb
 		    Else
 		      p = Win32.LastError
-		      Dim err As New RuntimeException
+		      Dim err As New Win32Exception
 		      err.ErrorNumber = p
 		      err.Message = Win32.FormatError(p)
 		      Raise err
@@ -205,7 +205,7 @@ Implements Win32.Win32Object
 		Function StringValue(OffSet As Integer, Length As Integer) As MemoryBlock
 		  Dim p As New MemoryBlock(Length)
 		  If HeapHandle = TypeGlobal Then
-		    If Not Me.Lock Then Raise New RuntimeException
+		    If Not Me.Lock Then Raise New Win32Exception
 		  End If
 		  Dim m As MemoryBlock = Ptr(mHandle)
 		  p.StringValue(0, Length) = m.StringValue(Offset, Length)
@@ -219,7 +219,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub StringValue(OffSet As Integer, Length As Integer, Assigns NewData As MemoryBlock)
 		  If HeapHandle = TypeGlobal Then
-		    If Not Me.Lock Then Raise New RuntimeException
+		    If Not Me.Lock Then Raise New Win32Exception
 		  End If
 		  Dim m As MemoryBlock = Ptr(mHandle)
 		  m.StringValue(OffSet, Length) = NewData.StringValue(0, Length)
@@ -246,7 +246,7 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function VirtualAllocate(Size As Integer, StartAddress As Integer = 0, Protection As Integer = PAGE_EXECUTE_READWRITE, AllocType As Integer = MEM_COMMIT) As Win32.Utils.Win32.Utils.WinMB
+		 Shared Function VirtualAllocate(Size As Integer, StartAddress As Integer = 0, Protection As Integer = PAGE_EXECUTE_READWRITE, AllocType As Integer = MEM_COMMIT) As Win32.Utils.WinMB
 		  Dim p As Integer = Win32.Libs.Kernel32.VirtualAlloc(StartAddress, Size, AllocType, Protection)
 		  If p <> 0 Then
 		    Dim m As New Win32.Utils.WinMB(p)
@@ -255,7 +255,7 @@ Implements Win32.Win32Object
 		    Return m
 		  Else
 		    p = Win32.LastError
-		    Dim err As New RuntimeException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = p
 		    err.Message = Win32.FormatError(p)
 		    Raise err

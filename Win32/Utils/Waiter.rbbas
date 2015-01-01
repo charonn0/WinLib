@@ -40,7 +40,7 @@ Implements Win32.Win32Object
 		    w.WaitProc(WaitFired)
 		  Else
 		    System.DebugLog("ERROR: Token not found!")
-		    'Raise New RuntimeException
+		    'Raise New Win32Exception
 		  End If
 		End Sub
 	#tag EndMethod

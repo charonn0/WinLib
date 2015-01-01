@@ -54,7 +54,7 @@ Inherits Win32.IO.FileObject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function MapView(DesiredAccess As Integer, Offset As Int64, Length As Integer) As Win32.Utils.Win32.Utils.WinMB
+		Function MapView(DesiredAccess As Integer, Offset As Int64, Length As Integer) As Win32.Utils.WinMB
 		  Dim p As Ptr = Win32.Libs.Kernel32.MapViewOfFile(MapHandle, DesiredAccess, Offset.HighBits, Offset.LowBits, Length)
 		  If p <> Nil Then
 		    Dim mb As Win32.Utils.WinMB = Win32.Utils.WinMB.Acquire(Integer(p), Win32.Utils.WinMB.TypeVirtual)

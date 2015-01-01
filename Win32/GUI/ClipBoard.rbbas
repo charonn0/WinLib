@@ -26,12 +26,12 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Function Data(Format As Win32.GUI.ClipboardFormat) As MemoryBlock
 		  
-		  If Not Me.Open Then Raise New RuntimeException
+		  If Not Me.Open Then Raise New Win32Exception
 		  Dim hMem As Integer = Win32.Libs.User32.GetClipboardData(Format.Handle)
 		  mLastError = Win32.LastError()
 		  If hMem = 0 Then
 		    Me.Close
-		    Raise New RuntimeException
+		    Raise New Win32Exception
 		  End If
 		  Dim hGlobal As Win32.Utils.WinMB = Win32.Utils.WinMB.Acquire(hMem, Win32.Utils.WinMB.TypeGlobal)
 		  If hGlobal.Size > -1 Then
@@ -76,7 +76,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Function FormatCount() As Integer
 		  
-		  If Not Me.Open Then Raise New RuntimeException
+		  If Not Me.Open Then Raise New Win32Exception
 		  Dim hClip, c As Integer
 		  Do
 		    hClip = Win32.Libs.User32.EnumClipboardFormats(hClip)
@@ -93,7 +93,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Function GetFormat(Index As Integer) As Win32.GUI.ClipboardFormat
 		  
-		  If Not Me.Open Then Raise New RuntimeException
+		  If Not Me.Open Then Raise New Win32Exception
 		  Dim hClip As Integer
 		  For i As Integer = 0 To Index
 		    hClip = Win32.Libs.User32.EnumClipboardFormats(hClip)
@@ -117,7 +117,7 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Function HasFormat(Format As Win32.GUI.ClipboardFormat) As Boolean
-		  If Not Me.Open Then Raise New RuntimeException
+		  If Not Me.Open Then Raise New Win32Exception
 		  Dim hClip As Integer
 		  Dim ret As Boolean
 		  Do
