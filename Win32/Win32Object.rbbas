@@ -1,5 +1,5 @@
 #tag Interface
-Interface Win32Object
+Protected Interface Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
 		  
