@@ -213,6 +213,48 @@ Protected Module Utils
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_DRIVER_GET_CAPS() As Integer
+		  Return Win32.GUI.WM_USER + 14
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_EDIT_COPY() As Integer
+		  Return Win32.GUI.WM_USER + 30
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_GET_SEQUENCE_SETUP() As Integer
+		  Return Win32.GUI.WM_USER + 65
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_SET_CALLBACK_ERROR() As Integer
+		  Return Win32.GUI.WM_USER + 102
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_SET_SCROLL() As Integer
+		  Return Win32.GUI.WM_USER + 55
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_SET_SEQUENCE_SETUP() As Integer
+		  Return Win32.GUI.WM_USER + 64
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function WM_CAP_SET_VIDEOFORMAT() As Integer
+		  Return Win32.GUI.WM_USER + 45
+		End Function
+	#tag EndMethod
+
 
 	#tag Constant, Name = COMPRESSION_ENGINE_MAXIMUM, Type = Double, Dynamic = False, Default = \"&h0100", Scope = Private
 	#tag EndConstant
