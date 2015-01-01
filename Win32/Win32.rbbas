@@ -16,18 +16,6 @@ Protected Module Win32
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function FILE_ALL_ACCESS() As Integer
-		  Return STANDARD_RIGHTS_REQUIRED Or SYNCHRONIZE Or &h1FF
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function FILE_GENERIC_READ() As Integer
-		  Return STANDARD_RIGHTS_READ Or FILE_READ_DATA Or FILE_READ_ATTRIBUTES Or FILE_READ_EA Or SYNCHRONIZE
-		End Function
-	#tag EndMethod
-
 	#tag Method, Flags = &h1
 		Protected Function FormatError(WinErrorNumber As Integer) As String
 		  //Returns the error message corresponding to a given windows error number.
@@ -147,7 +135,7 @@ Protected Module Win32
 
 	#tag Method, Flags = &h1
 		Protected Function Win32Exception(ErrorNumber As Integer) As RuntimeException
-		  Dim err As New RuntimeException
+		  Dim err As New Win32Exception
 		  err.ErrorNumber = ErrorNumber
 		  err.Message = "Win32 error: " + FormatError(ErrorNumber)
 		  Return err

@@ -1,5 +1,18 @@
 #tag Module
 Protected Module IO
+	#tag Method, Flags = &h1
+		Protected Function FILE_ALL_ACCESS() As Integer
+		  Return STANDARD_RIGHTS_REQUIRED Or SYNCHRONIZE Or &h1FF
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
+		Protected Function FILE_GENERIC_READ() As Integer
+		  Return STANDARD_RIGHTS_READ Or FILE_READ_DATA Or FILE_READ_ATTRIBUTES Or FILE_READ_EA Or SYNCHRONIZE
+		End Function
+	#tag EndMethod
+
+
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
