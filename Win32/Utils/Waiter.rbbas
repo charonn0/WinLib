@@ -3,7 +3,6 @@ Protected Class Waiter
 Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the Win32Object interface.
 		  If Not Win32.Libs.Kernel32.UnregisterWait(Me.Handle) Then
 		    mLastError = Win32.LastError()
 		  Else
@@ -14,15 +13,7 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Constructor()
-		  // Part of the Win32Object interface.
-		  Return
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Constructor(Handle As Integer)
-		  // Part of the Win32Object interface.
-		  mHandle = Handle
+		  mHandle = Window(0).Handle
 		End Sub
 	#tag EndMethod
 
@@ -101,7 +92,7 @@ Implements Win32.Win32Object
 
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

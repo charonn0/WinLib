@@ -17,10 +17,20 @@ Implements Win32.Win32Object
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h1001
+		Protected Sub Constructor(hMem As Integer)
+		  mHandle = hMem
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
+		  Me.Free
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
-		Sub Close()
-		  // Part of the Win32Object interface.
-		  'Call Unlock()
+		Sub Free()
 		  If Freeable Then
 		    Select Case HeapHandle
 		    Case TypeGlobal ' GlobalAllocate
@@ -30,21 +40,7 @@ Implements Win32.Win32Object
 		    Case Is >0 ' HeapAllocate
 		      If Not Win32.Libs.Kernel32.HeapFree(HeapHandle, 0, Me.Handle) Then mLastError = Win32.LastError()
 		    End Select
-		  Else
-		    ' Memory not allocated by us, so not freed by us.
 		  End If
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1001
-		Protected Sub Constructor(hMem As Integer)
-		  mHandle = hMem
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h21
-		Private Sub Destructor()
-		  Me.Close()
 		End Sub
 	#tag EndMethod
 
@@ -295,7 +291,7 @@ Implements Win32.Win32Object
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
