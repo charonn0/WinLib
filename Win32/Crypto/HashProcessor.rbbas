@@ -1,7 +1,6 @@
 #tag Class
 Protected Class HashProcessor
 Inherits Win32.Crypto.Context
-	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Function Algorithm() As Integer
 		  Dim alg As New MemoryBlock(4)
@@ -124,7 +123,7 @@ Inherits Win32.Crypto.Context
 
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 

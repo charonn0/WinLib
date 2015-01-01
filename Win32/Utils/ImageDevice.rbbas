@@ -4,7 +4,6 @@ Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the Win32Object interface.
 		  If CapWin <> 0 Then
 		    Call Win32.Libs.User32.SendMessage(CapWin, WM_CAP_DRIVER_DISCONNECT, mIndex, 0)
 		    mLastError = Win32.LastError()
@@ -16,7 +15,6 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h1
 		Protected Sub Constructor(Index As Integer)
-		  // Part of the Win32Object interface.
 		  mIndex = Index
 		End Sub
 	#tag EndMethod

@@ -1,6 +1,5 @@
 #tag Class
 Protected Class Context
-	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub Constructor(ProviderID As String, ProviderType As Integer)
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386983%28v=vs.85%29.aspx

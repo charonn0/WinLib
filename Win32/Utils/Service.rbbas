@@ -3,8 +3,8 @@ Protected Class Service
 Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the Win32Object interface.
-		  CloseService(ServiceHandle)
+		  If ServiceHandle <> INVALID_HANDLE_VALUE Then CloseService(ServiceHandle)
+		  ServiceHandle = INVALID_HANDLE_VALUE
 		End Sub
 	#tag EndMethod
 

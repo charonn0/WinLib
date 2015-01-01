@@ -4,22 +4,13 @@ Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the Win32Object interface.
-		  
 		  If Not Win32.Libs.User32.CloseClipboard() Then mLastError = Win32.LastError()
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Constructor()
-		  Me.Constructor(RB_FOREMOST_WINDOW_HWND)
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h1
-		Protected Sub Constructor(Handle As Integer)
-		  // Part of the Win32Object interface.
-		  mHandle = Handle
+		  mHandle = Window(RB_FOREMOST_WINDOW_HWND).Handle
 		End Sub
 	#tag EndMethod
 
@@ -63,6 +54,12 @@ Implements Win32.Win32Object
 		    Break
 		  End If
 		  Me.Close
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
+		  Me.Close()
 		End Sub
 	#tag EndMethod
 
@@ -147,7 +144,7 @@ Implements Win32.Win32Object
 
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

@@ -3,7 +3,6 @@ Protected Class FileObject
 Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the Win32Object interface.
 		  If Not Win32.Libs.Kernel32.CloseHandle(mHandle) Then
 		    mLastError = Win32.LastError()
 		  End If
@@ -24,8 +23,8 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Sub Constructor(Handle As Integer)
+	#tag Method, Flags = &h1
+		Protected Sub Constructor(Handle As Integer)
 		  // Part of the Win32Object interface.
 		  mHandle = Handle
 		End Sub
@@ -107,7 +106,7 @@ Implements Win32.Win32Object
 
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

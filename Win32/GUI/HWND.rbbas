@@ -4,15 +4,16 @@ Implements Win32.Win32Object
 	#tag CompatibilityFlags = TargetHasGUI
 	#tag Method, Flags = &h0
 		Sub Close()
-		  If Not Win32.Libs.User32.CloseWindow(mHandle) Then
+		  If mHandle <> INVALID_HANDLE_VALUE And Not Win32.Libs.User32.CloseWindow(mHandle) Then
 		    mLastError = Win32.LastError
 		  End If
+		  mHandle = INVALID_HANDLE_VALUE
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Constructor(HWND As Integer)
-		  Me.mHandle = HWND
+		  mHandle = HWND
 		End Sub
 	#tag EndMethod
 
@@ -169,7 +170,7 @@ Implements Win32.Win32Object
 
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

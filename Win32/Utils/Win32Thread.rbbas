@@ -149,7 +149,7 @@ Protected Class Win32Thread
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

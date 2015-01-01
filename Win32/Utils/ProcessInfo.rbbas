@@ -2,18 +2,6 @@
 Protected Class ProcessInfo
 Implements Win32.Win32Object
 	#tag Method, Flags = &h0
-		Attributes( hidden )  Sub Close()
-		  ' nothing to close; just satisfying Win32Object
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub Constructor(Handle As Integer)
-		  Me.ProcessID = Handle
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub Constructor(ProcInfo As Win32.Utils.PROCESSENTRY32)
 		  Me.ProcessID = ProcInfo.ProcessID
 		  Me.ParentID = ProcInfo.ParentProcessID

@@ -44,12 +44,6 @@ Implements Win32.Win32Object
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Attributes( hidden ) Protected Sub Close()
-		  Return
-		End Sub
-	#tag EndMethod
-
 	#tag Method, Flags = &h0
 		Sub Constructor(HWND As Integer)
 		  Me.mHandle = HWND
@@ -238,7 +232,7 @@ Implements Win32.Win32Object
 	#tag EndComputedProperty
 
 	#tag Property, Flags = &h21
-		Private mHandle As Integer
+		Private mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h0

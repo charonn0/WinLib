@@ -15,15 +15,7 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Close()
-		  // Part of the Win32Object interface.
-		  Return ' Not closeable
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Sub Constructor(hClipFormat As Integer)
-		  // Part of the Win32Object interface.
 		  mHandle = hClipFormat
 		End Sub
 	#tag EndMethod
@@ -140,7 +132,7 @@ Implements Win32.Win32Object
 
 
 	#tag Property, Flags = &h1
-		Protected mHandle As Integer
+		Protected mHandle As Integer = INVALID_HANDLE_VALUE
 	#tag EndProperty
 
 	#tag Property, Flags = &h1

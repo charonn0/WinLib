@@ -3,8 +3,7 @@ Protected Class FindFileIterator
 Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Close()
-		  // Part of the Win32.Win32Object interface.
-		  // This method closes the current FindFile operation and makes the class ready to begin another.
+		  ' This method closes the current FindFile operation and makes the class ready to begin another.
 		  #If TargetWin32 Then
 		    If FindHandle <> INVALID_HANDLE_VALUE Then  Call Win32.Libs.Kernel32.FindClose(FindHandle)
 		  #endif
@@ -22,13 +21,6 @@ Implements Win32.Win32Object
 		  
 		  mRootDirectory = Root
 		  mSearchPattern = Pattern
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Attributes( hidden )  Sub Constructor(Handle As Integer)
-		  // Part of the Win32.Win32Object interface.
-		  FindHandle = Handle
 		End Sub
 	#tag EndMethod
 
