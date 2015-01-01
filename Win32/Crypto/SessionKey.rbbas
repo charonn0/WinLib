@@ -3,6 +3,8 @@ Protected Class SessionKey
 Inherits Win32.Crypto.KeyContainer
 	#tag Method, Flags = &h1000
 		Sub Constructor(BaseData As Win32.Crypto.HashProcessor)
+		  ' Create a HashProcessor and hash some data, then pass it to this constructor. The Generate method
+		  ' will use the entropy from the HashProcessor to generate keys.
 		  // Calling the overridden superclass constructor.
 		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
 		  Super.Constructor(BaseData)

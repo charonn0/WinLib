@@ -18,10 +18,18 @@ Inherits Win32.Crypto.Context
 	#tag EndMethod
 
 	#tag Method, Flags = &h1000
-		Sub Constructor()
-		  // Calling the overridden superclass constructor.
-		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
-		  Super.Constructor(EnhancedProvider)
+		Sub Constructor(Algorithm As Integer, KeySize As Integer = 0)
+		  Select Case Algorithm
+		  Case CALG_3DES, CALG_3DES_112, CALG_DES, CALG_RC2, CALG_RC4, CALG_RSA_KEYX, CALG_RSA_SIGN
+		    Super.Constructor(EnhancedProvider)
+		  Case CALG_AES_128, CALG_AES_192, CALG_AES_256
+		    Super.Constructor(AESProvider)
+		  Else
+		    Raise New UnsupportedFormatException
+		  End Select
+		  
+		  Dim Flags As Integer = (CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE)
+		  If Not Win32.Libs.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then mLastError = Win32.LastError
 		End Sub
 	#tag EndMethod
 
@@ -32,13 +40,22 @@ Inherits Win32.Crypto.Context
 		  If Hashcontainer <> Nil Then h = Hashcontainer.Handle
 		  If Not Win32.Libs.AdvApi32.CryptDecrypt(Me.Handle, h, FinalBlock, 0, InputData, sz) Then
 		    mLastError = Win32.LastError
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
 		  End If
 		  Return InputData
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub Destructor()
+		  If Not Win32.Libs.AdvApi32.CryptDestroyKey(mHandle) Then
+		    mLastError = Win32.LastError
+		  End If
+		  
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -48,7 +65,7 @@ Inherits Win32.Crypto.Context
 		  If Hashcontainer <> Nil Then h = Hashcontainer.Handle
 		  If Not Win32.Libs.AdvApi32.CryptEncrypt(Me.Handle, h, FinalBlock, 0, InputData, sz, InputData.Size) Then
 		    mLastError = Win32.LastError
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
@@ -67,7 +84,6 @@ Inherits Win32.Crypto.Context
 		    blobtype = PLAINTEXTKEYBLOB
 		  End If
 		  
-		  
 		  If Not Win32.Libs.AdvApi32.CryptExportKey(Me.Handle, exp, blobtype, 0, Nil, sz) Then
 		    mLastError = Win32.LastError
 		    Return Nil
@@ -81,16 +97,6 @@ Inherits Win32.Crypto.Context
 		    Return Nil
 		  End If
 		  Return mb
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function Generate(Algorithm As Integer, KeySize As Integer) As Boolean
-		  Dim Flags As Integer = (CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE)')
-		  If Win32.Libs.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then
-		    Return True
-		  End If
-		  mLastError = Win32.LastError
 		End Function
 	#tag EndMethod
 
@@ -124,12 +130,13 @@ Inherits Win32.Crypto.Context
 		 Shared Function Import(KeyData As MemoryBlock, Provider As Win32.Crypto.Context) As Win32.Crypto.KeyContainer
 		  Dim hKey As Integer
 		  If Win32.Libs.AdvApi32.CryptImportKey(Provider.Provider, KeyData, KeyData.Size, 0, 0, hKey) Then
+		    ' Calling Context.Constructor instead of KeyContainer.Constructor
 		    Dim key As New Win32.Crypto.KeyContainer(Provider)
 		    key.mHandle = hkey
 		    Return key
 		  Else
 		    hKey = Win32.LastError
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = hKey
 		    err.Message = Win32.FormatError(hKey)
 		    Raise err
@@ -158,7 +165,7 @@ Inherits Win32.Crypto.Context
 		  Dim mb As New MemoryBlock(4)
 		  mb.Int32Value(0) = NewPermissionsMask
 		  If Not Me.SetKeyParam(KP_PERMISSIONS, mb, 0) Then
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err

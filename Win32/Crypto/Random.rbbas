@@ -3,9 +3,7 @@ Protected Class Random
 Inherits Win32.Crypto.Context
 	#tag Method, Flags = &h1000
 		Sub Constructor()
-		  // Calling the overridden superclass constructor.
 		  Super.Constructor(BaseProvider)
-		  
 		End Sub
 	#tag EndMethod
 

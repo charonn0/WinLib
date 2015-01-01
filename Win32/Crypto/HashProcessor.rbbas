@@ -6,7 +6,7 @@ Inherits Win32.Crypto.Context
 		Function Algorithm() As Integer
 		  Dim alg As New MemoryBlock(4)
 		  If Not Me.GetHashParam(HP_ALGID, alg) Then
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
@@ -17,24 +17,20 @@ Inherits Win32.Crypto.Context
 
 	#tag Method, Flags = &h0
 		Sub Constructor(Algorithm As Integer, Key As Win32.Crypto.KeyContainer = Nil)
-		  Dim CryptoProvider As Win32.Crypto.Context
 		  Select Case Algorithm
 		  Case CALG_MD2, CALG_MD4, CALG_MD5, CALG_SHA1
-		    CryptoProvider = EnhancedProvider
+		    Super.Constructor(EnhancedProvider)
 		  Case CALG_SHA256, CALG_SHA384, CALG_SHA512
-		    CryptoProvider = AESProvider
+		    Super.Constructor(AESProvider)
 		  Else
 		    Raise New UnsupportedFormatException
 		  End Select
-		  // Calling the overridden superclass constructor.
-		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
-		  Super.Constructor(CryptoProvider)
 		  
 		  Dim kh As Integer
 		  If Key <> Nil Then kh = Key.Handle
 		  If Not Win32.Libs.AdvApi32.CryptCreateHash(Me.Provider, Algorithm, kh, 0, mHandle) Then
 		    mLastError = Win32.LastError
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
@@ -46,10 +42,10 @@ Inherits Win32.Crypto.Context
 		Sub Constructor(DuplicateHash As Win32.Crypto.HashProcessor)
 		  // Calling the overridden superclass constructor.
 		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
-		  Super.Constructor(DuplicateHash.Provider)
+		  Super.Constructor(DuplicateHash)
 		  If Not Win32.Libs.AdvApi32.CryptDuplicateHash(DuplicateHash.mHandle, 0, 0, mHandle) Then
 		    mLastError = Win32.LastError
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
@@ -87,7 +83,7 @@ Inherits Win32.Crypto.Context
 		Sub Process(NewData As MemoryBlock)
 		  If Not Win32.Libs.AdvApi32.CryptHashData(mHandle, NewData, NewData.Size, 0) Then
 		    mLastError = Win32.LastError
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
@@ -110,14 +106,14 @@ Inherits Win32.Crypto.Context
 		Function Value() As String
 		  Dim buffer As New MemoryBlock(4)
 		  If Not Me.GetHashParam(HP_HASHSIZE, buffer) Then
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
 		  End If
 		  buffer = New MemoryBlock(buffer.Int32Value(0))
 		  If Not Me.GetHashParam(HP_HASHVAL, buffer) Then
-		    Dim err As New IOException
+		    Dim err As New Win32Exception
 		    err.ErrorNumber = mLastError
 		    err.Message = Win32.FormatError(mLastError)
 		    Raise err
