@@ -13,7 +13,7 @@ Implements Win32.Win32Object
 
 	#tag Method, Flags = &h0
 		Sub Constructor()
-		  mHandle = Window(0).Handle
+		  mHandle = INVALID_HANDLE_VALUE
 		End Sub
 	#tag EndMethod
 

@@ -4,11 +4,11 @@ Protected Module User32
 		Protected Soft Declare Function AddClipboardFormatListener Lib "User32" (HWND As Integer) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function AdjustWindowRect Lib "User32" (ByRef WindowRect As Win32 . GUI . RECT, Style As Integer, bMenu As Boolean) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function AdjustWindowRectEx Lib "User32" (ByRef WindowRect As Win32 . GUI . RECT, Style As Integer, bMenu As Boolean, ExStyle As Integer) As Boolean
 	#tag EndExternalMethod
 
@@ -32,11 +32,11 @@ Protected Module User32
 		Protected Declare Function ChangeClipboardChain Lib "User32" (Removed As Integer, NextWindow As Integer) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function ChildWindowFromPoint Lib "User32" (HWND As Integer, Coordinates As Win32 . GUI . POINT) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function ClipCursor Lib "User32" (ByRef Area As Win32 . GUI . RECT) As Boolean
 	#tag EndExternalMethod
 
@@ -104,7 +104,7 @@ Protected Module User32
 		Protected Declare Function FlashWindow Lib "User32" (HWND As Integer, invert As Boolean) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function FlashWindowEx Lib "User32" (Flashinfo As Win32 . GUI . FLASHWINFO) As Boolean
 	#tag EndExternalMethod
 
@@ -112,7 +112,7 @@ Protected Module User32
 		Protected Declare Function GetAncestor Lib "User32" (HWND As Integer, Flags As Integer) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function GetClientRect Lib "User32" (HWND As Integer, ByRef Dimensions As Win32 . GUI . RECT) As Boolean
 	#tag EndExternalMethod
 
@@ -124,11 +124,11 @@ Protected Module User32
 		Protected Declare Function GetClipboardFormatName Lib "User32" Alias "GetClipboardFormatNameW" (format As UInt32, Buffer As Ptr, MaxCount As Integer) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function GetClipCursor Lib "User32" (ByRef Area As Win32 . GUI . RECT) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function GetCursorInfo Lib "User32" (ByRef Info As Win32 . GUI . CURSORINFO) As Boolean
 	#tag EndExternalMethod
 
@@ -168,7 +168,7 @@ Protected Module User32
 		Protected Declare Function GetWindow Lib "User32" (HWND As Integer, CMD As Integer) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function GetWindowInfo Lib "User32" (HWND As Integer, ByRef Info As Win32 . GUI . WINDOWINFO) As Boolean
 	#tag EndExternalMethod
 
@@ -176,11 +176,11 @@ Protected Module User32
 		Protected Declare Function GetWindowLong Lib "User32" Alias "GetWindowLongW" (HWND As Integer, Index As Integer) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function GetWindowPlacement Lib "User32" (HWND As Integer, ByRef WinPlacement As Win32 . GUI . WINDOWPLACEMENT) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function GetWindowRect Lib "User32" (HWND As Integer, ByRef sm As Win32 . GUI . RECT) As Boolean
 	#tag EndExternalMethod
 
@@ -248,11 +248,11 @@ Protected Module User32
 		Protected Declare Function PostMessage Lib "User32" Alias "PostMessageW" (HWND As Integer, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function RegisterClass Lib "User32" Alias "RegisterClassW" (ByRef Info As Win32 . GUI . WNDCLASS) As UInt32
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function RegisterClassEx Lib "User32" Alias "RegisterClassExW" (ByRef Info As Win32 . GUI . WNDCLASSEX) As Integer
 	#tag EndExternalMethod
 
@@ -276,7 +276,7 @@ Protected Module User32
 		Protected Soft Declare Function RemoveClipboardFormatListener Lib "User32" (HWND As Integer) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function ScreenToClient Lib "User32" (HWND As Integer, ByRef Point As Win32 . GUI . POINT) As Boolean
 	#tag EndExternalMethod
 
@@ -364,7 +364,7 @@ Protected Module User32
 		Protected Declare Function VkKeyScan Lib "User32" Alias "VkKeyScanW" (Key As Integer) As Short
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function WindowFromPoint Lib "User32" (Coordinates As Win32 . GUI . POINT) As Integer
 	#tag EndExternalMethod
 

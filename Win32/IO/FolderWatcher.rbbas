@@ -86,7 +86,7 @@ Inherits Win32.Utils.Waiter
 			Group="Behavior"
 			InitialValue="INFINITE"
 			Type="Integer"
-			InheritedFrom="WinLib.Waiter"
+			InheritedFrom="Win32.Utils.Waiter"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Top"

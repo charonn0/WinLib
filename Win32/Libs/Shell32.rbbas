@@ -1,6 +1,6 @@
 #tag Module
 Protected Module Shell32
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function ExtractIconEx Lib "Shell32" Alias "ExtractIconExW" (ResourceFile As WString, Index As Integer, largeIco As Ptr, smallIco As Ptr, Icons As Integer) As Integer
 	#tag EndExternalMethod
 
@@ -32,15 +32,15 @@ Protected Module Shell32
 		Protected Declare Function ShellExecute Lib "Shell32" Alias "ShellExecuteW" (HWND As Integer, op As WString, file As WString, params As WString, directory As WString, cmd As Integer) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function Shell_NotifyIcon Lib "Shell32" Alias "Shell_NotifyIconW" (Message As Integer, Data As Win32 . GUI . NOTIFYICONDATA) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Function SHGetFileInfo Lib "Shell32" Alias "SHGetFileInfoW" (FilePath As WString, Attribs As Integer, ByRef info As Win32 . GUI . SHFILEINFO, infoSize As Integer, flags As Integer) As Boolean
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
+	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Declare Sub SHGetSettings Lib "Shell32" (ByRef flagStruct As Win32 . GUI . SHELLFLAGSTATE, flags As Integer)
 	#tag EndExternalMethod
 
