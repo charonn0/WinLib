@@ -157,6 +157,18 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegGetValue Lib "AdvApi32" Alias "RegGetValueW" (hKey As Integer, SubKeyName As WString, ValueName As WString, Flags As Integer, ByRef TypeCode As Integer, DataBuffer As Ptr, ByRef DataBufferSize As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegOpenKeyEx Lib "AdvApi32" Alias "RegOpenKeyExW" (hKey As Integer, SubkeyName As WString, Options As Integer, AccessMask As Integer, ByRef ResultKey As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegSetValueEx Lib "AdvApi32" Alias "RegSetValueExW" (hKey As Integer, ValueName As WString, Reserved As Integer, TypeCode As Integer, DataBuffer As Ptr, DataBufferSize As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function SaferiIsExecutableFileType Lib "AdvApi32" (FilePath As WString, OmitEXE As Boolean) As Boolean
 	#tag EndExternalMethod
 
