@@ -28,7 +28,7 @@ Inherits Win32.Crypto.Context
 		    Raise New UnsupportedFormatException
 		  End Select
 		  
-		  Dim Flags As Integer = (CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE)
+		  Dim Flags As Integer = CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE Or ShiftLeft(KeySize, 16)
 		  If Not Win32.Libs.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then mLastError = Win32.LastError
 		End Sub
 	#tag EndMethod
@@ -140,6 +140,22 @@ Inherits Win32.Crypto.Context
 		    err.ErrorNumber = hKey
 		    err.Message = Win32.FormatError(hKey)
 		    Raise err
+		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function KeySize() As Integer
+		  Dim mb As MemoryBlock
+		  ' first call allocates a buffer big enough for the second call
+		  If Me.GetKeyParam(KP_KEYLEN, mb, 0) Then ' on in mb is Nil
+		    If Me.GetKeyParam(KP_KEYLEN, mb, 0) Then ' on in mb is a MemoryBlock of correct size
+		      Return mb.Int32Value(0)
+		    Else
+		      mLastError = Win32.LastError
+		    End If
+		  Else
+		    mLastError = Win32.LastError
 		  End If
 		End Function
 	#tag EndMethod

@@ -67,6 +67,7 @@ Module=IO;Win32/IO/IO.rbbas;&hC1B07FF;&h561B87FF;false
 Module=Utils;Win32/Utils/Utils.rbbas;&h7C30FFF;&h561B87FF;false
 Class=HWND;Win32/GUI/HWND.rbbas;&h1927FFFF;&h593EC7FF;false
 Class=RegistryKey;Win32/Utils/RegistryKey.rbbas;&h2F1A1FFF;&h7C30FFF;false
+Class=Stream;Win32/Crypto/Stream.rbbas;&h69A787FF;&h5F7AB7FF;false
 DefaultWindow=Window1
 MajorVersion=1
 MinorVersion=0
