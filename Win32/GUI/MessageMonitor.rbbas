@@ -33,7 +33,7 @@ Implements Win32.Win32Object
 		    
 		    If WndProcs.HasKey(mHandle) Then
 		      Dim d As New Dictionary
-		      d.Value(mHandle) = Me
+		      d.Value(mHandle) = New WeakRef(Me)
 		      Subclasses.Append(d)
 		    Else
 		      Dim windproc As Ptr = AddressOf DefWindowProc
