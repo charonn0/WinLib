@@ -140,18 +140,6 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		 Shared Function PROCESS_QUERY_LIMITED_INFORMATION() As Integer
-		  #If TargetWin32 Then
-		    If OSVersion.MajorVersion >= 6 Then
-		      Return &h1000  'PROCESS_QUERY_LIMITED_INFORMATION
-		    Else
-		      Return PROCESS_QUERY_INFORMATION  'On old Windows, use the old API
-		    End If
-		  #endif
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function Terminate(ExitCode As Integer = 0) As Boolean
 		  Dim prochandle As Integer = Win32.Libs.Kernel32.OpenProcess(PROCESS_TERMINATE, False, Me.ProcessID)
 		  mLastError = Win32.LastError()
@@ -225,18 +213,6 @@ Implements Win32.Win32Object
 		ProcessID As Integer
 	#tag EndProperty
 
-
-	#tag Constant, Name = PROCESS_QUERY_INFORMATION, Type = Double, Dynamic = False, Default = \"&h400", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = PROCESS_SET_INFORMATION, Type = Double, Dynamic = False, Default = \"&h200", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = PROCESS_TERMINATE, Type = Double, Dynamic = False, Default = \"&h1", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = PROCESS_VM_READ, Type = Double, Dynamic = False, Default = \"&h10", Scope = Private
-	#tag EndConstant
 
 	#tag Constant, Name = SYSTEM_HANDLE_INFORMATION, Type = Double, Dynamic = False, Default = \"16", Scope = Private
 	#tag EndConstant
