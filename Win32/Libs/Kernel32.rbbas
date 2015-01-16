@@ -192,8 +192,18 @@ Protected Module Kernel32
 		Protected Declare Function GetLogicalDriveStrings Lib "Kernel32" Alias "GetLogicalDriveStringsW" (BufferLength As Integer, Buffer As Ptr) As Integer
 	#tag EndExternalMethod
 
-	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetMappedFileName Lib "Kernel32" Alias "GetMappedFileNameW" (hProcess As Integer, lvp As Integer, Filename As Ptr, Size As Integer) As Integer
+	#tag Method, Flags = &h1
+		Protected Function GetMappedFileName(hProcess As Integer, lvp As Integer, Filename As Ptr, Size As Integer) As Integer
+		  If Win32.KernelVersion >= 6.0 Or Not System.IsFunctionAvailable("GetMappedFileName", "Kernel32") Then ' XP or some versions of Vista
+		    Return Win32.Libs.PSAPI.GetMappedFileName(hProcess, lvp, FileName, Size)
+		  Else
+		    Return GetMappedFileNameW(hProcess, lvp, FileName, Size)
+		  End If
+		End Function
+	#tag EndMethod
+
+	#tag ExternalMethod, Flags = &h21
+		Private Soft Declare Function GetMappedFileNameW Lib "Kernel32" (hProcess As Integer, lvp As Integer, Filename As Ptr, Size As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
