@@ -73,18 +73,8 @@ Protected Class Context
 
 	#tag Method, Flags = &h0
 		Function Operator_Compare(OtherContext As Win32.Crypto.Context) As Integer
-		  Select Case True
-		  Case OtherContext Is Nil
-		    Return 1
-		  Case OtherContext.Provider > mProvider
-		    Return -1
-		  Case OtherContext.Provider < mProvider
-		    Return 1
-		  Case OtherContext.Provider = mProvider
-		    Return 0
-		  End Select
-		  
-		  
+		  If OtherContext Is Nil Then Return 1
+		  Return Sign(mProvider - OtherContext.Provider)
 		End Function
 	#tag EndMethod
 
@@ -126,8 +116,8 @@ Protected Class Context
 		Protected mLastError As Integer
 	#tag EndProperty
 
-	#tag Property, Flags = &h1
-		Protected mProvider As Integer
+	#tag Property, Flags = &h21
+		Private mProvider As Integer
 	#tag EndProperty
 
 

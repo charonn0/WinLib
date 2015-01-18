@@ -19,6 +19,8 @@ Inherits Win32.Crypto.Context
 
 	#tag Method, Flags = &h1000
 		Sub Constructor(Algorithm As Integer, KeySize As Integer = 0)
+		  // Calling the overridden superclass constructor.
+		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
 		  Select Case Algorithm
 		  Case CALG_3DES, CALG_3DES_112, CALG_DES, CALG_RC2, CALG_RC4, CALG_RSA_KEYX, CALG_RSA_SIGN
 		    Super.Constructor(EnhancedProvider)
@@ -156,6 +158,18 @@ Inherits Win32.Crypto.Context
 		    End If
 		  Else
 		    mLastError = Win32.LastError
+		  End If
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Operator_Compare(OtherKey As Win32.Crypto.KeyContainer) As Integer
+		  If OtherKey Is Nil Then Return 1
+		  Dim i As Integer = Super.Operator_Compare(OtherKey)
+		  If i = 0 Then
+		    Return Sign(mHandle - OtherKey.Handle)
+		  Else
+		    Return i
 		  End If
 		End Function
 	#tag EndMethod

@@ -37,8 +37,8 @@ Inherits Win32.Crypto.Context
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1000
-		Sub Constructor(DuplicateHash As Win32.Crypto.HashProcessor)
+	#tag Method, Flags = &h1001
+		Protected Sub Constructor(DuplicateHash As Win32.Crypto.HashProcessor)
 		  // Calling the overridden superclass constructor.
 		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
 		  Super.Constructor(DuplicateHash)
@@ -75,6 +75,18 @@ Inherits Win32.Crypto.Context
 	#tag Method, Flags = &h0
 		Function Handle() As Integer
 		  Return mHandle
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Operator_Compare(OtherHash As Win32.Crypto.HashProcessor) As Integer
+		  If OtherHash Is Nil Then Return 1
+		  Dim i As Integer = Super.Operator_Compare(OtherHash)
+		  If i = 0 Then
+		    Return Sign(mHandle - OtherHash.Handle)
+		  Else
+		    Return i
+		  End If
 		End Function
 	#tag EndMethod
 

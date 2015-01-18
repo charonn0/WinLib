@@ -32,8 +32,9 @@ Protected Module Crypto
 
 	#tag Method, Flags = &h1
 		Protected Function GetRandomData(ByteCount As Integer) As MemoryBlock
-		  ' The data produced by this funtion is cryptographically random.
+		  ' Data produced by this function are cryptographically random, and suitable for secure systems.
 		  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa379942%28v=vs.85%29.aspx
+		  
 		  Dim r As New Win32.Crypto.Random
 		  Return r.Generate(ByteCount)
 		End Function

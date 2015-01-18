@@ -2,8 +2,11 @@
 Protected Class Random
 Inherits Win32.Crypto.Context
 	#tag Method, Flags = &h1000
-		Sub Constructor()
-		  Super.Constructor(BaseProvider)
+		Sub Constructor(Optional RandomProvider As Win32.Crypto.Context)
+		  If RandomProvider = Nil Then RandomProvider = BaseProvider
+		  // Calling the overridden superclass constructor.
+		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
+		  Super.Constructor(RandomProvider)
 		End Sub
 	#tag EndMethod
 
@@ -18,6 +21,13 @@ Inherits Win32.Crypto.Context
 		  
 		End Function
 	#tag EndMethod
+
+
+	#tag Note, Name = About this class
+		Data produced by this class are cryptographically random, and suitable for secure systems.
+		See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa379942%28v=vs.85%29.aspx
+		
+	#tag EndNote
 
 
 	#tag ViewBehavior
