@@ -48,6 +48,7 @@ Implements Readable,Writeable
 		Sub Flush()
 		  // Part of the Writeable interface.
 		  If mWriter <> Nil Then
+		    mWriter.Write(mKey.Encrypt("", True, mHash))
 		    mWriter.Flush
 		  Else
 		    Raise New IOException
