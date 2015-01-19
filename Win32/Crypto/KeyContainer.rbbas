@@ -181,11 +181,7 @@ Inherits Win32.Crypto.Context
 		  If Me.GetKeyParam(KP_PERMISSIONS, mb, 0) Then ' on in mb is Nil
 		    If Me.GetKeyParam(KP_PERMISSIONS, mb, 0) Then ' on in mb is a MemoryBlock of correct size
 		      Return mb.Int32Value(0)
-		    Else
-		      mLastError = Win32.LastError
 		    End If
-		  Else
-		    mLastError = Win32.LastError
 		  End If
 		End Function
 	#tag EndMethod
