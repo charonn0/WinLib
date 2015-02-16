@@ -58,8 +58,8 @@ Protected Module Crypto
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Function MS_ENH_RSA_AES_PROV() As String
+	#tag Method, Flags = &h21
+		Private Function MS_ENH_RSA_AES_PROV() As String
 		  If KernelVersion < 6.0 Then ' XP used a different name
 		    Return "Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
 		  Else
@@ -243,6 +243,11 @@ Protected Module Crypto
 			  Return mStrongProvider
 			End Get
 		#tag EndGetter
+		#tag Setter
+			Set
+			  mStrongProvider = value
+			End Set
+		#tag EndSetter
 		Protected StrongProvider As Win32.Crypto.Context
 	#tag EndComputedProperty
 
