@@ -140,17 +140,9 @@ Protected Module Crypto
 			Get
 			  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386979%28v=vs.85%29.aspx
 			  
-			  If mAESProvider = Nil Then
-			    mAESProvider = New Win32.Crypto.Context(MS_ENH_RSA_AES_PROV, PROV_RSA_AES)
-			  End If
-			  Return mAESProvider
+			  Return New Win32.Crypto.Context(MS_ENH_RSA_AES_PROV, PROV_RSA_AES)
 			End Get
 		#tag EndGetter
-		#tag Setter
-			Set
-			  mAESProvider = value
-			End Set
-		#tag EndSetter
 		Protected AESProvider As Win32.Crypto.Context
 	#tag EndComputedProperty
 
@@ -159,17 +151,10 @@ Protected Module Crypto
 			Get
 			  'See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386980%28v=vs.85%29.aspx
 			  
-			  If mBaseProvider = Nil Then
-			    mBaseProvider = New Win32.Crypto.Context(MS_DEF_PROV, PROV_RSA_FULL)
-			  End If
-			  Return mBaseProvider
+			  Return New Win32.Crypto.Context(MS_DEF_PROV, PROV_RSA_FULL)
+			  
 			End Get
 		#tag EndGetter
-		#tag Setter
-			Set
-			  mBaseProvider = value
-			End Set
-		#tag EndSetter
 		Protected BaseProvider As Win32.Crypto.Context
 	#tag EndComputedProperty
 
@@ -179,17 +164,10 @@ Protected Module Crypto
 			  ' For diffie-hellman key exchanges
 			  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/bb394802%28v=vs.85%29.aspx
 			  
-			  If mDHProvider = Nil Then
-			    mDHProvider = New Win32.Crypto.Context(MS_ENH_DSS_DH_PROV, PROV_DSS_DH)
-			  End If
-			  Return mDHProvider
+			  Return New Win32.Crypto.Context(MS_ENH_DSS_DH_PROV, PROV_DSS_DH)
+			  
 			End Get
 		#tag EndGetter
-		#tag Setter
-			Set
-			  mDHProvider = value
-			End Set
-		#tag EndSetter
 		Protected DHProvider As Win32.Crypto.Context
 	#tag EndComputedProperty
 
@@ -198,56 +176,22 @@ Protected Module Crypto
 			Get
 			  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386986%28v=vs.85%29.aspx
 			  
-			  If mEnhancedProvider = Nil Then
-			    mEnhancedProvider = New Win32.Crypto.Context(MS_ENHANCED_PROV, PROV_RSA_FULL)
-			  End If
-			  Return mEnhancedProvider
+			  Return New Win32.Crypto.Context(MS_ENHANCED_PROV, PROV_RSA_FULL)
+			  
 			End Get
 		#tag EndGetter
-		#tag Setter
-			Set
-			  mEnhancedProvider = value
-			End Set
-		#tag EndSetter
 		Protected EnhancedProvider As Win32.Crypto.Context
 	#tag EndComputedProperty
-
-	#tag Property, Flags = &h21
-		Private mAESProvider As Win32.Crypto.Context
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mBaseProvider As Win32.Crypto.Context
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mDHProvider As Win32.Crypto.Context
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mEnhancedProvider As Win32.Crypto.Context
-	#tag EndProperty
-
-	#tag Property, Flags = &h21
-		Private mStrongProvider As Win32.Crypto.Context
-	#tag EndProperty
 
 	#tag ComputedProperty, Flags = &h1
 		#tag Getter
 			Get
 			  ' See: http://msdn.microsoft.com/en-us/library/windows/desktop/aa386989%28v=vs.85%29.aspx
 			  
-			  If mStrongProvider = Nil Then
-			    mStrongProvider = New Win32.Crypto.Context(MS_STRONG_PROV, PROV_RSA_FULL)
-			  End If
-			  Return mStrongProvider
+			  Return New Win32.Crypto.Context(MS_STRONG_PROV, PROV_RSA_FULL)
+			  
 			End Get
 		#tag EndGetter
-		#tag Setter
-			Set
-			  mStrongProvider = value
-			End Set
-		#tag EndSetter
 		Protected StrongProvider As Win32.Crypto.Context
 	#tag EndComputedProperty
 

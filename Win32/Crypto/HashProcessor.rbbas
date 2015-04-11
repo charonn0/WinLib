@@ -16,6 +16,8 @@ Inherits Win32.Crypto.Context
 
 	#tag Method, Flags = &h0
 		Sub Constructor(Algorithm As Integer, Key As Win32.Crypto.KeyContainer = Nil)
+		  // Calling the overridden superclass constructor.
+		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Win32.Crypto.Context
 		  Select Case Algorithm
 		  Case CALG_MD2, CALG_MD4, CALG_MD5, CALG_SHA1
 		    Super.Constructor(EnhancedProvider)
@@ -40,7 +42,7 @@ Inherits Win32.Crypto.Context
 	#tag Method, Flags = &h1001
 		Protected Sub Constructor(DuplicateHash As Win32.Crypto.HashProcessor)
 		  // Calling the overridden superclass constructor.
-		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
+		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Win32.Crypto.Context
 		  Super.Constructor(DuplicateHash)
 		  If Not Win32.Libs.AdvApi32.CryptDuplicateHash(DuplicateHash.mHandle, 0, 0, mHandle) Then
 		    mLastError = Win32.LastError
