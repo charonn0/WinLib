@@ -124,6 +124,20 @@ Protected Module Libs
 		BalloonIconHandle As Integer
 	#tag EndStructure
 
+	#tag Structure, Name = OSVERSIONINFOEX, Flags = &h1
+		StructSize As UInt32
+		  MajorVersion As Integer
+		  MinorVersion As Integer
+		  BuildNumber As Integer
+		  PlatformID As Integer
+		  ServicePackName As String*128
+		  ServicePackMajor As UInt16
+		  ServicePackMinor As UInt16
+		  SuiteMask As UInt16
+		  ProductType As Byte
+		Reserved As Byte
+	#tag EndStructure
+
 	#tag Structure, Name = OVERLAPPED, Flags = &h1
 		Internal As Integer
 		  InternalHigh As Integer
@@ -168,6 +182,12 @@ Protected Module Libs
 		  top As Integer
 		  right As Integer
 		bottom As Integer
+	#tag EndStructure
+
+	#tag Structure, Name = SECURITY_ATTRIBUTES, Flags = &h1
+		Length As Integer
+		  secDescriptor As Ptr
+		InheritHandle As Boolean
 	#tag EndStructure
 
 	#tag Structure, Name = SERVICE_STATUS, Flags = &h1
@@ -237,6 +257,19 @@ Protected Module Libs
 		  Minute As UInt16
 		  Second As UInt16
 		MS As UInt16
+	#tag EndStructure
+
+	#tag Structure, Name = SYSTEM_INFO, Flags = &h1
+		OEMID As Integer
+		  pageSize As Integer
+		  minApplicationAddress As Ptr
+		  maxApplicationAddress As Ptr
+		  activeProcessorMask As Integer
+		  numberOfProcessors As Integer
+		  processorType As Integer
+		  allocationGranularity As Integer
+		  processorLevel As Int16
+		processorRevision As Int16
 	#tag EndStructure
 
 	#tag Structure, Name = TIME_ZONE_INFORMATION, Flags = &h1

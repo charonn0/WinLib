@@ -1,7 +1,7 @@
 #tag Module
 Protected Module SensApi
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function IsDestinationReachable Lib "SensApi" Alias "IsDestinationReachableW" (destination As Wstring, ByRef info As Win32 . Libs . QOCINFO) As Boolean
+		Protected Declare Function IsDestinationReachable Lib "SensApi" Alias "IsDestinationReachableW" (destination As Wstring, ByRef info As QOCINFO) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

@@ -34,8 +34,8 @@ Protected Module Win32
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function GetSystemInfo() As SYSTEM_INFO
-		  Dim info As SYSTEM_INFO
+		Protected Function GetSystemInfo() As Win32.Libs.SYSTEM_INFO
+		  Dim info As Win32.Libs.SYSTEM_INFO
 		  Win32.Libs.Kernel32.GetSystemInfo(info)
 		  Return info
 		End Function
@@ -102,8 +102,8 @@ Protected Module Win32
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function OSVersion() As OSVERSIONINFOEX
-		  Dim info As OSVERSIONINFOEX
+		Protected Function OSVersion() As Win32.Libs.OSVERSIONINFOEX
+		  Dim info As Win32.Libs.OSVERSIONINFOEX
 		  info.StructSize = Info.Size
 		  #If TargetWin32 Then
 		    If Win32.Libs.Kernel32.GetVersionEx(info) Then
@@ -187,40 +187,6 @@ Protected Module Win32
 
 	#tag Constant, Name = S_OK, Type = Double, Dynamic = False, Default = \"0", Scope = Private
 	#tag EndConstant
-
-
-	#tag Structure, Name = OSVERSIONINFOEX, Flags = &h1
-		StructSize As UInt32
-		  MajorVersion As Integer
-		  MinorVersion As Integer
-		  BuildNumber As Integer
-		  PlatformID As Integer
-		  ServicePackName As String*128
-		  ServicePackMajor As UInt16
-		  ServicePackMinor As UInt16
-		  SuiteMask As UInt16
-		  ProductType As Byte
-		Reserved As Byte
-	#tag EndStructure
-
-	#tag Structure, Name = SECURITY_ATTRIBUTES, Flags = &h1
-		Length As Integer
-		  secDescriptor As Ptr
-		InheritHandle As Boolean
-	#tag EndStructure
-
-	#tag Structure, Name = SYSTEM_INFO, Flags = &h1
-		OEMID As Integer
-		  pageSize As Integer
-		  minApplicationAddress As Ptr
-		  maxApplicationAddress As Ptr
-		  activeProcessorMask As Integer
-		  numberOfProcessors As Integer
-		  processorType As Integer
-		  allocationGranularity As Integer
-		  processorLevel As Int16
-		processorRevision As Int16
-	#tag EndStructure
 
 
 	#tag ViewBehavior

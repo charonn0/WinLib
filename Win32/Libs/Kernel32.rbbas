@@ -13,7 +13,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function ConnectNamedPipe Lib "Kernel32" (hPipe As Integer, Overlapped As Win32 . Libs . OVERLAPPED) As Boolean
+		Protected Declare Function ConnectNamedPipe Lib "Kernel32" (hPipe As Integer, Overlapped As OVERLAPPED) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -53,7 +53,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function CreateProcess Lib "Kernel32" Alias "CreateProcessW" (AppName As WString, commandline As Ptr, ProcessAttribs As SECURITY_ATTRIBUTES, ThreadAttribs As SECURITY_ATTRIBUTES, inheritHandles As Boolean, flags As Integer, environ As Ptr, currentDir As Ptr, startInfo As Win32 . Libs . STARTUPINFO, ByRef info As Win32 . Libs . PROCESS_INFORMATION) As Boolean
+		Protected Declare Function CreateProcess Lib "Kernel32" Alias "CreateProcessW" (AppName As WString, commandline As Ptr, ProcessAttribs As SECURITY_ATTRIBUTES, ThreadAttribs As SECURITY_ATTRIBUTES, inheritHandles As Boolean, flags As Integer, environ As Ptr, currentDir As Ptr, startInfo As STARTUPINFO, ByRef info As PROCESS_INFORMATION) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -109,11 +109,11 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function FindFirstFile Lib "Kernel32" Alias "FindFirstFileW" (FileName As WString, ByRef FindData As Win32 . Libs . WIN32_FIND_DATA) As Integer
+		Protected Declare Function FindFirstFile Lib "Kernel32" Alias "FindFirstFileW" (FileName As WString, ByRef FindData As WIN32_FIND_DATA) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function FindFirstFileEx Lib "Kernel32" Alias "FindFirstFileExW" (FileName As WString, InfoLevel As Integer, ByRef FindData As Win32 . Libs . WIN32_FIND_DATA, SearchOptions As Integer, Reserved As Ptr, AdditionalFlags As Integer) As Integer
+		Protected Soft Declare Function FindFirstFileEx Lib "Kernel32" Alias "FindFirstFileExW" (FileName As WString, InfoLevel As Integer, ByRef FindData As WIN32_FIND_DATA, SearchOptions As Integer, Reserved As Ptr, AdditionalFlags As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -121,11 +121,11 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function FindFirstStream Lib "Kernel32" Alias "FindFirstStreamW" (filename As WString, InfoLevel As Integer, ByRef buffer As Win32 . Libs . WIN32_FIND_STREAM_DATA, Reserved As Integer) As Integer
+		Protected Soft Declare Function FindFirstStream Lib "Kernel32" Alias "FindFirstStreamW" (filename As WString, InfoLevel As Integer, ByRef buffer As WIN32_FIND_STREAM_DATA, Reserved As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function FindNextFile Lib "Kernel32" Alias "FindNextFileW" (FindHandle As Integer, ByRef FindData As Win32 . Libs . WIN32_FIND_DATA) As Boolean
+		Protected Declare Function FindNextFile Lib "Kernel32" Alias "FindNextFileW" (FindHandle As Integer, ByRef FindData As WIN32_FIND_DATA) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -133,7 +133,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function FindNextStream Lib "Kernel32" Alias "FindNextStreamW" (FindHandle As Integer, ByRef buffer As Win32 . Libs . WIN32_FIND_STREAM_DATA) As Boolean
+		Protected Soft Declare Function FindNextStream Lib "Kernel32" Alias "FindNextStreamW" (FindHandle As Integer, ByRef buffer As WIN32_FIND_STREAM_DATA) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -243,7 +243,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As Win32 . Libs . TIME_ZONE_INFORMATION) As Integer
+		Protected Soft Declare Function GetTimeZoneInformation Lib "Kernel32" (ByRef TZInfo As TIME_ZONE_INFORMATION) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -275,7 +275,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Soft Declare Function GlobalMemoryStatusEx Lib "Kernel32" (ByRef MemStatus As Win32 . Libs . MEMORYSTATUSEX) As Boolean
+		Protected Soft Declare Function GlobalMemoryStatusEx Lib "Kernel32" (ByRef MemStatus As MEMORYSTATUSEX) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -355,11 +355,11 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function Process32First Lib "Kernel32" Alias "Process32FirstW" (Handle As Integer, ByRef Entry As Win32 . Libs . PROCESSENTRY32) As Boolean
+		Protected Declare Function Process32First Lib "Kernel32" Alias "Process32FirstW" (Handle As Integer, ByRef Entry As PROCESSENTRY32) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function Process32Next Lib "Kernel32" Alias "Process32NextW" (Handle As Integer, ByRef Entry As Win32 . Libs . PROCESSENTRY32) As Boolean
+		Protected Declare Function Process32Next Lib "Kernel32" Alias "Process32NextW" (Handle As Integer, ByRef Entry As PROCESSENTRY32) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -419,7 +419,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function SetSystemTime Lib "Kernel32" (ByRef NewTime As Win32 . Libs . SYSTEMTIME) As Boolean
+		Protected Declare Function SetSystemTime Lib "Kernel32" (ByRef NewTime As SYSTEMTIME) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -483,7 +483,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Integer, ByRef InfoBuffer As Win32 . Libs . MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
+		Protected Declare Function VirtualQuery Lib "Kernel32" (Address As Integer, ByRef InfoBuffer As MEMORY_BASIC_INFORMATION, BufferLen As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1

@@ -5,11 +5,11 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function AdjustWindowRect Lib "User32" (ByRef WindowRect As Win32 . Libs . RECT, Style As Integer, bMenu As Boolean) As Boolean
+		Protected Declare Function AdjustWindowRect Lib "User32" (ByRef WindowRect As RECT, Style As Integer, bMenu As Boolean) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function AdjustWindowRectEx Lib "User32" (ByRef WindowRect As Win32 . Libs . RECT, Style As Integer, bMenu As Boolean, ExStyle As Integer) As Boolean
+		Protected Declare Function AdjustWindowRectEx Lib "User32" (ByRef WindowRect As RECT, Style As Integer, bMenu As Boolean, ExStyle As Integer) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -33,11 +33,11 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function ChildWindowFromPoint Lib "User32" (HWND As Integer, Coordinates As Win32 . Libs . POINT) As Integer
+		Protected Declare Function ChildWindowFromPoint Lib "User32" (HWND As Integer, Coordinates As POINT) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function ClipCursor Lib "User32" (ByRef Area As Win32 . Libs . RECT) As Boolean
+		Protected Declare Function ClipCursor Lib "User32" (ByRef Area As RECT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -105,7 +105,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function FlashWindowEx Lib "User32" (Flashinfo As Win32 . Libs . FLASHWINFO) As Boolean
+		Protected Declare Function FlashWindowEx Lib "User32" (Flashinfo As FLASHWINFO) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -113,7 +113,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function GetClientRect Lib "User32" (HWND As Integer, ByRef Dimensions As Win32 . Libs . RECT) As Boolean
+		Protected Declare Function GetClientRect Lib "User32" (HWND As Integer, ByRef Dimensions As RECT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -125,11 +125,11 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function GetClipCursor Lib "User32" (ByRef Area As Win32 . Libs . RECT) As Boolean
+		Protected Declare Function GetClipCursor Lib "User32" (ByRef Area As RECT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function GetCursorInfo Lib "User32" (ByRef Info As Win32 . Libs . CURSORINFO) As Boolean
+		Protected Declare Function GetCursorInfo Lib "User32" (ByRef Info As CURSORINFO) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -169,7 +169,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function GetWindowInfo Lib "User32" (HWND As Integer, ByRef Info As Win32 . Libs . WINDOWINFO) As Boolean
+		Protected Declare Function GetWindowInfo Lib "User32" (HWND As Integer, ByRef Info As WINDOWINFO) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -181,7 +181,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function GetWindowRect Lib "User32" (HWND As Integer, ByRef sm As Win32 . Libs . RECT) As Boolean
+		Protected Declare Function GetWindowRect Lib "User32" (HWND As Integer, ByRef sm As RECT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -249,11 +249,11 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function RegisterClass Lib "User32" Alias "RegisterClassW" (ByRef Info As Win32 . Libs . WNDCLASS) As UInt32
+		Protected Declare Function RegisterClass Lib "User32" Alias "RegisterClassW" (ByRef Info As WNDCLASS) As UInt32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function RegisterClassEx Lib "User32" Alias "RegisterClassExW" (ByRef Info As Win32 . Libs . WNDCLASSEX) As Integer
+		Protected Declare Function RegisterClassEx Lib "User32" Alias "RegisterClassExW" (ByRef Info As WNDCLASSEX) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -277,7 +277,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function ScreenToClient Lib "User32" (HWND As Integer, ByRef Point As Win32 . Libs . POINT) As Boolean
+		Protected Declare Function ScreenToClient Lib "User32" (HWND As Integer, ByRef Point As POINT) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -365,7 +365,7 @@ Protected Module User32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1, CompatibilityFlags = TargetHasGUI
-		Protected Declare Function WindowFromPoint Lib "User32" (Coordinates As Win32 . Libs . POINT) As Integer
+		Protected Declare Function WindowFromPoint Lib "User32" (Coordinates As POINT) As Integer
 	#tag EndExternalMethod
 
 

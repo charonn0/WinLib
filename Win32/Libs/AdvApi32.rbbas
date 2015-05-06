@@ -13,7 +13,7 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function ControlService Lib "AdvApi32" (ServiceHandle As Integer, Control As Integer, ByRef Status As Win32 . Libs . SERVICE_STATUS) As Boolean
+		Protected Declare Function ControlService Lib "AdvApi32" (ServiceHandle As Integer, Control As Integer, ByRef Status As SERVICE_STATUS) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -133,7 +133,7 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function LookupPrivilegeValue Lib "AdvApi32" Alias "LookupPrivilegeValueW" (sysName As WString, privName As WString, ByRef Luid As Win32 . Libs . TOKEN_PRIVILEGES) As Boolean
+		Protected Declare Function LookupPrivilegeValue Lib "AdvApi32" Alias "LookupPrivilegeValueW" (sysName As WString, privName As WString, ByRef Luid As TOKEN_PRIVILEGES) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
@@ -153,7 +153,7 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function QueryServiceStatus Lib "AdvApi32" (ServiceHandle As Integer, ByRef Status As Win32 . Libs . SERVICE_STATUS) As Boolean
+		Protected Declare Function QueryServiceStatus Lib "AdvApi32" (ServiceHandle As Integer, ByRef Status As SERVICE_STATUS) As Boolean
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
