@@ -160,7 +160,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.ClientArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.ClientArea
 			  Return size.bottom - size.top
 			End Get
 		#tag EndGetter
@@ -182,7 +182,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.ClientArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.ClientArea
 			  Return size.left
 			End Get
 		#tag EndGetter
@@ -205,7 +205,7 @@ Implements Win32.Win32Object
 		#tag Getter
 			Get
 			  #If TargetWin32 Then
-			    Dim wp As WINDOWPLACEMENT
+			    Dim wp As Win32.Libs.WINDOWPLACEMENT
 			    wp.Length = wp.Size
 			    If Win32.Libs.User32.GetWindowPlacement(Me.Handle, wp) Then
 			      Return wp.ShowCmd = SW_SHOWMAXIMIZED
@@ -239,7 +239,7 @@ Implements Win32.Win32Object
 		#tag Getter
 			Get
 			  #If TargetWin32 Then
-			    Dim wp As WINDOWPLACEMENT
+			    Dim wp As Win32.Libs.WINDOWPLACEMENT
 			    wp.Length = wp.Size
 			    If Win32.Libs.User32.GetWindowPlacement(Me.Handle, wp) Then
 			      Return wp.ShowCmd = SW_SHOWMINIMIZED
@@ -328,7 +328,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.ClientArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.ClientArea
 			  Return size.top
 			End Get
 		#tag EndGetter
@@ -350,7 +350,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.WindowArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.WindowArea
 			  Return size.bottom - size.top
 			End Get
 		#tag EndGetter
@@ -361,7 +361,7 @@ Implements Win32.Win32Object
 		#tag Getter
 			Get
 			  
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.WindowArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.WindowArea
 			  Return size.Left
 			End Get
 		#tag EndGetter
@@ -397,7 +397,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.WindowArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.WindowArea
 			  Return size.right
 			End Get
 		#tag EndGetter
@@ -408,7 +408,7 @@ Implements Win32.Win32Object
 		#tag Getter
 			Get
 			  
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.WindowArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.WindowArea
 			  Return size.top
 			End Get
 		#tag EndGetter
@@ -419,7 +419,7 @@ Implements Win32.Win32Object
 		#tag Getter
 			Get
 			  
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.WindowArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.WindowArea
 			  Return size.Right - size.Left
 			End Get
 		#tag EndGetter
@@ -455,7 +455,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim size As Win32.GUI.RECT = Me.WindowInfo.ClientArea
+			  Dim size As Win32.Libs.RECT = Me.WindowInfo.ClientArea
 			  Return size.right - size.left
 			End Get
 		#tag EndGetter
@@ -477,7 +477,7 @@ Implements Win32.Win32Object
 	#tag ComputedProperty, Flags = &h0
 		#tag Getter
 			Get
-			  Dim info As Win32.GUI.WINDOWINFO
+			  Dim info As Win32.Libs.WINDOWINFO
 			  #If TargetWin32 Then
 			    If Win32.Libs.User32.GetWindowInfo(Me.Handle, info) Then
 			      mLastError = 0
@@ -488,7 +488,7 @@ Implements Win32.Win32Object
 			  Return info
 			End Get
 		#tag EndGetter
-		WindowInfo As Win32.GUI.WINDOWINFO
+		WindowInfo As Win32.Libs.WINDOWINFO
 	#tag EndComputedProperty
 
 

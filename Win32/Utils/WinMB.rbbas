@@ -178,7 +178,7 @@ Implements Win32.Win32Object
 		      Call Me.Unlock
 		    Case TypeVirtual ' VirtualAllocate
 		      '#pragma Warning "FIXME" ' This doesn't return the size of the block
-		      Dim meta As MEMORY_BASIC_INFORMATION
+		      Dim meta As Win32.Libs.MEMORY_BASIC_INFORMATION
 		      If Win32.Libs.Kernel32.VirtualQuery(Me.Handle, meta, meta.Size) = meta.Size Then
 		        Do Until meta.AllocationBase <> Me.Handle
 		          mSize = mSize + meta.RegionSize

@@ -118,7 +118,7 @@ Implements Win32.Win32Object
 		Protected Shared Function RegisterClass(ClassName As String, DefWndProc As WndProc) As Integer
 		  #If TargetWin32 Then
 		    Dim atom As Integer
-		    Dim info As WNDCLASSEX
+		    Dim info As Win32.Libs.WNDCLASSEX
 		    Dim mbClass As New MemoryBlock(512)
 		    mbClass.WString(0) = ClassName
 		    info.ClassName = mbClass

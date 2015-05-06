@@ -57,7 +57,7 @@ Implements Win32.Win32Object
 		  //If no more files or an error occurred, returns False and sets LastError
 		  
 		  mCurrentItem = Nil
-		  Dim data As WIN32_FIND_DATA = Me.NextItemRaw
+		  Dim data As Win32.Libs.WIN32_FIND_DATA = Me.NextItemRaw
 		  If Me.LastError = 0 Then
 		    ' if the next item is either the current directory (".") or parent directory (".."), then skip it.
 		    If data.FileName.Trim = "." Or data.FileName.Trim = ".." Then Return NextItem()
@@ -70,12 +70,12 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function NextItemRaw() As WIN32_FIND_DATA
+		Protected Function NextItemRaw() As Win32.Libs.WIN32_FIND_DATA
 		  //This function returns the WIN32_FIND_DATA structure of the next file or directory (starting with the first) in the RootDirectory
 		  //If there are no more files, this function sets LastError=18 (ERROR_NO_MORE_FILES).
 		  
 		  #If TargetWin32 Then
-		    Dim data As WIN32_FIND_DATA
+		    Dim data As Win32.Libs.WIN32_FIND_DATA
 		    Dim namepattern As WString = "//?/" + ReplaceAll(RootDirectory.AbsolutePath, "/", "//") + SearchPattern + Chr(0)
 		    If FindHandle <= 0 Then
 		      If System.IsFunctionAvailable("FindFirstFileExW", "Kernel32") Then

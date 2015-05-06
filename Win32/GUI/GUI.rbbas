@@ -167,7 +167,7 @@ Protected Module GUI
 
 	#tag Method, Flags = &h1
 		Protected Function ScreenToClient(ScreenPoint As Realbasic.Point, HWND As Integer) As REALbasic.Point
-		  Dim p As Win32.GUI.POINT
+		  Dim p As Win32.Libs.POINT
 		  p.X = ScreenPoint.X
 		  p.Y = ScreenPoint.Y
 		  If Not Win32.Libs.User32.ScreenToClient(HWND, p) Then
@@ -271,7 +271,7 @@ Protected Module GUI
 	#tag Method, Flags = &h1, CompatibilityFlags = TargetHasGUI
 		Protected Function WindowFromXY(X As Integer, Y As Integer) As WindowRef
 		  #If TargetWin32 Then
-		    Dim p As Win32.GUI.POINT
+		    Dim p As Win32.Libs.POINT
 		    p.X = X
 		    p.Y = Y
 		    Dim hwnd As Integer = Win32.Libs.User32.WindowFromPoint(p)
@@ -292,12 +292,12 @@ Protected Module GUI
 	#tag EndMethod
 
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =             TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =              TargetHasGUI
 		#tag Getter
 			Get
 			  ' Returns a Rectangle within which the mouse cursor is currently allowed move.
 			  #If TargetWin32 Then
-			    Dim r As Win32.GUI.RECT
+			    Dim r As Win32.Libs.RECT
 			    If Win32.Libs.User32.GetClipCursor(r) Then
 			      Return New REALbasic.Rect(r.left, r.top, r.right - r.left, r.bottom - r.top)
 			    End If
@@ -313,7 +313,7 @@ Protected Module GUI
 			  ' Call Win32.LastError to determine whether this method succeeded (LastError=0).
 			  
 			  #If TargetWin32 Then
-			    Dim r As Win32.GUI.RECT
+			    Dim r As Win32.Libs.RECT
 			    If value <> Nil Then
 			      r.top = value.Top
 			      r.left = value.Left
@@ -327,7 +327,7 @@ Protected Module GUI
 		Protected CursorConfinementArea As REALbasic.Rect
 	#tag EndComputedProperty
 
-	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =             TargetHasGUI
+	#tag ComputedProperty, Flags = &h1, CompatibilityFlags =              TargetHasGUI
 		#tag Getter
 			Get
 			  ' Vista and newer. Returns true if desktop composition is enabled.
@@ -497,145 +497,6 @@ Protected Module GUI
 
 	#tag Constant, Name = WS_VISIBLE, Type = Double, Dynamic = False, Default = \"&h10000000", Scope = Protected
 	#tag EndConstant
-
-
-	#tag Structure, Name = CURSORINFO, Flags = &h1
-		cbSize As Integer
-		  Flags As Integer
-		  hIcon As Integer
-		Hotspot As POINT
-	#tag EndStructure
-
-	#tag Structure, Name = DWM_THUMBNAIL_PROPERTIES, Flags = &h1
-		flags As Integer
-		  Destination As Win32.GUI.RECT
-		  Source As Win32.GUI.RECT
-		  Opacity As Byte
-		  Visible As Boolean
-		SourceClientAreaOnly As Boolean
-	#tag EndStructure
-
-	#tag Structure, Name = FLASHWINFO, Flags = &h1
-		cbSize As UInt32
-		  HWND As Integer
-		  Flags As Integer
-		  Count As UInt32
-		Timeout As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = MARGINS, Flags = &h1
-		LeftWidth As Integer
-		  RightWidth As Integer
-		  TopHeight As Integer
-		BottomHeight As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = NOTIFYICONDATA, Flags = &h1
-		sSize As Integer
-		  WindowHandle As Integer
-		  uID As UInt32
-		  Flags As UInt32
-		  CallbackMessage As UInt32
-		  IconHandle As Integer
-		  ToolTip As String*64
-		  State As Integer
-		  StateMask As Integer
-		  BalloonText As String*256
-		  Timeout_Version_Union As UInt32
-		  BalloonTitle As String*64
-		  InfoFlags As Integer
-		  GUIDitem As Win32.Utils.GUID
-		BalloonIconHandle As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = POINT, Flags = &h1
-		X As Integer
-		Y As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = RECT, Flags = &h1
-		left As Integer
-		  top As Integer
-		  right As Integer
-		bottom As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = SHELLFLAGSTATE, Flags = &h1
-		ShowAllObjects As Boolean
-		  ShowExtensions As Boolean
-		  NoConfirmRecycle As Boolean
-		  ShowSystemFiles As Boolean
-		  ShowCompColor As Boolean
-		  DoubleClickInWebView As Boolean
-		  DesktopHTML As Boolean
-		  Win95Classic As Boolean
-		  DontPrettyPath As Boolean
-		  ShowAttribColor As Boolean
-		  MapNetDrvBtn As Boolean
-		  ShowInfoTip As Boolean
-		  HideIcons As Boolean
-		  AutoCheckSelect As Boolean
-		  IconsOnly As Boolean
-		RestFlags As UInt32
-	#tag EndStructure
-
-	#tag Structure, Name = SHFILEINFO, Flags = &h1
-		hIcon As Integer
-		  IconIndex As Int32
-		  attribs As Integer
-		  displayName As WString*260
-		TypeName As WString*80
-	#tag EndStructure
-
-	#tag Structure, Name = WINDOWINFO, Flags = &h1
-		cbSize As Integer
-		  WindowArea As Win32.GUI.RECT
-		  ClientArea As Win32.GUI.RECT
-		  Style As Integer
-		  ExStyle As Integer
-		  WindowStatus As Integer
-		  cxWindowBorders As Integer
-		  cyWindowBorders As Integer
-		  Atom As UInt16
-		CreatorVersion As UInt16
-	#tag EndStructure
-
-	#tag Structure, Name = WINDOWPLACEMENT, Flags = &h1
-		Length As Integer
-		  Flags As Integer
-		  ShowCmd As Integer
-		  MinPosition As POINT
-		  MaxPosition As POINT
-		NormalPosition As RECT
-	#tag EndStructure
-
-	#tag Structure, Name = WNDCLASS, Flags = &h1
-		Style As UInt32
-		  WndProc As Ptr
-		  ClsExtra As Integer
-		  WndExtra As Integer
-		  Instance As Integer
-		  Icon As Integer
-		  Cursor As Integer
-		  Brush As Integer
-		  MenuName As Ptr
-		ClassName As Ptr
-	#tag EndStructure
-
-	#tag Structure, Name = WNDCLASSEX, Flags = &h1
-		cbSize As Integer
-		  Style As UInt32
-		  WndProc As Ptr
-		  ClsExtra As Integer
-		  WndExtra As Integer
-		  Instance As Integer
-		  Icon As Integer
-		  Cursor As Integer
-		  Brush As Integer
-		  MenuName As Ptr
-		  ClassName As Ptr
-		IconSm As Integer
-	#tag EndStructure
 
 
 	#tag ViewBehavior

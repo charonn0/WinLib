@@ -72,7 +72,7 @@ Inherits Win32.IO.Stream
 		  MaxInstances, OutBufferSize, InBufferSize, DefaultTimeout, Nil)
 		  err = Win32.LastError()
 		  If err = 0 Then
-		    Dim over As OVERLAPPED
+		    Dim over As Win32.Libs.OVERLAPPED
 		    over.Internal = 0
 		    over.InternalHigh = 0
 		    over.Offset = 0

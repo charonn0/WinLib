@@ -157,42 +157,6 @@ Protected Module IO
 	#tag EndConstant
 
 
-	#tag Structure, Name = FILETIME, Flags = &h1
-		HighDateTime As Integer
-		LowDateTime As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = IO_STATUS_BLOCK, Flags = &h1
-		Status As Int32
-		Info As Int32
-	#tag EndStructure
-
-	#tag Structure, Name = OVERLAPPED, Flags = &h1
-		Internal As Integer
-		  InternalHigh As Integer
-		  Offset As UInt64
-		hEvent As Integer
-	#tag EndStructure
-
-	#tag Structure, Name = WIN32_FIND_DATA, Flags = &h1
-		Attribs As Integer
-		  CreationTime As FILETIME
-		  LastAccess As FILETIME
-		  LastWrite As FILETIME
-		  sizeHigh As Integer
-		  sizeLow As Integer
-		  Reserved1 As Integer
-		  Reserved2 As Integer
-		  FileName As WString*260
-		AlternateName As String*14
-	#tag EndStructure
-
-	#tag Structure, Name = WIN32_FIND_STREAM_DATA, Flags = &h1
-		StreamSize As Int64
-		StreamName As String*1024
-	#tag EndStructure
-
-
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Index"

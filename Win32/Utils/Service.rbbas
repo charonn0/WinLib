@@ -33,7 +33,7 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function Control(Command As Integer, ByRef Status As SERVICE_STATUS) As Boolean
+		Protected Function Control(Command As Integer, ByRef Status As Win32.Libs.SERVICE_STATUS) As Boolean
 		  #If TargetWin32 Then
 		    If Not Win32.Libs.AdvApi32.ControlService(Me.Handle, Command, status) Then
 		      mLastError = Win32.LastError()
@@ -170,7 +170,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Function Pause() As Boolean
 		  #If TargetWin32 Then
-		    Dim status As SERVICE_STATUS
+		    Dim status As Win32.Libs.SERVICE_STATUS
 		    Return Me.Control(SERVICE_CONTROL_PAUSE, status)
 		  #endif
 		End Function
@@ -190,9 +190,9 @@ Implements Win32.Win32Object
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function QueryStatus() As SERVICE_STATUS
+		Function QueryStatus() As Win32.Libs.SERVICE_STATUS
 		  #If TargetWin32 Then
-		    Dim stat As SERVICE_STATUS
+		    Dim stat As Win32.Libs.SERVICE_STATUS
 		    If Not Win32.Libs.AdvApi32.QueryServiceStatus(Me.Handle, stat) Then
 		      mLastError = Win32.LastError()
 		      Exit Function
@@ -206,7 +206,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Function Resume() As Boolean
 		  #If TargetWin32 Then
-		    Dim status As SERVICE_STATUS
+		    Dim status As Win32.Libs.SERVICE_STATUS
 		    Return Me.Control(SERVICE_CONTROL_CONTINUE, status)
 		  #endif
 		End Function
@@ -248,7 +248,7 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Function Stop() As Boolean
 		  #If TargetWin32 Then
-		    Dim status As SERVICE_STATUS
+		    Dim status As Win32.Libs.SERVICE_STATUS
 		    Return Me.Control(SERVICE_CONTROL_STOP, status)
 		  #endif
 		End Function
