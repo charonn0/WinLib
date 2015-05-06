@@ -7,7 +7,7 @@ Implements Win32.Win32Object
 		Sub Close()
 		  // Part of the Win32Object interface.
 		  #If TargetWin32 Then
-		    If Not WndProcs.HasKey(mHandle) Then Return
+		    If WndProcs = Nil Or Not WndProcs.HasKey(mHandle) Then Return
 		    Dim oldWndProc As Ptr = WndProcs.Value(mHandle)
 		    Call Win32.Libs.User32.SetWindowLong(mHandle, GWL_WNDPROC, oldWndProc)
 		    WndProcs.Remove(mHandle)
