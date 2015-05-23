@@ -25,8 +25,10 @@ Protected Module Crypto
 	#tag EndMethod
 
 	#tag Method, Flags = &h1
-		Protected Function EncodeHex(Data As MemoryBlock) As String
-		  Return BinaryToString(Data, CRYPT_STRING_HEX)
+		Protected Function EncodeHex(Data As MemoryBlock, IncludeSpaces As Boolean = True) As String
+		  Dim out As String = BinaryToString(Data, CRYPT_STRING_HEX)
+		  If Not IncludeSpaces Then out = ReplaceAll(out, " ", "")
+		  Return out
 		End Function
 	#tag EndMethod
 
