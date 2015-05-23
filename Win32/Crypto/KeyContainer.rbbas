@@ -32,6 +32,20 @@ Inherits Win32.Crypto.Context
 		  
 		  Dim Flags As Integer = CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE Or ShiftLeft(KeySize, 16)
 		  If Not Win32.Libs.AdvApi32.CryptGenKey(Me.Provider, Algorithm, Flags, mHandle) Then mLastError = Win32.LastError
+		  mAlgorithm = Algorithm
+		  mKeySize = KeySize
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1000
+		Sub Constructor(DuplicateContext As Win32.Crypto.KeyContainer)
+		  // Calling the overridden superclass constructor.
+		  // Constructor(DuplicateContext As Win32.Crypto.Context) -- From Context
+		  Super.Constructor(DuplicateContext)
+		  Dim Flags As Integer = CRYPT_CREATE_SALT Or CRYPT_EXPORTABLE Or ShiftLeft(mKeySize, 16)
+		  If Not Win32.Libs.AdvApi32.CryptGenKey(Me.Provider, mAlgorithm, Flags, mHandle) Then mLastError = Win32.LastError
+		  mAlgorithm = DuplicateContext.mAlgorithm
+		  mKeySize = DuplicateContext.mKeySize
 		End Sub
 	#tag EndMethod
 
@@ -66,13 +80,20 @@ Inherits Win32.Crypto.Context
 		  Dim h As Integer
 		  If Hashcontainer <> Nil Then h = Hashcontainer.Handle
 		  If Not Win32.Libs.AdvApi32.CryptEncrypt(Me.Handle, h, FinalBlock, 0, InputData, sz, InputData.Size) Then
-		    mLastError = Win32.LastError
-		    Dim err As New Win32Exception
-		    err.ErrorNumber = mLastError
-		    err.Message = Win32.FormatError(mLastError)
-		    Raise err
+		    If sz <> InputData.Size Then
+		      Dim buffer As New MemoryBlock(sz * 2)
+		      buffer.StringValue(0, InputData.Size) = InputData.StringValue(0, InputData.Size)
+		      If Win32.Libs.AdvApi32.CryptEncrypt(Me.Handle, h, FinalBlock, 0, buffer, sz, buffer.Size) Then Return buffer
+		    End If
+		  Else
+		    Return InputData
 		  End If
-		  Return InputData
+		  
+		  mLastError = Win32.LastError
+		  Dim err As New Win32Exception
+		  err.ErrorNumber = mLastError
+		  err.Message = Win32.FormatError(mLastError)
+		  Raise err
 		End Function
 	#tag EndMethod
 
@@ -88,6 +109,12 @@ Inherits Win32.Crypto.Context
 		  
 		  If Not Win32.Libs.AdvApi32.CryptExportKey(Me.Handle, exp, blobtype, 0, Nil, sz) Then
 		    mLastError = Win32.LastError
+		    If mLastError <> 0 Then 
+		      Dim err As New Win32Exception
+		      err.ErrorNumber = mLastError
+		      err.Message = Win32.FormatError(mLastError)
+		      Raise err
+		    End If
 		    Return Nil
 		  End If
 		  
@@ -212,7 +239,15 @@ Inherits Win32.Crypto.Context
 
 
 	#tag Property, Flags = &h1
+		Protected mAlgorithm As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
 		Protected mHandle As Integer = INVALID_HANDLE_VALUE
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected mKeySize As Integer
 	#tag EndProperty
 
 
