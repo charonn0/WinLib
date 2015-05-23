@@ -29,7 +29,7 @@ Protected Module Kernel32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
-		Protected Declare Function CreateFile Lib "Kernel32" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As SECURITY_ATTRIBUTES, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
+		Protected Declare Function CreateFile Lib "Kernel32" Alias "CreateFileW" (name As WString, access As Integer, sharemode As Integer, SecAtrribs As SECURITY_ATTRIBUTES, CreateDisp As Integer, flags As Integer, template As Integer) As Integer
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
