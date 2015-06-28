@@ -121,6 +121,12 @@ Protected Class Context
 	#tag EndProperty
 
 
+	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = NTE_BAD_KEYSET, Type = Double, Dynamic = False, Default = \"&h80090016", Scope = Private
+	#tag EndConstant
+
 	#tag Constant, Name = NTE_BAD_UID, Type = Double, Dynamic = False, Default = \"&h80090001", Scope = Private
 	#tag EndConstant
 

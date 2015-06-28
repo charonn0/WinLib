@@ -273,9 +273,6 @@ Protected Module Crypto
 	#tag Constant, Name = CRYPT_EXPORTABLE, Type = Double, Dynamic = False, Default = \"1", Scope = Protected
 	#tag EndConstant
 
-	#tag Constant, Name = CRYPT_NEWKEYSET, Type = Double, Dynamic = False, Default = \"&h00000008\r", Scope = Protected
-	#tag EndConstant
-
 	#tag Constant, Name = CRYPT_NO_SALT, Type = Double, Dynamic = False, Default = \"&h10", Scope = Protected
 	#tag EndConstant
 
@@ -343,9 +340,6 @@ Protected Module Crypto
 	#tag EndConstant
 
 	#tag Constant, Name = MS_STRONG_PROV, Type = String, Dynamic = False, Default = \"Microsoft Strong Cryptographic Provider", Scope = Private
-	#tag EndConstant
-
-	#tag Constant, Name = NTE_BAD_KEYSET, Type = Double, Dynamic = False, Default = \"&h80090016", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = PROV_DSS, Type = Double, Dynamic = False, Default = \"3", Scope = Private
