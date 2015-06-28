@@ -21,7 +21,7 @@ Inherits Win32.Crypto.Context
 		  Select Case Algorithm
 		  Case CALG_MD2, CALG_MD4, CALG_MD5, CALG_SHA1
 		    Super.Constructor(EnhancedProvider)
-		  Case CALG_SHA256, CALG_SHA384, CALG_SHA512
+		  Case CALG_SHA256, CALG_SHA384, CALG_SHA512, CALG_MAC, CALG_HMAC
 		    Super.Constructor(AESProvider)
 		  Else
 		    Raise New UnsupportedFormatException
