@@ -40,7 +40,7 @@ Protected Module Utils
 
 	#tag Method, Flags = &h1
 		Protected Function ExitWindows(Mode As Integer, Reason As Integer, ForceIfHung As Boolean) As Integer
-		  //Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
+		  // Shuts down, reboots, or logs off the computer. Returns 0 on success, or a Win32 error code on error.
 		  // The reason code may be any code(s) documented here: http://msdn.microsoft.com/en-us/library/aa376885%28v=vs.85%29.aspx
 		  // If ForceIfHung=True then Windows forces processes to terminate if they do not respond to end-of-session messages within a timeout interval.
 		  // Mode can be one of the following:
@@ -278,6 +278,24 @@ Protected Module Utils
 	#tag EndConstant
 
 	#tag Constant, Name = EWX_FORCEIFHUNG, Type = Double, Dynamic = False, Default = \"&h00000010", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_HYBRID_SHUTDOWN, Type = Double, Dynamic = False, Default = \"&h00400000", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_LOGOFF, Type = Double, Dynamic = False, Default = \"0", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_POWEROFF, Type = Double, Dynamic = False, Default = \"&h00000008", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_REBOOT, Type = Double, Dynamic = False, Default = \"&h00000002", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_RESTARTAPPS, Type = Double, Dynamic = False, Default = \"&h00000040", Scope = Protected
+	#tag EndConstant
+
+	#tag Constant, Name = EWX_SHUTDOW, Type = Double, Dynamic = False, Default = \"&h00000001", Scope = Protected
 	#tag EndConstant
 
 	#tag Constant, Name = GMEM_MOVEABLE, Type = Double, Dynamic = False, Default = \"&h0002", Scope = Protected
