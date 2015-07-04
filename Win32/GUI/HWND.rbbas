@@ -17,8 +17,8 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Shared Function CreateWindow(ClassName As String, WindowName As String, Style As Integer, X As Integer, Y As Integer, Width As Integer, Height As Integer, Parent As Win32.GUI.HWND = Nil) As Integer
+	#tag Method, Flags = &h0
+		 Shared Function CreateWindow(ClassName As String, WindowName As String, Style As Integer, X As Integer, Y As Integer, Width As Integer, Height As Integer, Parent As Win32.GUI.HWND = Nil) As Integer
 		  Dim HWND As Integer
 		  If Parent <> Nil Then HWND = Parent.Handle
 		  Return Win32.Libs.User32.CreateWindowEx(0, ClassName, WindowName, Style, X, Y, Width, Height, HWND, 0, 0, Nil)
@@ -114,8 +114,8 @@ Implements Win32.Win32Object
 		End Sub
 	#tag EndMethod
 
-	#tag Method, Flags = &h1
-		Protected Shared Function RegisterClass(ClassName As String, DefWndProc As WndProc) As Integer
+	#tag Method, Flags = &h0
+		 Shared Function RegisterClass(ClassName As String, DefWndProc As WndProc) As Integer
 		  #If TargetWin32 Then
 		    Dim atom As Integer
 		    Dim info As Win32.Libs.WNDCLASSEX
