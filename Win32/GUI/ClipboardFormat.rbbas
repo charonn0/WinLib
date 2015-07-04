@@ -17,6 +17,8 @@ Implements Win32.Win32Object
 	#tag Method, Flags = &h0
 		Sub Constructor(hClipFormat As Integer)
 		  mHandle = hClipFormat
+		  mWndProc = Win32.GUI.MessageMonitor.SubClass(Window(RB_FOREMOST_WINDOW_HWND))
+		  AddHandler mWndProc.WindowMessage, WeakAddressOf WindowMessageHandler
 		End Sub
 	#tag EndMethod
 
@@ -125,9 +127,18 @@ Implements Win32.Win32Object
 		Private Delegate Function RenderHandler(Sender As Win32 . GUI . ClipboardFormat, RawClipboard As Ptr) As Boolean
 	#tag EndDelegateDeclaration
 
+	#tag Method, Flags = &h21
+		Private Function WindowMessageHandler(Sender As Win32.GUI.MessageMonitor, Message As Integer, WParam As Ptr, LParam As Ptr) As Boolean
+		  If Message = WM_RENDERFORMAT Then
+		    Return RaiseEvent RenderClipboard()
+		  End If
+		  
+		End Function
+	#tag EndMethod
+
 
 	#tag Hook, Flags = &h0
-		Event RenderClipboard(RawClipboard As Ptr) As Boolean
+		Event RenderClipboard() As Boolean
 	#tag EndHook
 
 
@@ -137,6 +148,10 @@ Implements Win32.Win32Object
 
 	#tag Property, Flags = &h1
 		Protected mLastError As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mWndProc As Win32.GUI.MessageMonitor
 	#tag EndProperty
 
 
@@ -189,6 +204,9 @@ Implements Win32.Win32Object
 	#tag EndConstant
 
 	#tag Constant, Name = CF_WAVE, Type = Double, Dynamic = False, Default = \"12", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = WM_RENDERFORMAT, Type = Double, Dynamic = False, Default = \"&h0305", Scope = Private
 	#tag EndConstant
 
 
