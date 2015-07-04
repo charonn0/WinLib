@@ -77,9 +77,8 @@ Implements Win32.Win32Object
 		  Dim hClip, c As Integer
 		  Do
 		    hClip = Win32.Libs.User32.EnumClipboardFormats(hClip)
-		    If hClip = 0 Then Exit Do
-		    c = c + 1
-		  Loop
+		    If hClip <> 0 Then c = c + 1
+		  Loop Until hClip = 0
 		  mLastError = Win32.LastError
 		  Me.Close
 		  Return c
