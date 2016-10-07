@@ -157,6 +157,18 @@ Protected Module AdvApi32
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegCreateKeyEx Lib "AdvApi32" Alias "RegCreateKeyExW" (hKey As Integer, SubkeyName As WString, Reserved As Integer, RegClass As Ptr, Options As Integer, AccessMask As Integer, SecurityAttributes As Ptr, ByRef ResultKey As Integer, ByRef Disposistion As Integer) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegDeleteTree Lib "AdvApi32" Alias "RegDeleteTreeW" (hKey As Integer, SubKeyName As WString) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
+		Protected Declare Function RegDeleteValue Lib "AdvApi32" Alias "RegDeleteValueW" (hKey As Integer, ValueName As WString) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Declare Function RegGetValue Lib "AdvApi32" Alias "RegGetValueW" (hKey As Integer, SubKeyName As WString, ValueName As WString, Flags As Integer, ByRef TypeCode As Integer, DataBuffer As Ptr, ByRef DataBufferSize As Integer) As Integer
 	#tag EndExternalMethod
 

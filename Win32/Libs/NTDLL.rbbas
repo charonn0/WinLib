@@ -5,6 +5,10 @@ Protected Module NTDLL
 	#tag EndExternalMethod
 
 	#tag ExternalMethod, Flags = &h1
+		Protected Soft Declare Function NtQueryKey Lib "NTDLL" (HKEY As Integer, InfoClass As Integer, KeyInformation As Ptr, BufferSize As UInt32, ByRef ResultSize As UInt32) As Integer
+	#tag EndExternalMethod
+
+	#tag ExternalMethod, Flags = &h1
 		Protected Soft Declare Function NtQuerySystemInformation Lib "NTDLL" (SystemInfoClass As UInt32, SystemInfoBuffer As Ptr, SysInfoBufferLen As UInt32, ByRef ReturnLen As Integer) As UInt32
 	#tag EndExternalMethod
 
