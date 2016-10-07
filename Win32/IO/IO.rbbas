@@ -1,6 +1,32 @@
 #tag Module
 Protected Module IO
 	#tag Method, Flags = &h1
+		Protected Sub CopyFolder(Source As FolderItem, Destination As FolderItem)
+		  Dim fe As New Win32.IO.FindFileIterator
+		  fe.RootDirectory = Source
+		  While fe.NextItem
+		    Dim item As FolderItem = fe.CurrentItem
+		    If item.Directory Then
+		      Dim f As FolderItem = Destination.Child(item.Name)
+		      f.CreateAsFolder()
+		      Win32.IO.CopyFolder(item, f)
+		    Else
+		      Dim srcbs, dstbs As BinaryStream
+		      srcbs = BinaryStream.Open(item)
+		      dstbs = BinaryStream.Create(Destination, True)
+		      srcbs.Write(dstbs.Read(dstbs.Length))
+		      srcbs.Close
+		      dstbs.Close
+		    End If
+		  Wend
+		  
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h1
 		Protected Function FILE_ALL_ACCESS() As Integer
 		  Return STANDARD_RIGHTS_REQUIRED Or SYNCHRONIZE Or &h1FF
 		End Function
