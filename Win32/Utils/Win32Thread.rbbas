@@ -63,11 +63,11 @@ Protected Class Win32Thread
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Resume()
-		  
-		  Call Win32.Libs.Kernel32.ResumeThread(Me.Handle)
+		Function Resume() As Integer
+		  Dim suspending As Integer = Win32.Libs.Kernel32.ResumeThread(Me.Handle)
 		  mLastError = Win32.LastError
-		End Sub
+		  Return suspending - 1
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -81,8 +81,7 @@ Protected Class Win32Thread
 		    Threads.Value(token) = Me
 		    Dim count As Integer
 		    Do
-		      count = Win32.Libs.Kernel32.ResumeThread(Me.Handle)
-		      mLastError = Win32.LastError
+		      count = Me.Resume
 		    Loop Until count <= 0
 		  End If
 		End Sub
@@ -97,11 +96,11 @@ Protected Class Win32Thread
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Suspend()
-		  
-		  Call Win32.Libs.Kernel32.SuspendThread(Me.Handle)
+		Function Suspend() As Integer
+		  Dim Suspending As Integer = Win32.Libs.Kernel32.SuspendThread(Me.Handle)
 		  mLastError = Win32.LastError
-		End Sub
+		  Return Suspending - 1
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -124,6 +123,8 @@ Protected Class Win32Thread
 
 
 	#tag Note, Name = About this class
+		WARNING: This class is experimental and should not be used in production!
+		
 		This class represents a *preemptive* Win32 thread.
 		
 		Notes:
